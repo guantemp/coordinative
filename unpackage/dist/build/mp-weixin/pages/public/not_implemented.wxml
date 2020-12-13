@@ -1,0 +1,1 @@
+<view class="content"><text class="tit">未实现，请等待....</text><button data-event-opts="{{[['tap',[['navBack']]]]}}" class="cu-btn bg-cyan lg shadow confirmBtn" bindtap="__e">返回</button></view>

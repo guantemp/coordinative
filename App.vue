@@ -1,0 +1,27 @@
+<script>
+	export default {
+		onLaunch: function() {
+			console.log('App Launch')
+		},
+		onShow: function() {
+			console.log('App Show')
+		},
+		onHide: function() {
+			console.log('App Hide')
+		}
+	}
+</script>
+
+<style lang="scss">
+	@import "uview-ui/index.scss";
+	/*导入colorUI */
+	@import "static/colorui/main.wxss";
+	@import "static/colorui/icon.wxss";
+	// 导入阿里巴巴矢量图标库
+	/*#ifdef MP*/
+	@import 'static/iconfont/iconfont.css';
+	/*#endif*/
+	/*#ifndef MP*/
+	@import url('https://at.alicdn.com/t/font_2251055_hjmobg0n7ks.css');
+	/*#endif*/
+</style>

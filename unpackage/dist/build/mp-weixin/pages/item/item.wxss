@@ -1,0 +1,1 @@
+.item{padding-top:3vh;position:relative;width:100vw;height:100vh;overflow:hidden;background:#fff}.top{position:absolute;top:calc(25px+20rpx);z-index:90;font-size:32rpx;color:#606266}
