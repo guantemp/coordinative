@@ -40,9 +40,9 @@ export default {
 						await this.$http.post('/auth/v1/login', {
 							params: {
 								js_code: this.wxCode,
-								//encryptedData: res.encryptedData,
-								//iv: res.iv,
-								//signature: res.signature,
+								encryptedData: res.encryptedData,
+								iv: res.iv,
+								signature: res.signature,
 								method: 'byShortcut',
 								userInfo: JSON.parse(res.rawData)
 							},
