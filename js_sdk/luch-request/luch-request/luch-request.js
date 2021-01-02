@@ -55,7 +55,7 @@ http.interceptors.response.use(async (response) => { /* 请求之后拦截器。
 	if (response.config.custom.loading) {
 		setTimeout(() => {
 			uni.hideLoading()
-		}, 2000)
+		}, 1500)
 	}
 	return response
 }, (response) => { // 请求错误做点什么。可以使用async await 做异步操作

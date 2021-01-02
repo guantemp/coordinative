@@ -1,8 +1,5 @@
 @charset "UTF-8";
 /**
- * 暂时
- */
-/**
  * 这里是uni-app内置的常用样式变量
  *
  * uni-app 官方扩展插件及插件市场（https://ext.dcloud.net.cn）上很多三方插件均使用了这些样式变量
@@ -51,8 +48,7 @@
 .right-top-sign.data-v-802e0a44:before {
   -webkit-transform: rotate(50deg);
           transform: rotate(50deg);
-  -webkit-border-top-right-radius: 50px;
-          border-top-right-radius: 50px;
+  border-top-right-radius: 50px;
 }
 .right-top-sign.data-v-802e0a44:after {
   position: absolute;
@@ -60,16 +56,14 @@
   top: 0;
   -webkit-transform: rotate(-50deg);
           transform: rotate(-50deg);
-  -webkit-border-top-left-radius: 50px;
-          border-top-left-radius: 50px;
+  border-top-left-radius: 50px;
 }
 .left-bottom-sign.data-v-802e0a44 {
   position: absolute;
   left: -270rpx;
   bottom: -320rpx;
   border: 100rpx solid #d0d1fd;
-  -webkit-border-radius: 80%;
-          border-radius: 80%;
+  border-radius: 80%;
   padding: 180rpx;
 }
 .back-btn.data-v-802e0a44 {
@@ -96,29 +90,33 @@
   text-shadow: 1px 0px 1px rgba(0, 0, 0, 0.3);
 }
 .input-content.data-v-802e0a44 {
-  padding: 0rpx 50rpx;
+  padding: 0rpx 40rpx;
 }
 .input-content .form-group.data-v-802e0a44 {
   padding: 0rpx 10rpx;
-  color: #2b85e4;
 }
-.input-content .form-group button.plain.data-v-802e0a44 {
-  border: none;
+.input-content .smsBtn.data-v-802e0a44 {
+  background: transparent;
+  border-width: 0px;
+  outline: none;
+}
+.input-content .smsBtnEnable.data-v-802e0a44 {
+  color: #2b85e4;
 }
 .input-content .from-img.data-v-802e0a44 {
   width: 54rpx;
   height: 54rpx;
   margin-right: 30rpx;
 }
-.input-content .from-tit.data-v-802e0a44 {
-  font-size: 64rpx;
-  margin-right: 30rpx;
-  color: #555555;
-}
 .input-content .second_line.data-v-802e0a44 {
   vertical-align: middle;
   border-bottom: solid 2rpx #e8e8e8;
-  margin-bottom: 56rpx;
+  margin-bottom: 46rpx;
+}
+.input-content .from-tit.data-v-802e0a44 {
+  font-size: 60rpx;
+  margin-right: 30rpx;
+  color: #555555;
 }
 .input-content .confirmBtn.data-v-802e0a44 {
   width: 98%;
@@ -140,11 +138,10 @@
   display: -webkit-box;
   display: -webkit-flex;
   display: flex;
-  width: 320rpx;
+  width: 300rpx;
   -webkit-justify-content: space-around;
           justify-content: space-around;
-  margin-top: 20rpx;
-  margin-bottom: 40rpx;
+  margin-top: 25rpx;
 }
 .other-wrapper .btn.data-v-802e0a44 {
   border: 0;
@@ -153,6 +150,12 @@
 }
 .other-wrapper .btn.data-v-802e0a44:after {
   border: 0;
+}
+.other-wrapper .line.data-v-802e0a44 {
+  vertical-align: middle;
+  width: 300rpx;
+  margin-top: 20rpx;
+  border-bottom: solid 2rpx #e8e8e8;
 }
 .other-wrapper .img.data-v-802e0a44 {
   width: 80rpx;
@@ -173,14 +176,23 @@
 }
 .agreement.data-v-802e0a44 {
   position: absolute;
-  left: 0;
+  left: 10rpx;
   bottom: 6vh;
   z-index: 1;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+          align-items: center;
   width: 750rpx;
   height: 90rpx;
-  color: #999;
-  font-size: 26rpx;
+  font-size: 28rpx;
   text-align: center;
+}
+.agreement .check.data-v-802e0a44 {
+  -webkit-transform: scale(0.73);
+          transform: scale(0.73);
 }
 .agreement .tit.data-v-802e0a44 {
   color: #40a2ff;

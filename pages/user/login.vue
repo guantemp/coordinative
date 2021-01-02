@@ -8,27 +8,28 @@
 			<view class="welcome">欢迎回来！</view>
 			<view class="input-content">
 				<view class="cu-form-group form-group">
-					<image class="from-img" src="/static/user/mobile.png" mode="aspectFit"></image>
+					<text class="iconfont icon-mobile from-tit"></text>
 					<input type="number" placeholder="请填写手机号码" name="input" v-model="mobile" maxlength="11" @input="check(mobile,smsCode,password)"></input>
 				</view>
 				<view v-if="verification" class="cu-form-group form-group">
-					<image class="from-img" src="/static/user/verification.png" mode="aspectFit"></image>
+					<text class="iconfont icon-captcha from-tit"></text>
 					<input placeholder="请填写手机验证码" name="input" type="number" v-model="smsCode" maxlength="6" @input="check(mobile,smsCode,password)"></input>
-					<button class="cu-btn no-border" @click.self.stop="sendSmsCode" :disabled="sendCodeBtnDisable">
+					<button class="cu-btn smsBtn" :class="sendCodeBtnDisable?'':'smsBtnEnable'" @click.self.stop="sendSmsCode"
+					 :disabled="sendCodeBtnDisable">
 						<text v-if="!sendCodeTitDisable">获取验证码</text>
 						<text v-else>{{codeSeconds}}秒</text>
 					</button>
 				</view>
 				<view v-else class="cu-form-group form-group">
 					<text class="iconfont icon-password from-tit"></text>
-					<input placeholder="请填写密码" name="input" password v-model="password" maxlength="16" @input="check(mobile,smsCode,password)"></input>
+					<input placeholder="请填写密码(6-16位大，小写字母、数字)" name="input" password v-model="password" maxlength="16" @input="check(mobile,smsCode,password)"></input>
 				</view>
 				<view class="second_line" />
-				<button class="cu-btn bg-cyan lg confirmBtn" :class="confirmBtnDisabled?'line-blue':''" :disabled="confirmBtnDisabled"
-				 @click.self.stop="login">登录</button>
+				<button class="cu-btn bg-cyan lg confirmBtn" :disabled="confirmBtnDisabled" @click.self.stop="login">登录</button>
 			</view>
 			<view class="other-wrapper">
-				<u-divider>快捷登录</u-divider>
+				<view>快捷登录</view>
+				<view class="line"> </view>
 				<view class="shortcut">
 					<image @click="convert" v-if="verification" class="img" src="/static/user/password_01.png"></image>
 					<image @click="convert" v-else class="img" src="/static/user/tel.png"></image>
@@ -44,15 +45,17 @@
 				</view>
 			</view>
 			<view class="appendix">
-				<text @click="this.$util.navTo('/pages/user/password')">找回密码</text>
+				<text @click="this.$util.navTo('/pages/user/password')">忘记密码</text>
 				<text class="appendix-split">|</text>
 				<text @click="this.$util.navTo('/pages/user/register')">注册账号</text>
 			</view>
 			<view class="agreement">
-				<u-checkbox shape="circle" icon-size="24rpx" label-size="26rpx" active-color="red" label-disabled="false" v-model="agreement">我已阅读并同意
+				<checkbox class='round red check' checked v-model="agreement" @click="checkAgreement"></checkbox>
+				<view>
+					<text>我已阅读并同意</text>
 					<text class="tit" @click="this.$util.navTo('/pages/public/not_implemented')">《用户服务协议》</text>
 					<text class="tit" @click="this.$util.navTo('/pages/public/not_implemented')">《隐私权政策》</text>
-				</u-checkbox>
+				</view>
 			</view>
 		</view>
 	</view>
@@ -103,18 +106,19 @@
 				this.check(this.mobile, this.smsCode, this.password);
 			},
 			async sendSmsCode() {
-				await this.$http.get('/egde/v1/sms', {
+				await this.$http.get('/auth/v1/sms', {
 					params: {
 						mobile: this.mobile
 					}
 				}).then(res => {
 					if (res.data.code == 200) {
-						this.$util.toast(`验证码已发送`, 3000, false, success);
+						this.$util.toast(`验证码已发送`, 2000, false, success);
 						this.handleSmsCodeTime(this.countDown);
 					} else {
-						this.$util.toast(res.data.msg);
+						this.$util.toast(res.data.message);
 					}
 				}).catch(err => {
+					console.log(err);
 					this.$util.toast(`服务器离线，请稍后再试！`);
 				});
 			},
@@ -138,19 +142,20 @@
 					return;
 				}
 				await this.$http
-					.post('/egde/v1/sms', {
-						mobile: this.mobile,
-						smsCode: this.smsCode
+					.post('/auth/v1/login', {
+						username: this.mobile,
+						password: this.password,
+						method:'byPassword'
 					})
 					.then(res => {
-						if (res.data.code == 200) {
+						if (!res.data.code) {
 							this.$util.toast('登录成功，欢迎回来！');
-							//this.$store.commit('setToken', data);
+							this.$store.commit('login', res.data);
 							setTimeout(() => {
 								uni.navigateBack();
 							}, 1500)
 						} else {
-							this.$util.toast(res.data.msg);
+							this.$util.toast(res.data.message);
 						}
 					})
 					.catch(err => {
@@ -243,15 +248,20 @@
 	}
 
 	.input-content {
-		padding: 0rpx 50rpx;
+		padding: 0rpx 40rpx;
 
 		.form-group {
 			padding: 0rpx 10rpx;
-			color: #2b85e4;
+		}
 
-			button.plain {
-				border: none;
-			}
+		.smsBtn {
+			background: transparent;
+			border-width: 0px;
+			outline: none;
+		}
+
+		.smsBtnEnable {
+			color: #2b85e4;
 		}
 
 		.from-img {
@@ -260,16 +270,16 @@
 			margin-right: 30rpx;
 		}
 
-		.from-tit {
-			font-size: 64rpx;
-			margin-right: 30rpx;
-			color: #555555;
-		}
-
 		.second_line {
 			vertical-align: middle;
 			border-bottom: solid 2upx #e8e8e8;
-			margin-bottom: 56rpx;
+			margin-bottom: 46rpx;
+		}
+
+		.from-tit {
+			font-size: 60rpx;
+			margin-right: 30rpx;
+			color: #555555;
 		}
 
 		.confirmBtn {
@@ -285,10 +295,9 @@
 
 		.shortcut {
 			display: flex;
-			width: 320rpx;
+			width: 300rpx;
 			justify-content: space-around;
-			margin-top: 20rpx;
-			margin-bottom: 40rpx;
+			margin-top: 25rpx;
 		}
 
 		.btn {
@@ -299,6 +308,13 @@
 			&:after {
 				border: 0;
 			}
+		}
+
+		.line {
+			vertical-align: middle;
+			width: 300rpx;
+			margin-top: 20rpx;
+			border-bottom: solid 2upx #e8e8e8;
 		}
 
 		.img {
@@ -320,14 +336,19 @@
 
 	.agreement {
 		position: absolute;
-		left: 0;
+		left: 10rpx;
 		bottom: 6vh;
 		z-index: 1;
+		display: flex;
+		align-items: center;
 		width: 750rpx;
 		height: 90rpx;
-		color: #999;
-		font-size: 26rpx;
+		font-size: 28rpx;
 		text-align: center;
+
+		.check {
+			transform: scale(0.73);
+		}
 
 		.tit {
 			color: #40a2ff;

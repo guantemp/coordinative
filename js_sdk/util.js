@@ -41,12 +41,12 @@ export const toast = (title, duration = 3000, mask = false, icon = 'none') => {
 	});
 }
 
-export const hasLogin = (options={}) => {
+export const hasLogin = (options = {}) => {
 	const token = uni.getStorageSync('accessToken');
-	if(token){
+	if (token) {
 		return true;
 	}
-	if(options.nav !== false){
+	if (options.nav !== false) {
 		uni.navigateTo({
 			url: '/pages/user/auth/login'
 		})
@@ -54,7 +54,7 @@ export const hasLogin = (options={}) => {
 	return false;
 }
 
-export const navto = (url) => {
+export const navTo = (url) => {
 	uni.navigateTo({
 		url
 	})
@@ -65,11 +65,12 @@ export const checkMobile = (val) => {
 }
 
 export const checkPassword = (val) => {
-	return /^[a-zA-Z0-9]{6,16}$/.test(val);
+	return /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,16}$/.test(val);
+	//(?=.*[~@#$%\*-\+=:,\\?\[\]\{}]) 如果需要特殊字符加上
 }
 export const checkSmsCode = (val) => {
 	return /^\d{6,6}$/.test(val);
 }
 export const checkEmail = (val) => {
-	return /^[a-z0-9A-Z]+[- | a-z0-9A-Z . _]+@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-z]{2,}$/.test(val);
+	return /^\\s*\\w+(?:\\.{0,1}[\\w-]+)*@[a-zA-Z0-9]+(?:[-.][a-zA-Z0-9]+)*\\.[a-zA-Z]+\\s*$/.test(val);
 }

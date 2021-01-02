@@ -1,15 +1,9 @@
 {
 	"easycom": {
-		"^u-(.*)": "@/uview-ui/components/u-$1/u-$1.vue"
+		
 	},
 	"pages": [{
 			"path": "pages/index/index"
-		},
-		{
-			"path": "pages/center/index",
-			"style": {
-				"navigationBarTitleText": "uView-center"
-			}
 		},
 		{
 			"path": "pages/item/item",
@@ -82,7 +76,7 @@
 		{
 			"path": "pages/public/not_implemented",
 			"style": {
-				"navigationBarTitleText": "找回密码",
+				"navigationBarTitleText": "未实现",
 				"navigationStyle": "custom"
 			}
 		},
@@ -90,6 +84,13 @@
 			"path": "pages/user/userInfo",
 			"style": {
 				"navigationBarTitleText": "用户信息",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/user/bindMobile",
+			"style": {
+				"navigationBarTitleText": "用户绑定",
 				"navigationStyle": "custom"
 			}
 		}
@@ -108,7 +109,7 @@
 	*/
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "HOPRXI协着工具",
+		"navigationBarTitleText": "HOPRXI协助工具",
 		"navigationBarBackgroundColor": "#e7ebed",
 		"backgroundColor": "#F8F8F8"
 	},

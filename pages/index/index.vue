@@ -1,16 +1,53 @@
 <template>
-	<view class="content">
-		<image class="logo" src="/static/logo.png"></image>
-		<view class="text-area">
-			<text class="title">
-				uView - 多平台快速开发的UI框架
-			</text>
-		</view>
-		<view class="button-demo">
-			<u-button :ripple="true">按钮组件演示</u-button>
-		</view>
-		<view class="link-demo">
-			<u-link :color="$u.color['primary']" :under-line="true" href="http://www.uviewui.com">跳转uView文档：www.uviewui.com</u-link>
+	<view class="cu-card dynamic" :class="isCard?'no-card':''">
+		<view class="cu-item shadow">
+			<view class="cu-list menu-avatar comment solids-top">
+				<view class="cu-item">
+					<view class="cu-avatar round" style="background-image:url(https://ossweb-img.qq.com/images/lol/img/champion/Morgana.png);"></view>
+					<view class="content">
+						<view class="text-grey">莫甘娜</view>
+						<view class="text-gray text-content text-df">
+							凯尔，你被自己的光芒变的盲目。
+						</view>
+						<view class="bg-grey padding-sm radius margin-top-sm  text-sm">
+							<view class="flex">
+								<view>凯尔：</view>
+								<view class="flex-sub">妹妹，你在帮他们给黑暗找借口吗?</view>
+							</view>
+						</view>
+						<view class="margin-top-sm flex justify-between">
+							<view class="text-gray text-df">2018年12月4日</view>
+							<view>
+								<text class="cuIcon-appreciatefill text-red"></text>
+								<text class="cuIcon-messagefill text-gray margin-left-sm"></text>
+							</view>
+						</view>
+					</view>
+				</view>
+
+				<view class="cu-item">
+					<view class="cu-avatar round" style="background-image:url(https://ossweb-img.qq.com/images/lol/web201310/skin/big10006.jpg);"></view>
+					<view class="content">
+						<view class="text-grey">凯尔</view>
+						<view class="text-gray text-content text-df">
+							妹妹，如果不是为了飞翔，我们要这翅膀有什么用?
+						</view>
+						<view class="bg-grey padding-sm radius margin-top-sm  text-sm">
+							<view class="flex">
+								<view>莫甘娜：</view>
+								<view class="flex-sub">如果不能立足于大地，要这双脚又有何用?</view>
+							</view>
+						</view>
+						<view class="margin-top-sm flex justify-between">
+							<view class="text-gray text-df">2018年12月4日</view>
+							<view>
+								<text class="cuIcon-appreciate text-gray"></text>
+								<text class="cuIcon-messagefill text-gray margin-left-sm"></text>
+							</view>
+						</view>
+					</view>
+				</view>
+			</view>
 		</view>
 	</view>
 </template>
@@ -37,33 +74,5 @@
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
-		padding: 40rpx;
-	}
-
-	.logo {
-		height: 200rpx;
-		width: 200rpx;
-		margin-top: 100rpx;
-		margin-left: auto;
-		margin-right: auto;
-		margin-bottom: 50rpx;
-	}
-
-	.text-area {
-		display: flex;
-		justify-content: center;
-	}
-	
-	.title {
-		font-size: 28rpx;
-		color: $u-content-color;
-	}
-	
-	.button-demo {
-		margin-top: 80rpx;
-	}
-	
-	.link-demo {
-		margin-top: 80rpx;
 	}
 </style>

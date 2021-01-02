@@ -1,8 +1,5 @@
 @charset "UTF-8";
 /**
- * 暂时
- */
-/**
  * 这里是uni-app内置的常用样式变量
  *
  * uni-app 官方扩展插件及插件市场（https://ext.dcloud.net.cn）上很多三方插件均使用了这些样式变量
@@ -51,8 +48,7 @@
 .right-top-sign.data-v-6bdb5298:before {
   -webkit-transform: rotate(50deg);
           transform: rotate(50deg);
-  -webkit-border-top-right-radius: 50px;
-          border-top-right-radius: 50px;
+  border-top-right-radius: 50px;
 }
 .right-top-sign.data-v-6bdb5298:after {
   position: absolute;
@@ -60,16 +56,14 @@
   top: 0;
   -webkit-transform: rotate(-50deg);
           transform: rotate(-50deg);
-  -webkit-border-top-left-radius: 50px;
-          border-top-left-radius: 50px;
+  border-top-left-radius: 50px;
 }
 .left-bottom-sign.data-v-6bdb5298 {
   position: absolute;
   left: -270rpx;
   bottom: -320rpx;
   border: 100rpx solid #d0d1fd;
-  -webkit-border-radius: 80%;
-          border-radius: 80%;
+  border-radius: 80%;
   padding: 180rpx;
 }
 .back-btn.data-v-6bdb5298 {

@@ -1,7 +1,6 @@
 {
   "pages": [
     "pages/index/index",
-    "pages/center/index",
     "pages/item/item",
     "pages/warehouse/warehouse",
     "pages/finance/finance",
@@ -10,12 +9,13 @@
     "pages/user/register",
     "pages/user/password",
     "pages/public/not_implemented",
-    "pages/user/userInfo"
+    "pages/user/userInfo",
+    "pages/user/bindMobile"
   ],
   "subPackages": [],
   "window": {
     "navigationBarTextStyle": "black",
-    "navigationBarTitleText": "HOPRXI协着工具",
+    "navigationBarTitleText": "HOPRXI协助工具",
     "navigationBarBackgroundColor": "#e7ebed",
     "backgroundColor": "#F8F8F8"
   },
@@ -59,5 +59,5 @@
   },
   "permission": {},
   "usingComponents": {},
-  "sitemapLocation": "sitemap53.json"
+  "sitemapLocation": "sitemap68.json"
 }

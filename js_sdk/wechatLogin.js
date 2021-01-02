@@ -37,25 +37,48 @@ export default {
 				uni.getUserInfo({
 					provider: 'weixin',
 					success: async res => {
-						console.log(this.wxCode);
-						await this.$http.get('/egde/v1/wxAuth', {
+						await this.$http.post('/auth/v1/login', {
 							params: {
 								js_code: this.wxCode,
-								encryptedData: res.encryptedData,
-								iv: res.iv,
-								signature: res.signature,
-								//userInfo: JSON.parse(res.rawData)
-							}
+								//encryptedData: res.encryptedData,
+								//iv: res.iv,
+								//signature: res.signature,
+								method: 'byShortcut',
+								userInfo: JSON.parse(res.rawData)
+							},
+							custom: {loading: false},
 						}).then(res => {
-							console.log(res);
+							if (res.data.code == 300) {
+								uni.showModal({
+									title: '绑定',
+									content: '用户尚未绑定',
+									confirmText: '去绑定',
+									cancelText: '还是算了',
+									success: function(r) {
+										if (r.confirm) {
+											console.log('用户点击确定');
+											uni.navigateTo({
+												url: '/pages/user/bindMobile?data=' + JSON.stringify(res.data)
+											})
+										} else if (r.cancel) {
+											console.log('用户点击取消');
+											uni.navigateBack();
+										}
+									}
+								});
+							} else {
+								this.$store.commit('login', res.data);
+								setTimeout(() => {
+									uni.navigateBack();
+								}, 1500)
+							}
 						}).catch(err => {
 							this.$util.toast(`服务器离线，请稍后再试！`);
 						});
 						//this.$store.commit('login', {
-							//token: true,
-							//userInfo: JSON.parse(res.rawData)
+						//token: true,
+						//userInfo: JSON.parse(res.rawData)
 						//});
-						uni.navigateBack();
 					},
 					fail: err => {
 						this.$store.commit('logout');

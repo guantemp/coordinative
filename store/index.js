@@ -16,10 +16,12 @@ const store = new Vuex.Store({
 	},
 	mutations: { //set方法
 		login(state, data) {
+			console.log(data);
+			console.log(data.token);
 			state.token = data.token;
-			state.userInfo = data.userInfo;
+			state.userInfo = data.user;
 			uni.setStorageSync('token', data.token);
-			uni.setStorageSync('userInfo', data.userInfo);
+			uni.setStorageSync('userInfo', data.user);
 		},
 		logout(state) {
 			state.token = '';

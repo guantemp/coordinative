@@ -13,7 +13,6 @@
 </script>
 
 <style lang="scss">
-	@import "uview-ui/index.scss";
 	/*导入colorUI */
 	@import "static/colorui/main.wxss";
 	@import "static/colorui/icon.wxss";

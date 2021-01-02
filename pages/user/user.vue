@@ -3,13 +3,15 @@
 		<!--info-->
 		<view class="user_info">
 			<image class="top-bg" src="/static/user/user-bg.png"></image>
-			<view class="user_portrait" @click="navTo(hasLogin?'/pages/user/userInfo':'/pages/user/login')">
-				<image class="user_portrait_img" :src="userInfo.avatarUrl || '/static/user/face.png'"></image>
+			<view class="user_portrait">
+				<image class="user_portrait_img" :src="userInfo.avatarUrl || '/static/user/face.png'" @click="this.$util.navTo(hasLogin?'/pages/user/userInfo':'/pages/user/login')"></image>
 				<view class="user_portrait_hasLogin" v-if="hasLogin">
 					<text class="user_portrait_hasLogin_text">{{ userInfo.nickName || userInfo.username || '无名' }}</text>
 					<text class="user_portrait_hasLogin_bonus">积分：{{bonus}}</text>
 				</view>
-				<text class="user_portrait_noLogin_text" v-else>登录</text>
+				<view class="user_portrait_noLogin_text" v-else @click="this.$util.navTo('/pages/user/login')">
+					<text>登录</text>
+				</view>
 			</view>
 		</view>
 		<view class="arc">
@@ -17,13 +19,13 @@
 		</view>
 		<!--工资条-->
 		<view class="pay">
-			<list-Cell icon="/static/user/pay.png" title="我的工资" @eventClick="navTo(hasLogin?'':'/pages/user/login')" />
+			<list-Cell icon="/static/user/pay.png" title="我的工资" @eventClick="this.$util.navTo(hasLogin?'':'/pages/user/login')" />
 		</view>
 		<!--工作流-->
 		<view class="work">
 			<listCell icon="/static/user/attendance.png" title="工作流" />
 			<view class="cu-list grid col-5 no-border grid_list">
-				<view class="cu-item" v-for="(item, index) in attendanceList" @tap.stop="navTo('/pages/public/not_implemented')">
+				<view class="cu-item" v-for="(item, index) in attendanceList" @tap.stop="this.$util.navTo('/pages/public/not_implemented')">
 					<view class="text-red">
 						<image class="img" :src="item.icon" />
 						<view class="cu-tag badge">
@@ -38,7 +40,7 @@
 		<view class="service">
 			<listCell icon="/static/user/service.png" title="我的服务" />
 			<view class="cu-list grid col-3 no-border">
-				<view class="cu-item " @tap.stop="navTo('/pages/public/not_implemented')">
+				<view class="cu-item " @tap.stop="this.$util.navTo('/pages/public/not_implemented')">
 					<view class="text-red">
 						<image class="grid_img" src="/static/user/notice.png" />
 						<view class="cu-tag badge">
@@ -47,7 +49,7 @@
 					</view>
 					<text>公告</text>
 				</view>
-				<view class="cu-item" @tap.stop="navTo('/pages/public/not_implemented')">
+				<view class="cu-item" @tap.stop="this.$util.navTo('/pages/public/not_implemented')">
 					<view class="text-red">
 						<image class="grid_img" src="/static/user/task.png" />
 						<view class="cu-tag badge">
@@ -56,25 +58,25 @@
 					</view>
 					<text>任务中心</text>
 				</view>
-				<view class="cu-item" @tap.stop="navTo('/pages/public/not_implemented')">
+				<view class="cu-item" @tap.stop="this.$util.navTo('/pages/public/not_implemented')">
 					<view class="text-red">
 						<image class="grid_img" src="/static/user/telecast.png" />
 					</view>
 					<text>直播</text>
 				</view>
-				<view class="cu-item" @tap.stop="navTo('/pages/public/not_implemented')">
+				<view class="cu-item" @tap.stop="this.$util.navTo('/pages/public/not_implemented')">
 					<view class="text-red">
 						<image class="grid_img" src="/static/user/shopping.png" />
 					</view>
 					<text>商城</text>
 				</view>
-				<view class="cu-item" @tap.stop="navTo('/pages/public/not_implemented')">
+				<view class="cu-item" @tap.stop="this.$util.navTo('/pages/public/not_implemented')">
 					<view class="text-red">
 						<image class="grid_img" src="/static/user/share.png" />
 					</view>
 					<text>分享</text>
 				</view>
-				<view class="cu-item" @tap.stop="navTo('/pages/public/not_implemented')">
+				<view class="cu-item" @tap.stop="this.$util.navTo('/pages/public/not_implemented')">
 					<view class="text-red">
 						<image class="grid_img" src="/static/user/set.png" />
 					</view>
@@ -164,11 +166,7 @@
 			//console.log(this.$store.state.userInfo);
 		},
 		methods: {
-			navTo(url) {
-				uni.navigateTo({
-					url
-				})
-			}
+
 		}
 	}
 </script>
