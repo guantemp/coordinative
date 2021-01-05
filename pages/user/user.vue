@@ -93,7 +93,6 @@
 		mapGetters
 	} from 'vuex'
 	import listCell from 'components/list-cell';
-	import login from '../../js_sdk/wechatLogin.js';
 	export default {
 		components: {
 			listCell,

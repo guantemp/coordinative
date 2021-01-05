@@ -148,6 +148,10 @@ var _default =
   methods: {
     navBack: function navBack() {
       uni.navigateBack();
+    },
+    logout: function logout() {
+      this.$store.commit('logout');
+      uni.navigateBack();
     } } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 

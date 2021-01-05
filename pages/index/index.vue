@@ -1,54 +1,9 @@
 <template>
-	<view class="cu-card dynamic" :class="isCard?'no-card':''">
-		<view class="cu-item shadow">
-			<view class="cu-list menu-avatar comment solids-top">
-				<view class="cu-item">
-					<view class="cu-avatar round" style="background-image:url(https://ossweb-img.qq.com/images/lol/img/champion/Morgana.png);"></view>
-					<view class="content">
-						<view class="text-grey">莫甘娜</view>
-						<view class="text-gray text-content text-df">
-							凯尔，你被自己的光芒变的盲目。
-						</view>
-						<view class="bg-grey padding-sm radius margin-top-sm  text-sm">
-							<view class="flex">
-								<view>凯尔：</view>
-								<view class="flex-sub">妹妹，你在帮他们给黑暗找借口吗?</view>
-							</view>
-						</view>
-						<view class="margin-top-sm flex justify-between">
-							<view class="text-gray text-df">2018年12月4日</view>
-							<view>
-								<text class="cuIcon-appreciatefill text-red"></text>
-								<text class="cuIcon-messagefill text-gray margin-left-sm"></text>
-							</view>
-						</view>
-					</view>
-				</view>
-
-				<view class="cu-item">
-					<view class="cu-avatar round" style="background-image:url(https://ossweb-img.qq.com/images/lol/web201310/skin/big10006.jpg);"></view>
-					<view class="content">
-						<view class="text-grey">凯尔</view>
-						<view class="text-gray text-content text-df">
-							妹妹，如果不是为了飞翔，我们要这翅膀有什么用?
-						</view>
-						<view class="bg-grey padding-sm radius margin-top-sm  text-sm">
-							<view class="flex">
-								<view>莫甘娜：</view>
-								<view class="flex-sub">如果不能立足于大地，要这双脚又有何用?</view>
-							</view>
-						</view>
-						<view class="margin-top-sm flex justify-between">
-							<view class="text-gray text-df">2018年12月4日</view>
-							<view>
-								<text class="cuIcon-appreciate text-gray"></text>
-								<text class="cuIcon-messagefill text-gray margin-left-sm"></text>
-							</view>
-						</view>
-					</view>
-				</view>
-			</view>
-		</view>
+	<view class="content">
+		<text class="solid-bottom text-lg padding text-red">HOPRXI协助工具 - Release Notes</text>
+		<text class="solid-bottom text-blue padding">#version 0.0.4 2021-01-04</text>
+		<text class="solid-bottom text-sm  text-brown">* 【重要】完成用户注册，登录，微信快捷登录功能 </text>
+		<text class="solid-bottom text-sm text-brown">* 优化 控制台 消息通知 当控制台产生新日志时，右上角显示消息通知</text>
 	</view>
 </template>
 
@@ -72,7 +27,6 @@
 	.content {
 		display: flex;
 		flex-direction: column;
-		align-items: center;
 		justify-content: center;
 	}
 </style>

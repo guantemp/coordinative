@@ -7973,7 +7973,6 @@ var store = new _vuex.default.Store({
   mutations: { //set方法
     login: function login(state, data) {
       console.log(data);
-      console.log(data.token);
       state.token = data.token;
       state.userInfo = data.user;
       uni.setStorageSync('token', data.token);
@@ -7985,7 +7984,7 @@ var store = new _vuex.default.Store({
       setTimeout(function () {
         state.userInfo = {};
         uni.removeStorageSync('userInfo');
-      }, 1100);
+      }, 1500);
     } },
 
   actions: {
@@ -10965,10 +10964,18 @@ var checkEmail = function checkEmail(val) {
 /* 62 */,
 /* 63 */,
 /* 64 */,
-/* 65 */
-/*!**************************************************!*\
-  !*** E:/mini/coordinative/js_sdk/wechatLogin.js ***!
-  \**************************************************/
+/* 65 */,
+/* 66 */,
+/* 67 */,
+/* 68 */,
+/* 69 */,
+/* 70 */,
+/* 71 */,
+/* 72 */,
+/* 73 */
+/*!******************************************************!*\
+  !*** E:/mini/coordinative/js_sdk/auth/wechatAuth.js ***!
+  \******************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -10995,7 +11002,7 @@ var checkEmail = function checkEmail(val) {
     //}
   },
   onShow: function onShow() {
-    //this.getWxCode();
+    this.getWxCode();
   },
   methods: {
     //微信小程序登录
@@ -11012,31 +11019,27 @@ var checkEmail = function checkEmail(val) {
                 uni.getUserInfo({
                   provider: 'weixin',
                   success: function () {var _success = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(res) {return _regenerator.default.wrap(function _callee$(_context) {while (1) {switch (_context.prev = _context.next) {case 0:_context.next = 2;return (
-                                _this.$http.post('/auth/v1/login', {
+                                _this.$http.post('/auth/v1/wxAuth', {
                                   params: {
                                     js_code: _this.wxCode,
                                     //encryptedData: res.encryptedData,
                                     //iv: res.iv,
                                     //signature: res.signature,
-                                    method: 'byShortcut',
                                     userInfo: JSON.parse(res.rawData) },
 
                                   custom: { loading: false } }).
                                 then(function (res) {
                                   if (res.data.code == 300) {
                                     uni.showModal({
-                                      title: '绑定',
-                                      content: '用户尚未绑定',
+                                      content: '账号尚未绑定',
                                       confirmText: '去绑定',
                                       cancelText: '还是算了',
                                       success: function success(r) {
                                         if (r.confirm) {
-                                          console.log('用户点击确定');
                                           uni.navigateTo({
-                                            url: '/pages/user/bindMobile?data=' + JSON.stringify(res.data) });
+                                            url: '/pages/user/bindMobile?data=' + JSON.stringify(res.data.rawData) });
 
                                         } else if (r.cancel) {
-                                          console.log('用户点击取消');
                                           uni.navigateBack();
                                         }
                                       } });
@@ -11048,6 +11051,7 @@ var checkEmail = function checkEmail(val) {
                                     }, 1500);
                                   }
                                 }).catch(function (err) {
+                                  console.log(err);
                                   _this.$util.toast("\u670D\u52A1\u5668\u79BB\u7EBF\uFF0C\u8BF7\u7A0D\u540E\u518D\u8BD5\uFF01");
                                 }));case 2:case "end":return _context.stop();}}}, _callee);}));function success(_x) {return _success.apply(this, arguments);}return success;}(),
 
@@ -11072,7 +11076,7 @@ var checkEmail = function checkEmail(val) {
             uni.login({
               provider: 'weixin',
               success: function success(res) {
-                console.log(JSON.stringify(res));
+                //console.log(JSON.stringify(res));
                 _this2.wxCode = res.code;
               } });
 

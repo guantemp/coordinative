@@ -130,7 +130,7 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _regenerator = _interopRequireDefault(__webpack_require__(/*! ./node_modules/@babel/runtime/regenerator */ 12));
 
 
 
@@ -168,54 +168,51 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+var _util = __webpack_require__(/*! ../../js_sdk/util.js */ 30);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {try {var info = gen[key](arg);var value = info.value;} catch (error) {reject(error);return;}if (info.done) {resolve(value);} else {Promise.resolve(value).then(_next, _throw);}}function _asyncToGenerator(fn) {return function () {var self = this,args = arguments;return new Promise(function (resolve, reject) {var gen = fn.apply(self, args);function _next(value) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);}function _throw(err) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);}_next(undefined);});};}var _default =
 
 
 
 
-var _index = _interopRequireDefault(__webpack_require__(/*! ../../js_sdk/luch-request/luch-request/index.js */ 17));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };} //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-// 下载的插件
-var http = new _index.default();var _default = { data: function data() {return { agreement: true, username: '', password: '', code: '', sendCodeDisable: false, codeSeconds: 0, countDown: 10 };}, methods: { sendCode: function sendCode() {var _this = this;if (!this.$u.test.mobile(this.username)) {this.$u.toast('请输入正确的手机号码');return;}http.post('http://demo.rageframe.com/api/tiny-shop/v1/site/sms-code', { mobile: this.username, usage: 'register' }).then(function (res) {if (res.data.code == 200) {_this.$util.toast("\u9A8C\u8BC1\u7801\u53D1\u9001\u6210\u529F, \u9A8C\u8BC1\u7801\u662F".concat(res.data.data));} else {_this.$util.toast(res.data.message);}}).catch(function (err) {console.log(err);});this.handleSmsCodeTime(this.countDown);}, handleSmsCodeTime: function handleSmsCodeTime(time) {var _this2 = this;var timer = setInterval(function () {if (time === 0) {clearInterval(timer);_this2.sendCodeDisable = false;} else {_this2.codeSeconds = time;
-          _this2.sendCodeDisable = true;
+
+{
+  data: function data() {
+    return {
+      mobile: '',
+      password: '',
+      confirmPassword: '',
+      smsCode: '',
+      sendCodeTitDisable: false,
+      sendCodeBtnDisable: true,
+      codeSeconds: 0,
+      countDown: 59 };
+
+  },
+
+  methods: {
+    sendSmsCode: function sendSmsCode() {var _this = this;return _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {return _regenerator.default.wrap(function _callee$(_context) {while (1) {switch (_context.prev = _context.next) {case 0:_context.next = 2;return (
+                  _this.$http.get('/auth/v1/sms', {
+                    params: {
+                      mobile: _this.mobile } }).
+
+                  then(function (res) {
+                    if (res.data.code == 200) {
+                      _this.$util.toast("\u9A8C\u8BC1\u7801\u5DF2\u53D1\u9001", 2000, false, 'success');
+                      _this.handleSmsCodeTime(_this.countDown);
+                    } else {
+                      _this.$util.toast(res.data.message);
+                    }
+                  }).catch(function (err) {
+                    _this.$util.toast("\u670D\u52A1\u5668\u79BB\u7EBF\uFF0C\u8BF7\u7A0D\u540E\u518D\u8BD5\uFF01");
+                  }));case 2:case "end":return _context.stop();}}}, _callee);}))();
+    },
+    handleSmsCodeTime: function handleSmsCodeTime(time) {var _this2 = this;
+      var timer = setInterval(function () {
+        if (time === 0) {
+          clearInterval(timer);
+          _this2.sendCodeTitDisable = false;
+        } else {
+          _this2.codeSeconds = time;
+          _this2.sendCodeTitDisable = true;
           time--;
         }
       }, 1000);
@@ -223,19 +220,45 @@ var http = new _index.default();var _default = { data: function data() {return {
     navBack: function navBack() {
       uni.navigateBack();
     },
-    //同意协议
-    checkAgreement: function checkAgreement() {
-      this.agreement = !this.agreement;
-    },
-    register: function register() {
-
-    },
-    //打开协议
-    navToAgreementDetail: function navToAgreementDetail(type) {
-      console.log(type);
-      uni.navigateTo({});
+    restPassword: function restPassword() {var _this3 = this;return _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2() {return _regenerator.default.wrap(function _callee2$(_context2) {while (1) {switch (_context2.prev = _context2.next) {case 0:if (
+                (0, _util.checkSmsCode)(_this3.smsCode)) {_context2.next = 3;break;}
+                _this3.$util.toast('验证码格式不正确！');return _context2.abrupt("return");case 3:if (
 
 
+                (0, _util.checkMobile)(_this3.mobile)) {_context2.next = 6;break;}
+                _this3.$util.toast('手机号码不正确！');return _context2.abrupt("return");case 6:if (
+
+
+                (0, _util.checkPassword)(_this3.password)) {_context2.next = 9;break;}
+                _this3.$util.toast('密码不符合要求！');return _context2.abrupt("return");case 9:if (!(
+
+
+                _this3.password != _this3.confirmPassword)) {_context2.next = 12;break;}
+                _this3.$util.toast('2次输入密码不一致！');return _context2.abrupt("return");case 12:_context2.next = 14;return (
+
+
+                  _this3.$http.
+                  put('/auth/v1/user', {
+                    username: _this3.mobile,
+                    password: _this3.password,
+                    confirmPassword: _this3.confirmPassword,
+                    code: _this3.smsCode,
+                    invitationCode: _this3.invitationCode }).
+
+                  then(function (res) {
+                    console.log(res);
+                    if (!res.data.code) {
+                      _this3.$util.toast('注册成功,正在跳转登录...');
+                      setTimeout(function () {
+                        _this3.$util.navTo('/pages/user/login');;
+                      }, 1500);
+                    } else {
+                      _this3.$util.toast(res.data.message);
+                    }
+                  }).
+                  catch(function (err) {
+                    _this3.$util.toast(err);
+                  }));case 14:case "end":return _context2.stop();}}}, _callee2);}))();
     } } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 

@@ -17,7 +17,6 @@ const store = new Vuex.Store({
 	mutations: { //set方法
 		login(state, data) {
 			console.log(data);
-			console.log(data.token);
 			state.token = data.token;
 			state.userInfo = data.user;
 			uni.setStorageSync('token', data.token);
@@ -29,7 +28,7 @@ const store = new Vuex.Store({
 			setTimeout(()=>{
 				state.userInfo = {};
 				uni.removeStorageSync('userInfo');
-			}, 1100)		
+			}, 1500)		
 		}
 	},
 	actions: {

@@ -4,86 +4,83 @@
 		<view class="left-bottom-sign"></view>
 		<text class="back-btn" :class="'cuIcon-close'" @click="navBack"></text>
 		<view>
-			<view class="left-top-sign">HI!</view>
-			<view class="welcome">欢迎您的到来</view>
+			<view class="left-top-sign">FORGET</view>
+			<view class="welcome">当你老了</view>
 			<view class="input-content">
 				<view class="cu-form-group form-group">
-					<image class="from-img" src="/static/user/mobile.png" mode="aspectFit"></image>
-					<!--<u-keyboard ref="uKeyboard" mode="number" @change="username_changed" @backspace="username_backspace" v-model="username_key"tips="请输入手机号"></u-keyboard>-->
-					<input type="number" placeholder="请填写手机号码" name="input" v-model="username" maxlength="11"></input>
+					<text class="iconfont icon-mobile from-tit"></text>
+					<input type="number" placeholder="请填写手机号码" name="input" v-model="mobile" maxlength="11" @input="check(mobile)"></input>
 				</view>
 				<view class="cu-form-group form-group">
-					<image class="from-img" src="/static/user/verification.png" mode="aspectFit"></image>
-					<input placeholder="请填写手机验证码" name="input" v-model="code"></input>
-					<text @click="sendCode" v-if="!sendCodeDisable">获取验证码</text>
-					<text v-else>{{codeSeconds}}秒</text>
+					<text class="iconfont icon-captcha from-tit"></text>
+					<input placeholder="请填写手机验证码" name="input" type="number" v-model="smsCode" maxlength="6"></input>
+					<button class="cu-btn smsBtn" :class="sendCodeBtnDisable?'':'smsBtnEnable'" @click.self.stop="sendSmsCode"
+					 :disabled="sendCodeBtnDisable">
+						<text v-if="!sendCodeTitDisable">获取验证码</text>
+						<text v-else>{{codeSeconds}}秒</text>
+					</button>
 				</view>
 				<view class="cu-form-group form-group">
-					<image class="from-img" src="/static/user/password.png" mode="aspectFit"></image>
-					<input placeholder="请填写密码(6-16位包含数字和字母)" name="input" password v-model="password"></input>
+					<text class="iconfont icon-password from-tit"></text>
+					<input placeholder="请填写密码(6-16位大，小写字母、数字)" name="input" password v-model="password"></input>
 				</view>
 				<view class="cu-form-group form-group">
-					<image class="from-img" src="/static/user/password.png" mode="aspectFit"></image>
-					<input placeholder="请再填写一次密码" name="input" password></input>
+					<text class="iconfont icon-password from-tit"></text>
+					<input placeholder="请再填写一次密码" name="input" password v-model="confirmPassword"></input>
 				</view>
 				<view class="second_line" />
-				<view class="agreement">
-					<u-checkbox shape="circle" icon-size="24rpx" label-size="26rpx" active-color="red" label-disabled="false" v-model="agreement">我已阅读并同意
-						<text class="tit" @click="navToAgreementDetail(1)">《用户服务协议》</text>
-						<text class="tit" @click="navToAgreementDetail(2)">《隐私权政策》</text>
-					</u-checkbox>
-				</view>
-				<u-button ref="register" shape="circle" type="warning" plan marginTop="60rpx" @click="register">注册</u-button>
+				<button class="cu-btn bg-mauve lg confirmBtn" :disabled="confirmBtnDisabled" @click.self.stop="restPassword">重置密码</button>
 			</view>
 		</view>
 	</view>
 </template>
 
 <script>
-	import Request from '../../js_sdk/luch-request/luch-request/index.js' // 下载的插件
-	
-	const http = new Request();
+	import {
+		checkMobile,
+		checkPassword,
+		checkSmsCode
+	} from '../../js_sdk/util.js';
+
 	export default {
 		data() {
 			return {
-				agreement: true,
-				username: '',
+				mobile: '',
 				password: '',
-				code: '',
-				sendCodeDisable: false,
+				confirmPassword: '',
+				smsCode: '',
+				sendCodeTitDisable: false,
+				sendCodeBtnDisable: true,
 				codeSeconds: 0,
-				countDown: 10,
+				countDown: 59,
 			}
 		},
 
 		methods: {
-			sendCode() {
-				if (!this.$u.test.mobile(this.username)) {
-					this.$u.toast('请输入正确的手机号码');
-					return;
-				}
-				http.post('http://demo.rageframe.com/api/tiny-shop/v1/site/sms-code', {
-						mobile: this.username,
-						usage: 'register'
-					}).then(res => {
-						if (res.data.code == 200) {
-							this.$util.toast(`验证码发送成功, 验证码是${res.data.data}`);
-						} else {
-							this.$util.toast(res.data.message);
-						}
-					}).catch(err => {
-							console.log(err);
-					});
-				this.handleSmsCodeTime(this.countDown);
+			async sendSmsCode() {
+				await this.$http.get('/auth/v1/sms', {
+					params: {
+						mobile: this.mobile
+					}
+				}).then(res => {
+					if (res.data.code == 200) {
+						this.$util.toast(`验证码已发送`, 2000, false, 'success');
+						this.handleSmsCodeTime(this.countDown);
+					} else {
+						this.$util.toast(res.data.message);
+					}
+				}).catch(err => {
+					this.$util.toast(`服务器离线，请稍后再试！`);
+				});
 			},
 			handleSmsCodeTime(time) {
 				let timer = setInterval(() => {
 					if (time === 0) {
 						clearInterval(timer);
-						this.sendCodeDisable = false;
+						this.sendCodeTitDisable = false;
 					} else {
 						this.codeSeconds = time;
-						this.sendCodeDisable = true;
+						this.sendCodeTitDisable = true;
 						time--;
 					}
 				}, 1000);
@@ -91,19 +88,45 @@
 			navBack() {
 				uni.navigateBack();
 			},
-			//同意协议
-			checkAgreement() {
-				this.agreement = !this.agreement;
-			},
-			register() {
-
-			},
-			//打开协议
-			navToAgreementDetail(type) {
-				console.log(type);
-				uni.navigateTo({
-
-				})
+			async restPassword() {
+				if (!checkSmsCode(this.smsCode)) {
+					this.$util.toast('验证码格式不正确！');
+					return;
+				}
+				if (!checkMobile(this.mobile)) {
+					this.$util.toast('手机号码不正确！');
+					return;
+				}
+				if (!checkPassword(this.password)) {
+					this.$util.toast('密码不符合要求！');
+					return;
+				}
+				if (this.password != this.confirmPassword) {
+					this.$util.toast('2次输入密码不一致！');
+					return;
+				}
+				await this.$http
+					.put('/auth/v1/user', {
+						username: this.mobile,
+						password: this.password,
+						confirmPassword: this.confirmPassword,
+						code: this.smsCode,
+						invitationCode: this.invitationCode,
+					})
+					.then(res => {
+						console.log(res);
+						if (!res.data.code) {
+							this.$util.toast('注册成功,正在跳转登录...');
+							setTimeout(() => {
+								this.$util.navTo('/pages/user/login');;
+							}, 1500)
+						} else {
+							this.$util.toast(res.data.message);
+						}
+					})
+					.catch(err => {
+						this.$util.toast(err);
+					});
 			},
 		}
 	}
@@ -184,11 +207,26 @@
 	}
 
 	.input-content {
-		padding: 0rpx 50rpx;
+		padding: 0rpx 30rpx;
 
 		.form-group {
 			padding: 0rpx 10rpx;
 			color: #2b85e4;
+		}
+
+		.smsBtn {
+			background: transparent;
+			border-width: 0px;
+			outline: none;
+		}
+
+		.smsBtnEnable {
+			color: #2b85e4;
+		}
+
+		.confirmBtn {
+			width: 98%;
+			margin-top: 40rpx;
 		}
 
 		.from-img {
@@ -197,37 +235,37 @@
 			margin-right: 30rpx;
 		}
 
+		.from-tit {
+			font-size: 60rpx;
+			margin-right: 30rpx;
+			color: #555555;
+		}
+
 		.second_line {
 			vertical-align: middle;
 			border-bottom: solid 2upx #e8e8e8;
-			margin-bottom: 56rpx;
+			margin-bottom: 20rpx;
 		}
 
 		.agreement {
-			left: 0;
+			position: absolute;
+			left: 30rpx;
 			z-index: 1;
+			display: flex;
+			align-items: center;
 			width: 750rpx;
 			height: 90rpx;
-			color: #999;
-			font-size: 26rpx;
+			font-size: 28rpx;
+			text-align: center;
+
+			.check {
+				transform: scale(0.73);
+			}
 
 			.tit {
 				color: #40a2ff;
 			}
-		}
-	}
 
-	.other-wrapper {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		margin-top: 80rpx;
-
-		.icon {
-			width: 80rpx;
-			height: 80rpx;
-			margin-top: 40rpx;
 		}
 	}
 </style>
-

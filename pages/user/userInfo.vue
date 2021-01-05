@@ -6,7 +6,7 @@
 		<view>
 			<view class="left-top-sign">LOGIN</view>
 			<view class="welcome">欢迎回来！</view>
-			<button>退出登录</button>
+			<button @click="logout">退出登录</button>
 		</view>
 	</view>
 </template>
@@ -17,6 +17,10 @@
 			navBack() {
 				uni.navigateBack();
 			},
+			logout(){
+				this.$store.commit('logout');
+				uni.navigateBack();
+			}
 		}
 	}
 </script>

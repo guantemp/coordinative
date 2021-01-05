@@ -67,9 +67,9 @@
 		checkPassword,
 		checkSmsCode
 	} from '../../js_sdk/util.js';
-	import wxLogin from '../../js_sdk/wechatLogin.js'
+	import wxAuth from '../../js_sdk/auth/wechatAuth.js'
 	export default {
-		mixins: [wxLogin],
+		mixins: [wxAuth],
 		data() {
 			return {
 				agreement: true,
@@ -82,6 +82,7 @@
 				codeSeconds: 0,
 				countDown: 59,
 				confirmBtnDisabled: true,
+				method: 'byPassword',
 			}
 		},
 
@@ -112,7 +113,7 @@
 					}
 				}).then(res => {
 					if (res.data.code == 200) {
-						this.$util.toast(`验证码已发送`, 2000, false, success);
+						this.$util.toast(`验证码已发送`, 2000, false, 'success');
 						this.handleSmsCodeTime(this.countDown);
 					} else {
 						this.$util.toast(res.data.message);
@@ -141,11 +142,16 @@
 					this.$util.toast('请阅读并同意用户服务协议及隐私权协议');
 					return;
 				}
+				var res;
+				if (this.verification) {
+					this.method='byCode';
+				} 
 				await this.$http
-					.post('/auth/v1/login', {
+					.post('/auth/v1/auth', {
 						username: this.mobile,
 						password: this.password,
-						method:'byPassword'
+						code:this.smsCode,
+						method: this.method,
 					})
 					.then(res => {
 						if (!res.data.code) {

@@ -23,10 +23,12 @@
 				<view class="second_line" />
 				<view class="flex-sub">
 					<view class="solid-bottom text-xs padding">
-						<text class="text-gray">温馨提示：如果你输入的手机号码尚未注册，系统将注册一个新账户，并绑定该微信号</text>
+						<text class="text-gray">温馨提示：如果手机号码尚未注册，系统会自动生成一个新账户并绑定该微信号，此操作代表你同意</text>
+						<text class="text-blue" @click="this.$util.navTo('/pages/public/not_implemented')">《用户服务协议》</text>
+						<text class="text-blue" @click="this.$util.navTo('/pages/public/not_implemented')">《隐私权政策》</text>
 					</view>
 				</view>
-				<button class="cu-btn bg-brown lg confirmBtn" :disabled="confirmBtnDisabled" @click.self.stop="login">绑定用户</button>
+				<button class="cu-btn bg-brown lg confirmBtn" :disabled="confirmBtnDisabled" @click.self.stop="userBind">绑定</button>
 			</view>
 		</view>
 	</view>
@@ -49,33 +51,37 @@
 				countDown: 59,
 			}
 		},
-
+		onLoad(options) {
+			this.data = JSON.parse(options.data);
+		},
 		methods: {
-			async register() {
+			async userBind() {
 				if (!checkSmsCode(this.smsCode)) {
 					this.$util.toast('验证码格式不正确！');
 					return;
 				}
-				if (checkMobile(mobile)) {
+				if (!checkMobile(this.mobile)) {
 					this.$util.toast('手机号码不正确！');
 					return;
 				}
 				await this.$http
-					.post('/auth/v1/user', {
+					.post('/auth/v1/bind', {
 						username: this.mobile,
 						code: this.smsCode,
-						unionId:'',
-						thirdPartyName:'WEIXIN',
-						method: 'bind'
+						...this.data,
 					})
 					.then(res => {
-						if (res.data.code != 200) {
-							this.$util.toast(res.data.message);
-						} else {
-							this.$util.toast('绑定成功,正在跳转登录...');
+						console.log(res);
+						if (!res.data.code) {
+							this.$util.toast('绑定成功,正在跳转...');
+							this.$store.commit('login', res.data);
 							setTimeout(() => {
-								this.$util.navTo('/pages/user/login');;
+								uni.navigateBack({
+									delta: 2
+								});
 							}, 1500)
+						} else {
+							this.$util.toast(res.data.message);
 						}
 					})
 					.catch(err => {

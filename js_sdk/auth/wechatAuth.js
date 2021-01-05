@@ -20,7 +20,7 @@ export default {
 		//}
 	},
 	onShow() {
-		//this.getWxCode();
+		this.getWxCode();
 	},
 	methods: {
 		//微信小程序登录
@@ -37,31 +37,27 @@ export default {
 				uni.getUserInfo({
 					provider: 'weixin',
 					success: async res => {
-						await this.$http.post('/auth/v1/login', {
+						await this.$http.post('/auth/v1/wxAuth', {
 							params: {
 								js_code: this.wxCode,
-								encryptedData: res.encryptedData,
-								iv: res.iv,
-								signature: res.signature,
-								method: 'byShortcut',
+								//encryptedData: res.encryptedData,
+								//iv: res.iv,
+								//signature: res.signature,
 								userInfo: JSON.parse(res.rawData)
 							},
 							custom: {loading: false},
 						}).then(res => {
 							if (res.data.code == 300) {
 								uni.showModal({
-									title: '绑定',
-									content: '用户尚未绑定',
+									content: '账号尚未绑定',
 									confirmText: '去绑定',
 									cancelText: '还是算了',
 									success: function(r) {
 										if (r.confirm) {
-											console.log('用户点击确定');
 											uni.navigateTo({
-												url: '/pages/user/bindMobile?data=' + JSON.stringify(res.data)
+												url: '/pages/user/bindMobile?data='  +JSON.stringify(res.data.rawData)
 											})
 										} else if (r.cancel) {
-											console.log('用户点击取消');
 											uni.navigateBack();
 										}
 									}
@@ -73,6 +69,7 @@ export default {
 								}, 1500)
 							}
 						}).catch(err => {
+							console.log(err);
 							this.$util.toast(`服务器离线，请稍后再试！`);
 						});
 						//this.$store.commit('login', {
@@ -97,7 +94,7 @@ export default {
 						uni.login({
 							provider: 'weixin',
 							success: res => {
-								console.log(JSON.stringify(res));
+								//console.log(JSON.stringify(res));
 								this.wxCode = res.code;
 							}
 						});

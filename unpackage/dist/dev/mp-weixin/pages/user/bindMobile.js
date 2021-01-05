@@ -97,6 +97,15 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
+  if (!_vm._isMounted) {
+    _vm.e0 = function($event) {
+      return this.$util.navTo("/pages/public/not_implemented")
+    }
+
+    _vm.e1 = function($event) {
+      return this.$util.navTo("/pages/public/not_implemented")
+    }
+  }
 }
 var recyclableRender = false
 var staticRenderFns = []
@@ -165,7 +174,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var _util = __webpack_require__(/*! ../../js_sdk/util.js */ 30);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {try {var info = gen[key](arg);var value = info.value;} catch (error) {reject(error);return;}if (info.done) {resolve(value);} else {Promise.resolve(value).then(_next, _throw);}}function _asyncToGenerator(fn) {return function () {var self = this,args = arguments;return new Promise(function (resolve, reject) {var gen = fn.apply(self, args);function _next(value) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);}function _throw(err) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);}_next(undefined);});};}var _default =
+
+
+var _util = __webpack_require__(/*! ../../js_sdk/util.js */ 30);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function ownKeys(object, enumerableOnly) {var keys = Object.keys(object);if (Object.getOwnPropertySymbols) {var symbols = Object.getOwnPropertySymbols(object);if (enumerableOnly) symbols = symbols.filter(function (sym) {return Object.getOwnPropertyDescriptor(object, sym).enumerable;});keys.push.apply(keys, symbols);}return keys;}function _objectSpread(target) {for (var i = 1; i < arguments.length; i++) {var source = arguments[i] != null ? arguments[i] : {};if (i % 2) {ownKeys(Object(source), true).forEach(function (key) {_defineProperty(target, key, source[key]);});} else if (Object.getOwnPropertyDescriptors) {Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));} else {ownKeys(Object(source)).forEach(function (key) {Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));});}}return target;}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {try {var info = gen[key](arg);var value = info.value;} catch (error) {reject(error);return;}if (info.done) {resolve(value);} else {Promise.resolve(value).then(_next, _throw);}}function _asyncToGenerator(fn) {return function () {var self = this,args = arguments;return new Promise(function (resolve, reject) {var gen = fn.apply(self, args);function _next(value) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);}function _throw(err) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);}_next(undefined);});};}var _default =
 
 
 
@@ -181,32 +192,37 @@ var _util = __webpack_require__(/*! ../../js_sdk/util.js */ 30);function _intero
       countDown: 59 };
 
   },
-
+  onLoad: function onLoad(options) {
+    this.data = JSON.parse(options.data);
+  },
   methods: {
-    register: function register() {var _this = this;return _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {return _regenerator.default.wrap(function _callee$(_context) {while (1) {switch (_context.prev = _context.next) {case 0:if (
+    userBind: function userBind() {var _this = this;return _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {return _regenerator.default.wrap(function _callee$(_context) {while (1) {switch (_context.prev = _context.next) {case 0:if (
                 (0, _util.checkSmsCode)(_this.smsCode)) {_context.next = 3;break;}
-                _this.$util.toast('验证码格式不正确！');return _context.abrupt("return");case 3:if (!
+                _this.$util.toast('验证码格式不正确！');return _context.abrupt("return");case 3:if (
 
 
-                (0, _util.checkMobile)(mobile)) {_context.next = 6;break;}
+                (0, _util.checkMobile)(_this.mobile)) {_context.next = 6;break;}
                 _this.$util.toast('手机号码不正确！');return _context.abrupt("return");case 6:_context.next = 8;return (
 
 
                   _this.$http.
-                  post('/auth/v1/user', {
+                  post('/auth/v1/bind', _objectSpread({
                     username: _this.mobile,
-                    code: _this.smsCode,
-                    unionId: '',
-                    method: 'bind' }).
+                    code: _this.smsCode },
+                  _this.data)).
 
                   then(function (res) {
-                    if (res.data.code != 200) {
-                      _this.$util.toast(res.data.message);
-                    } else {
-                      _this.$util.toast('绑定成功,正在跳转登录...');
+                    console.log(res);
+                    if (!res.data.code) {
+                      _this.$util.toast('绑定成功,正在跳转...');
+                      _this.$store.commit('login', res.data);
                       setTimeout(function () {
-                        _this.$util.navTo('/pages/user/login');;
+                        uni.navigateBack({
+                          delta: 2 });
+
                       }, 1500);
+                    } else {
+                      _this.$util.toast(res.data.message);
                     }
                   }).
                   catch(function (err) {

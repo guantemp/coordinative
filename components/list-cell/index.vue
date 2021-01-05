@@ -76,7 +76,7 @@
 				// 此处采用兼容分开写，兼容nvue的写法
 				style.borderBottomWidth = '1px';
 				style.borderBottomStyle = this.borderStyle;
-				style.width = this.$u.addUnit(this.length);
+				//style.width = this.$u.addUnit(this.length);
 				if (this.hairLine) style.transform = 'scaleY(0.5)';
 				style.borderColor = this.color;
 				return style;

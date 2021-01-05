@@ -206,7 +206,7 @@ var _util = __webpack_require__(/*! ../../js_sdk/util.js */ 30);function _intero
       sendCodeTitDisable: false,
       sendCodeBtnDisable: true,
       codeSeconds: 0,
-      countDown: 10,
+      countDown: 59,
       invitationCode: '' };
 
   },
@@ -226,7 +226,7 @@ var _util = __webpack_require__(/*! ../../js_sdk/util.js */ 30);function _intero
 
                   then(function (res) {
                     if (res.data.code == 200) {
-                      _this.$util.toast("\u9A8C\u8BC1\u7801\u5DF2\u53D1\u9001", 2000, false, success);
+                      _this.$util.toast("\u9A8C\u8BC1\u7801\u5DF2\u53D1\u9001", 2000, false, 'success');
                       _this.handleSmsCodeTime(_this.countDown);
                     } else {
                       _this.$util.toast(res.data.message);
@@ -260,14 +260,14 @@ var _util = __webpack_require__(/*! ../../js_sdk/util.js */ 30);function _intero
 
 
                 (0, _util.checkSmsCode)(_this3.smsCode)) {_context2.next = 6;break;}
-                _this3.$util.toast('验证码格式不正确！');return _context2.abrupt("return");case 6:if (!
+                _this3.$util.toast('验证码格式不正确！');return _context2.abrupt("return");case 6:if (
 
 
-                (0, _util.checkMobile)(mobile)) {_context2.next = 9;break;}
-                _this3.$util.toast('手机号码不正确！');return _context2.abrupt("return");case 9:if (!
+                (0, _util.checkMobile)(_this3.mobile)) {_context2.next = 9;break;}
+                _this3.$util.toast('手机号码不正确！');return _context2.abrupt("return");case 9:if (
 
 
-                (0, _util.checkPassword)(password)) {_context2.next = 12;break;}
+                (0, _util.checkPassword)(_this3.password)) {_context2.next = 12;break;}
                 _this3.$util.toast('密码不符合要求！');return _context2.abrupt("return");case 12:if (!(
 
 
@@ -281,21 +281,21 @@ var _util = __webpack_require__(/*! ../../js_sdk/util.js */ 30);function _intero
                     password: _this3.password,
                     confirmPassword: _this3.confirmPassword,
                     code: _this3.smsCode,
-                    invitationCode: _this3.invitationCode,
-                    method: 'byCode' }).
+                    invitationCode: _this3.invitationCode }).
 
                   then(function (res) {
-                    if (res.data.code != 200) {
-                      _this3.$util.toast(res.data.message);
-                    } else {
+                    //console.log(res);
+                    if (!res.data.code) {
                       _this3.$util.toast('注册成功,正在跳转登录...');
                       setTimeout(function () {
                         _this3.$util.navTo('/pages/user/login');;
                       }, 1500);
+                    } else {
+                      _this3.$util.toast(res.data.message);
                     }
                   }).
                   catch(function (err) {
-                    _this3.$util.toast("\u670D\u52A1\u5668\u79BB\u7EBF\uFF0C\u8BF7\u7A0D\u540E\u518D\u8BD5\uFF01");
+                    _this3.$util.toast(err);
                   }));case 17:case "end":return _context2.stop();}}}, _callee2);}))();
     } } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))

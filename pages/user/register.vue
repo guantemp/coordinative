@@ -65,7 +65,7 @@
 				sendCodeTitDisable: false,
 				sendCodeBtnDisable: true,
 				codeSeconds: 0,
-				countDown: 10,
+				countDown: 59,
 				invitationCode: ''
 			}
 		},
@@ -85,7 +85,7 @@
 					}
 				}).then(res => {
 					if (res.data.code == 200) {
-						this.$util.toast(`验证码已发送`, 2000, false, success);
+						this.$util.toast(`验证码已发送`, 2000, false, 'success');
 						this.handleSmsCodeTime(this.countDown);
 					} else {
 						this.$util.toast(res.data.message);
@@ -122,11 +122,11 @@
 					this.$util.toast('验证码格式不正确！');
 					return;
 				}
-				if (checkMobile(mobile)) {
+				if (!checkMobile(this.mobile)) {
 					this.$util.toast('手机号码不正确！');
 					return;
 				}
-				if (checkPassword(password)) {
+				if (!checkPassword(this.password)) {
 					this.$util.toast('密码不符合要求！');
 					return;
 				}
@@ -141,20 +141,20 @@
 						confirmPassword: this.confirmPassword,
 						code: this.smsCode,
 						invitationCode: this.invitationCode,
-						method: 'byCode'
 					})
 					.then(res => {
-						if (res.data.code != 200) {
-							this.$util.toast(res.data.message);
-						} else {
+						//console.log(res);
+						if (!res.data.code) {
 							this.$util.toast('注册成功,正在跳转登录...');
 							setTimeout(() => {
 								this.$util.navTo('/pages/user/login');;
 							}, 1500)
+						} else {
+							this.$util.toast(res.data.message);
 						}
 					})
 					.catch(err => {
-						this.$util.toast(`服务器离线，请稍后再试！`);
+						this.$util.toast(err);
 					});
 			},
 		}
