@@ -24,7 +24,7 @@
 /* 垂直间距 */
 /* 透明度 */
 /* 文章场景相关 */
-.login.data-v-6bdb5298 {
+.userInfo.data-v-6bdb5298 {
   padding-top: 15vh;
   position: relative;
   width: 100vw;
@@ -32,41 +32,7 @@
   overflow: hidden;
   background: #fff;
 }
-.right-top-sign.data-v-6bdb5298 {
-  position: absolute;
-  top: 80rpx;
-  right: -30rpx;
-  z-index: 95;
-}
-.right-top-sign.data-v-6bdb5298:before, .right-top-sign.data-v-6bdb5298:after {
-  display: block;
-  content: "";
-  width: 400rpx;
-  height: 80rpx;
-  background: #b4f3e2;
-}
-.right-top-sign.data-v-6bdb5298:before {
-  -webkit-transform: rotate(50deg);
-          transform: rotate(50deg);
-  border-top-right-radius: 50px;
-}
-.right-top-sign.data-v-6bdb5298:after {
-  position: absolute;
-  right: -198rpx;
-  top: 0;
-  -webkit-transform: rotate(-50deg);
-          transform: rotate(-50deg);
-  border-top-left-radius: 50px;
-}
-.left-bottom-sign.data-v-6bdb5298 {
-  position: absolute;
-  left: -270rpx;
-  bottom: -320rpx;
-  border: 100rpx solid #d0d1fd;
-  border-radius: 80%;
-  padding: 180rpx;
-}
-.back-btn.data-v-6bdb5298 {
+.back-txt.data-v-6bdb5298 {
   position: absolute;
   left: 20rpx;
   top: calc(25px + 20rpx);
@@ -74,11 +40,6 @@
   padding: 20rpx;
   font-size: 32rpx;
   color: #606266;
-}
-.left-top-sign.data-v-6bdb5298 {
-  font-size: 120rpx;
-  color: #f8f8f8;
-  position: relative;
-  left: -12rpx;
+  text-align: center;
 }
 

@@ -116,7 +116,7 @@
 .input-content .from-tit.data-v-802e0a44 {
   font-size: 60rpx;
   margin-right: 30rpx;
-  color: #555555;
+  color: #1cbbb4;
 }
 .input-content .confirmBtn.data-v-802e0a44 {
   width: 98%;

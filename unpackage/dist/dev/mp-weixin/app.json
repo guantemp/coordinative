@@ -1,8 +1,8 @@
 {
   "pages": [
     "pages/index/index",
-    "pages/item/item",
-    "pages/warehouse/warehouse",
+    "pages/workflow/workflow",
+    "pages/member/member",
     "pages/finance/finance",
     "pages/user/user",
     "pages/user/login",
@@ -32,16 +32,16 @@
         "selectedIconPath": "static/index_selected.png"
       },
       {
-        "text": "业务",
-        "pagePath": "pages/item/item",
-        "iconPath": "static/item.png",
-        "selectedIconPath": "static/item_selected.png"
+        "text": "业务流",
+        "pagePath": "pages/workflow/workflow",
+        "iconPath": "static/workflow.png",
+        "selectedIconPath": "static/workflow_selected.png"
       },
       {
         "text": "会员",
-        "pagePath": "pages/warehouse/warehouse",
-        "iconPath": "static/warehouse.png",
-        "selectedIconPath": "static/warehouse_selected.png"
+        "pagePath": "pages/member/member",
+        "iconPath": "static/member.png",
+        "selectedIconPath": "static/member_selected.png"
       },
       {
         "text": "财务",

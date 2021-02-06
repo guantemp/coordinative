@@ -2,7 +2,7 @@
 	<view class="login">
 		<view class="right-top-sign"></view>
 		<view class="left-bottom-sign"></view>
-		<text class="back-btn" :class="'cuIcon-close'" @click="navBack"></text>
+		<text class="back-btn iconfont icon-left_arrow" :class="'cuIcon-close'" @click="navBack"></text>
 		<view>
 			<view class="left-top-sign">LOGIN</view>
 			<view class="welcome">欢迎回来！</view>
@@ -31,7 +31,7 @@
 				<view>快捷登录</view>
 				<view class="line"> </view>
 				<view class="shortcut">
-					<image @click="convert" v-if="verification" class="img" src="/static/user/password_01.png"></image>
+					<image @click="convert" v-if="verification" class="img" src="/static/user/password.png"></image>
 					<image @click="convert" v-else class="img" src="/static/user/tel.png"></image>
 					<!-- #ifdef MP-WEIXIN -->
 					<button class="btn" plain open-type="getUserInfo" @getuserinfo="getUserInfo">
@@ -82,7 +82,7 @@
 				codeSeconds: 0,
 				countDown: 59,
 				confirmBtnDisabled: true,
-				method: 'byPassword',
+				method: '',
 			}
 		},
 
@@ -104,6 +104,11 @@
 			},
 			convert() {
 				this.verification = !this.verification;
+				if (this.verification) {
+					this.method='byCode';
+				} else{
+					this.method='byPassword';
+				}
 				this.check(this.mobile, this.smsCode, this.password);
 			},
 			async sendSmsCode() {
@@ -141,10 +146,6 @@
 				if (!this.agreement) {
 					this.$util.toast('请阅读并同意用户服务协议及隐私权协议');
 					return;
-				}
-				var res;
-				if (this.verification) {
-					this.method='byCode';
 				} 
 				await this.$http
 					.post('/auth/v1/auth', {
@@ -285,7 +286,7 @@
 		.from-tit {
 			font-size: 60rpx;
 			margin-right: 30rpx;
-			color: #555555;
+			color: #1cbbb4;
 		}
 
 		.confirmBtn {

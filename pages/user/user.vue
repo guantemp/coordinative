@@ -3,13 +3,13 @@
 		<!--info-->
 		<view class="user_info">
 			<image class="top-bg" src="/static/user/user-bg.png"></image>
-			<view class="user_portrait">
-				<image class="user_portrait_img" :src="userInfo.avatarUrl || '/static/user/face.png'" @click="this.$util.navTo(hasLogin?'/pages/user/userInfo':'/pages/user/login')"></image>
+			<view class="user_portrait" @click="this.$util.navTo(hasLogin?'/pages/user/userInfo':'/pages/user/login')">
+				<image class="user_portrait_img" :src="userInfo.avatarUrl || '/static/user/face.png'" ></image>
 				<view class="user_portrait_hasLogin" v-if="hasLogin">
 					<text class="user_portrait_hasLogin_text">{{ userInfo.nickName || userInfo.username || '无名' }}</text>
 					<text class="user_portrait_hasLogin_bonus">积分：{{bonus}}</text>
 				</view>
-				<view class="user_portrait_noLogin_text" v-else @click="this.$util.navTo('/pages/user/login')">
+				<view class="user_portrait_noLogin_text" v-else>
 					<text>登录</text>
 				</view>
 			</view>

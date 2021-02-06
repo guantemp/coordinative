@@ -1,4 +1,5 @@
 {
   "navigationBarTitleText": "财务",
+  "navigationStyle": "custom",
   "usingComponents": {}
 }
