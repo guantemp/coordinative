@@ -248,14 +248,14 @@ __webpack_require__.r(__webpack_exports__);
     navBack: function navBack() {
       uni.navigateBack();
     },
-    location: function location() {
+    location: function location() {var _this = this;
       uni.getLocation({
-        type: 'gcj02', //gcj02//wgs84
+        type: 'wgs84', //gcj02//wgs84
         success: function success(res) {
-          this.$util.toast('当前位置的经度：' + res.longitude + '\n当前位置的纬度：' + res.latitude);
+          _this.$util.toast('当前位置的经度：' + res.longitude + '\n当前位置的纬度：' + res.latitude);
         },
         fail: function fail(res) {
-          this.$util.toast("wqrwqe");
+          _this.$util.toast("获取位置失败，请手动选择。");
         } });
 
 
