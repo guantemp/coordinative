@@ -17,7 +17,8 @@
     "navigationBarTextStyle": "black",
     "navigationBarTitleText": "HOPRXI协助工具",
     "navigationBarBackgroundColor": "#e7ebed",
-    "backgroundColor": "#F8F8F8"
+    "backgroundColor": "#F8F8F8",
+    "navigationStyle": "custom"
   },
   "tabBar": {
     "color": "#909399",
@@ -57,6 +58,11 @@
       }
     ]
   },
-  "permission": {},
-  "usingComponents": {}
+  "permission": {
+    "scope.userLocation": {
+      "desc": "您的位置将用于定位所处门店"
+    }
+  },
+  "usingComponents": {},
+  "sitemapLocation": "sitemap84.json"
 }

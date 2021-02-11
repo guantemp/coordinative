@@ -1,6 +1,6 @@
 {
 	"easycom": {
-		
+
 	},
 	"pages": [{
 			"path": "pages/index/index",
@@ -11,8 +11,12 @@
 		{
 			"path": "pages/workflow/workflow",
 			"style": {
-				"navigationBarTitleText": "业务",
 				"navigationStyle": "custom"
+			},
+			"permission": {
+				"scope.userLocation": {
+					"desc": "你的位置信息将用于小程序位置接口的效果展示"
+				}
 			}
 		},
 		{
@@ -24,44 +28,19 @@
 		{
 			"path": "pages/finance/finance",
 			"style": {
-				"navigationBarTitleText": "财务",
 				"navigationStyle": "custom"
 			}
 		},
 		{
 			"path": "pages/user/user",
 			"style": {
-				"navigationBarTitleText": "我的",
-				"navigationStyle": "custom",
-				"app-plus": {
-					"bounce": "none",
-					"titleNView": {
-						"type": "transparent",
-						"buttons": [{
-								"text": "\ue658",
-								"fontSize": "28",
-								"color": "#8799a3",
-								"width": "42px",
-								"background": "rgba(114, 130, 138, 0.2)"
-							},
-							{
-								"text": "\ue618",
-								"fontSize": "26",
-								"color": "#e7ebed",
-								"background": "rgba(114, 130, 138, 0.2)",
-								"redDot": true
-							}
-						]
-					}
-				}
+				"navigationStyle": "custom"
+
 			}
 		},
 		{
 			"path": "pages/user/login",
-			"style": {
-				"navigationBarTitleText": "登录",
-				"navigationStyle": "custom"
-			}
+			"style": {}
 		},
 		{
 			"path": "pages/user/register",
@@ -111,11 +90,13 @@
 			}]
 		}],
 	*/
+	
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "HOPRXI协助工具",
 		"navigationBarBackgroundColor": "#e7ebed",
-		"backgroundColor": "#F8F8F8"
+		"backgroundColor": "#F8F8F8",
+		"navigationStyle": "custom"
 	},
 	"tabBar": {
 		"color": "#909399",

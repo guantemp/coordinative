@@ -3,6 +3,11 @@
 		<view class="top">
 			<image class="top-bg" src="/static/workflow/blue_back.jpeg"></image>
 			<text class="center">业务流</text>
+			<view class="store">
+				<text class="iconfont icon-shop">嘉鱼超市</text>
+				<view @click="location"><text class="iconfont icon-location">起源店</text></view>
+				<button @click="location">点我</button>
+			</view>
 		</view>
 		<view class="item">
 			<listCell icon="/static/workflow/item.png" title="商品" />
@@ -74,6 +79,18 @@
 		methods: {
 			navBack() {
 				uni.navigateBack();
+			},
+			location() {
+				uni.getLocation({
+					type: 'gcj02',//gcj02//wgs84
+					success: function(res) {
+						this.$util.toast('当前位置的经度：' + res.longitude+'\n当前位置的纬度：' + res.latitude);
+					},
+					fail: function(res) {
+						this.$util.toast("wqrwqe");
+					},
+				});
+
 			}
 		},
 	}
@@ -88,15 +105,23 @@
 
 	.top {
 		display: flex;
-		align-items: center;
+		flex-direction: column;
 		margin-top: var(--status-bar-height);
 		z-index: 90;
-		font-size: 32rpx;
-		font-weight:bold;
 
 		.center {
 			padding-top: 20rpx;
 			padding-left: 35%;
+			font-size: 32rpx;
+			font-weight: bold;
+		}
+
+		.store {
+			display: flex;
+			justify-content: space-between;
+			font-size: 16rpx;
+			margin-top: 30rpx;
+			padding: 0rpx 20rpx;
 		}
 
 		.top-bg {
@@ -115,7 +140,7 @@
 		border-radius: 20rpx;
 		padding: 20rpx 20rpx 0rpx 20rpx;
 		background-color: #FFFFFF;
-		margin: 108rpx 20rpx 0rpx 20rpx;
+		margin: 48rpx 20rpx 0rpx 20rpx;
 
 		.item_img {
 			width: 64rpx;
@@ -126,6 +151,7 @@
 			padding: 20rpx 0rpx 0rpx 0rpx;
 		}
 	}
+
 	.order {
 		display: flex;
 		flex-direction: column;
@@ -134,12 +160,12 @@
 		padding: 20rpx 20rpx 0rpx 20rpx;
 		background-color: #FFFFFF;
 		margin: 20rpx 20rpx 0rpx 20rpx;
-	
+
 		.item_img {
 			width: 64rpx;
 			height: 64rpx;
 		}
-	
+
 		.item_grid_list {
 			padding: 20rpx 0rpx 0rpx 0rpx;
 		}

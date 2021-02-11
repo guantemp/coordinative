@@ -8,7 +8,7 @@
 		},
 		onHide: function() {
 			console.log('App Hide')
-		}
+		},
 	}
 </script>
 
@@ -21,6 +21,8 @@
 	@import 'static/iconfont/iconfont.css';
 	/*#endif*/
 	/*#ifndef MP*/
-	@import url('https://at.alicdn.com/t/font_2251055_q9oyvsj1nra.css');
+	@import url('https://at.alicdn.com/t/font_2371605_z7lflm5au0f.css');
 	/*#endif*/
 </style>
+
+

@@ -1,5 +1,4 @@
 {
-  "navigationBarTitleText": "业务",
   "navigationStyle": "custom",
   "usingComponents": {
     "list-cell": "/components/list-cell/index"
