@@ -3,9 +3,15 @@
 		<view class="top">
 			<text class="back-btn iconfont icon-left_arrow" :class="'cuIcon-close'" @click="navBack"></text>
 			<text class="center">调价单</text>
-			<view class="search">
-				<input @focus="InputFocus" @blur="InputBlur" :adjust-position="false" type="text" placeholder="按条码品名拼音搜索商品"
-				 confirm-type="search"></input>
+			<view class="cu-bar search bg-white">
+				<view class="search-form round">
+					<text class="cuIcon-search"></text>
+					<input @focus="InputFocus" @blur="InputBlur" :adjust-position="false" type="text" placeholder="按条码品名拼音搜索商品"
+					 confirm-type="search"></input>
+				</view>
+				<view class="action">
+					<button class="cu-btn bg-green shadow-blur round">过滤</button>
+				</view>
 			</view>
 			<image class="top-bg" src="/static/workflow/blue_back.png"></image>
 		</view>
@@ -51,16 +57,14 @@
 			font-size: 32rpx;
 			font-weight: bold;
 		}
-		.search{
-			display: flex;
-			padding: 10rpx 20rpx;
-		}
+
+
 
 		.top-bg {
 			position: absolute;
 			min-width: 100vw;
 			top: 0rpx;
-			height:230rpx;
+			height: 230rpx;
 			opacity: .7;
 		}
 	}
