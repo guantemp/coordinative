@@ -18,26 +18,26 @@
 					</view>
 					<text>商品档案</text>
 				</view>
-				<view class="cu-item" @tap.stop="this.$util.navTo('/pages/public/not_implemented')">
+				<view class="cu-item" @tap.stop="this.$util.navTo('/pages/workflow/price_adjustment_sheet')">
 					<view class="text-red">
 						<image class="item_img" src="/static/workflow/readjust.png" />
 						<view class="cu-tag badge">
 							<block>2</block>
 						</view>
 					</view>
-					<text>调价单</text>
+					<text>调价</text>
 				</view>
 				<view class="cu-item" @tap.stop="this.$util.navTo('/pages/public/not_implemented')">
 					<view class="text-red">
 						<image class="item_img" src="/static/workflow/label_printer.png" />
 					</view>
-					<text>标价签</text>
+					<text>价签打印</text>
 				</view>
 				<view class="cu-item" @tap.stop="this.$util.navTo('/pages/public/not_implemented')">
 					<view class="text-red">
 						<image class="item_img" src="/static/workflow/promotion.png" />
 					</view>
-					<text>促销单</text>
+					<text>促销</text>
 				</view>
 			</view>
 		</view>
@@ -48,7 +48,7 @@
 					<view class="text-red">
 						<image class="item_img" src="/static/workflow/purchase.png" />
 					</view>
-					<text>订单</text>
+					<text>下单</text>
 				</view>
 				<view class="cu-item" @tap.stop="this.$util.navTo('/pages/public/not_implemented')">
 					<view class="text-red">

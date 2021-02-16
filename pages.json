@@ -20,6 +20,12 @@
 			}
 		},
 		{
+			"path": "pages/workflow/price_adjustment_sheet",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		},
+		{
 			"path": "pages/member/member",
 			"style": {
 				"navigationBarTitleText": "会员"
@@ -79,18 +85,20 @@
 		}
 	],
 	/*
-		"subPackages": [{
-			"root": "pages/user",
-			"pages": [{
-				"path": "login",
+	"subPackages":[
+		{
+			"root":"pages/workflow",
+			"pages":[
+				{
+				"path": "price_adjustment_sheet",
 				"style": {
-					"navigationBarTitleText": "登录",
 					"navigationStyle": "custom"
+				}	
 				}
-			}]
-		}],
+			]
+		}
+	],
 	*/
-	
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "HOPRXI协助工具",

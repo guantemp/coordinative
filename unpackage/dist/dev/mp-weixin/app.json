@@ -2,6 +2,7 @@
   "pages": [
     "pages/index/index",
     "pages/workflow/workflow",
+    "pages/workflow/price_adjustment_sheet",
     "pages/member/member",
     "pages/finance/finance",
     "pages/user/user",
@@ -60,9 +61,8 @@
   },
   "permission": {
     "scope.userLocation": {
-      "desc": "您的位置将用于定位所处门店"
+      "desc": ""
     }
   },
-  "usingComponents": {},
-  "sitemapLocation": "sitemap84.json"
+  "usingComponents": {}
 }
