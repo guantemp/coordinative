@@ -1,6 +1,4 @@
 {
-  "usingComponents": {
-    "u-button": "/uview-ui/components/u-button/u-button",
-    "u-link": "/uview-ui/components/u-link/u-link"
-  }
+  "navigationBarTitleText": "首页",
+  "usingComponents": {}
 }

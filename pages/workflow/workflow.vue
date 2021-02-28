@@ -1,16 +1,14 @@
 <template>
 	<view class="workflow">
 		<view class="top">
-			<image class="top-bg" src="/static/workflow/blue_back.jpeg"></image>
-			<text class="center">业务流</text>
-			<view class="store">
-				<text class="iconfont icon-shop">嘉鱼超市</text>
-				<view @click="location"><text class="iconfont icon-location">起源店</text></view>
-				<button @click="location">点我</button>
+			<text class="flow">业务工作台</text>
+			<view class="store" @click="this.$util.navTo('/pages/workflow/store_selection')">
+				<text class="iconfont icon-location"></text>
+				<text class="txt">旺客隆超市国美绿洲店</text>
 			</view>
 		</view>
 		<view class="item">
-			<listCell icon="/static/workflow/item.png" title="商品" />
+			<listCell icon="/static/workflow/item.png" title="商品" :arrow="false"/>
 			<view class="cu-list grid col-4 no-border item_grid_list">
 				<view class="cu-item " @tap.stop="this.$util.navTo('/pages/public/not_implemented')">
 					<view class="text-red">
@@ -71,18 +69,24 @@
 </template>
 
 <script>
-	import listCell from 'components/list-cell';
+	import listCell from '@/components/list-cell';
 	export default {
 		components: {
 			listCell,
+			//'HMfilterDropdown': HMfilterDropdown
 		},
+		data() {
+			return {
+			}
+		},
+		onLoad: function() {},
 		methods: {
 			navBack() {
 				uni.navigateBack();
 			},
 			location() {
 				uni.getLocation({
-					type: 'wgs84', //gcj02//wgs84
+					type: 'gcj02', //gcj02//wgs84
 					success: res => {
 						this.$util.toast('当前位置的经度：' + res.longitude + '\n当前位置的纬度：' + res.latitude);
 					},
@@ -106,22 +110,29 @@
 	.top {
 		display: flex;
 		flex-direction: column;
-		margin-top: var(--status-bar-height);
 		z-index: 90;
+		background: linear-gradient(45deg, #0081ff, #1cbbb4);
+		height:210rpx;
+		top:0rpx;
 
-		.center {
-			padding-top: 20rpx;
-			padding-left: 35%;
-			font-size: 32rpx;
-			font-weight: bold;
+		.flow {
+			padding-top: 78rpx;
+			padding-left: 30%;
+			font-size: 36rpx;
+			text-shadow: 1px 0px 1px rgba(0, 0, 0, .3);
 		}
 
 		.store {
-			display: flex;
-			justify-content: space-between;
 			font-size: 16rpx;
-			margin-top: 30rpx;
-			padding: 0rpx 20rpx;
+			color: #FFF;
+			padding: 5rpx 20rpx;
+			align-items: center;
+			margin: 20rpx 0rpx;
+			
+			.txt{
+				margin: 0rpx 10rpx;
+				font-size: 30rpx;
+			}
 		}
 
 		.top-bg {
@@ -133,6 +144,7 @@
 		}
 	}
 
+
 	.item {
 		display: flex;
 		flex-direction: column;
@@ -140,7 +152,7 @@
 		border-radius: 20rpx;
 		padding: 20rpx 20rpx 0rpx 20rpx;
 		background-color: #FFFFFF;
-		margin: 48rpx 20rpx 0rpx 20rpx;
+		margin: 20rpx 20rpx 0rpx 20rpx;
 
 		.item_img {
 			width: 64rpx;

@@ -12,6 +12,12 @@
 			"path": "pages/workflow/workflow",
 			"style": {
 				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/workflow/store_selection",
+			"style": {
+				"navigationStyle": "custom"
 			},
 			"permission": {
 				"scope.userLocation": {
@@ -28,12 +34,14 @@
 		{
 			"path": "pages/member/member",
 			"style": {
-				"navigationBarTitleText": "会员"
+				"navigationBarTitleText": "会员",
+				"navigationStyle": "custom"
 			}
 		},
 		{
-			"path": "pages/finance/finance",
+			"path": "pages/oa/oa",
 			"style": {
+				"navigationBarTitleText": "OA",
 				"navigationStyle": "custom"
 			}
 		},
@@ -46,7 +54,10 @@
 		},
 		{
 			"path": "pages/user/login",
-			"style": {}
+			"style": {
+				"navigationBarTitleText": "登录",
+				"navigationStyle": "custom"
+			}
 		},
 		{
 			"path": "pages/user/register",
@@ -103,8 +114,8 @@
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "HOPRXI协助工具",
 		"navigationBarBackgroundColor": "#e7ebed",
-		"backgroundColor": "#F8F8F8",
-		"navigationStyle": "custom"
+		"backgroundColor": "#F8F8F8"
+		//"navigationStyle": "custom"
 	},
 	"tabBar": {
 		"color": "#909399",
@@ -130,10 +141,10 @@
 				"selectedIconPath": "static/member_selected.png"
 			},
 			{
-				"text": "财务",
-				"pagePath": "pages/finance/finance",
-				"iconPath": "static/finance.png",
-				"selectedIconPath": "static/finance_selected.png"
+				"text": "OA",
+				"pagePath": "pages/oa/oa",
+				"iconPath": "static/oa.png",
+				"selectedIconPath": "static/oa_selected.png"
 			},
 			{
 				"text": "我的",

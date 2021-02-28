@@ -21,7 +21,7 @@
     "checkSiteMap": true,
     "uploadWithSourceMap": true,
     "compileHotReLoad": false,
-    "useMultiFrameRuntime": false,
+    "useMultiFrameRuntime": true,
     "useApiHook": true,
     "babelSetting": {
       "ignore": [],
@@ -36,14 +36,13 @@
     "userConfirmedBundleSwitch": false,
     "packNpmManually": false,
     "packNpmRelationList": [],
-    "minifyWXSS": true
+    "minifyWXSS": true,
+    "useApiHostProcess": false
   },
   "compileType": "miniprogram",
   "libVersion": "",
   "appid": "wx16772085b996e8e0",
-  "projectname": "HOPRXI%E5%8D%8F%E7%9D%80%E5%B7%A5%E5%85%B7",
-  "simulatorType": "wechat",
-  "simulatorPluginLibVersion": {},
+  "projectname": "HOPRXI协着工具",
   "condition": {
     "search": {
       "list": []

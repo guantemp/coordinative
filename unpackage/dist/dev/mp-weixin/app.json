@@ -2,9 +2,10 @@
   "pages": [
     "pages/index/index",
     "pages/workflow/workflow",
+    "pages/workflow/store_selection",
     "pages/workflow/price_adjustment_sheet",
     "pages/member/member",
-    "pages/finance/finance",
+    "pages/oa/oa",
     "pages/user/user",
     "pages/user/login",
     "pages/user/register",
@@ -18,8 +19,7 @@
     "navigationBarTextStyle": "black",
     "navigationBarTitleText": "HOPRXI协助工具",
     "navigationBarBackgroundColor": "#e7ebed",
-    "backgroundColor": "#F8F8F8",
-    "navigationStyle": "custom"
+    "backgroundColor": "#F8F8F8"
   },
   "tabBar": {
     "color": "#909399",
@@ -46,10 +46,10 @@
         "selectedIconPath": "static/member_selected.png"
       },
       {
-        "text": "财务",
-        "pagePath": "pages/finance/finance",
-        "iconPath": "static/finance.png",
-        "selectedIconPath": "static/finance_selected.png"
+        "text": "OA",
+        "pagePath": "pages/oa/oa",
+        "iconPath": "static/oa.png",
+        "selectedIconPath": "static/oa_selected.png"
       },
       {
         "text": "我的",
@@ -61,7 +61,7 @@
   },
   "permission": {
     "scope.userLocation": {
-      "desc": ""
+      "desc": "的苏格拉底说"
     }
   },
   "usingComponents": {}

@@ -822,7 +822,7 @@ function initData(vueOptions, context) {
     try {
       data = data.call(context); // 支持 Vue.prototype 上挂的数据
     } catch (e) {
-      if (Object({"VUE_APP_NAME":"HOPRXI协着工具","VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG) {
+      if (Object({"NODE_ENV":"development","VUE_APP_NAME":"HOPRXI协着工具","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG) {
         console.warn('根据 Vue 的 data 函数初始化小程序 data 失败，请尽量确保 data 函数中不访问 vm 对象，否则可能影响首次数据渲染速度。', data);
       }
     }
@@ -7318,7 +7318,7 @@ function type(obj) {
 
 function flushCallbacks$1(vm) {
     if (vm.__next_tick_callbacks && vm.__next_tick_callbacks.length) {
-        if (Object({"VUE_APP_NAME":"HOPRXI协着工具","VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG) {
+        if (Object({"NODE_ENV":"development","VUE_APP_NAME":"HOPRXI协着工具","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG) {
             var mpInstance = vm.$scope;
             console.log('[' + (+new Date) + '][' + (mpInstance.is || mpInstance.route) + '][' + vm._uid +
                 ']:flushCallbacks[' + vm.__next_tick_callbacks.length + ']');
@@ -7339,14 +7339,14 @@ function nextTick$1(vm, cb) {
     //1.nextTick 之前 已 setData 且 setData 还未回调完成
     //2.nextTick 之前存在 render watcher
     if (!vm.__next_tick_pending && !hasRenderWatcher(vm)) {
-        if(Object({"VUE_APP_NAME":"HOPRXI协着工具","VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG){
+        if(Object({"NODE_ENV":"development","VUE_APP_NAME":"HOPRXI协着工具","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG){
             var mpInstance = vm.$scope;
             console.log('[' + (+new Date) + '][' + (mpInstance.is || mpInstance.route) + '][' + vm._uid +
                 ']:nextVueTick');
         }
         return nextTick(cb, vm)
     }else{
-        if(Object({"VUE_APP_NAME":"HOPRXI协着工具","VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG){
+        if(Object({"NODE_ENV":"development","VUE_APP_NAME":"HOPRXI协着工具","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG){
             var mpInstance$1 = vm.$scope;
             console.log('[' + (+new Date) + '][' + (mpInstance$1.is || mpInstance$1.route) + '][' + vm._uid +
                 ']:nextMPTick');
@@ -7432,7 +7432,7 @@ var patch = function(oldVnode, vnode) {
     });
     var diffData = this.$shouldDiffData === false ? data : diff(data, mpData);
     if (Object.keys(diffData).length) {
-      if (Object({"VUE_APP_NAME":"HOPRXI协着工具","VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG) {
+      if (Object({"NODE_ENV":"development","VUE_APP_NAME":"HOPRXI协着工具","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG) {
         console.log('[' + (+new Date) + '][' + (mpInstance.is || mpInstance.route) + '][' + this._uid +
           ']差量更新',
           JSON.stringify(diffData));
@@ -7871,7 +7871,7 @@ module.exports = g;
 /***/ }),
 /* 4 */
 /*!***************************************!*\
-  !*** D:/mini/coordinative/pages.json ***!
+  !*** E:/mini/coordinative/pages.json ***!
   \***************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
@@ -8014,7 +8014,7 @@ function normalizeComponent (
 /***/ }),
 /* 11 */
 /*!*******************************************!*\
-  !*** D:/mini/coordinative/store/index.js ***!
+  !*** E:/mini/coordinative/store/index.js ***!
   \*******************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
@@ -9973,7 +9973,7 @@ var index = {
 /***/ }),
 /* 16 */
 /*!*****************************************************************************!*\
-  !*** D:/mini/coordinative/js_sdk/luch-request/luch-request/luch-request.js ***!
+  !*** E:/mini/coordinative/js_sdk/luch-request/luch-request/luch-request.js ***!
   \*****************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
@@ -10052,7 +10052,7 @@ http;exports.default = _default;
 /***/ }),
 /* 17 */
 /*!**********************************************************************!*\
-  !*** D:/mini/coordinative/js_sdk/luch-request/luch-request/index.js ***!
+  !*** E:/mini/coordinative/js_sdk/luch-request/luch-request/index.js ***!
   \**********************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
@@ -10064,7 +10064,7 @@ _Request.default;exports.default = _default;
 /***/ }),
 /* 18 */
 /*!*****************************************************************************!*\
-  !*** D:/mini/coordinative/js_sdk/luch-request/luch-request/core/Request.js ***!
+  !*** E:/mini/coordinative/js_sdk/luch-request/luch-request/core/Request.js ***!
   \*****************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
@@ -10273,7 +10273,7 @@ Request = /*#__PURE__*/function () {
 /***/ }),
 /* 19 */
 /*!*************************************************************************************!*\
-  !*** D:/mini/coordinative/js_sdk/luch-request/luch-request/core/dispatchRequest.js ***!
+  !*** E:/mini/coordinative/js_sdk/luch-request/luch-request/core/dispatchRequest.js ***!
   \*************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
@@ -10289,7 +10289,7 @@ function _default(config) {
 /***/ }),
 /* 20 */
 /*!*******************************************************************************!*\
-  !*** D:/mini/coordinative/js_sdk/luch-request/luch-request/adapters/index.js ***!
+  !*** E:/mini/coordinative/js_sdk/luch-request/luch-request/adapters/index.js ***!
   \*******************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
@@ -10388,7 +10388,7 @@ function _default(config) {
 /***/ }),
 /* 21 */
 /*!*********************************************************************************!*\
-  !*** D:/mini/coordinative/js_sdk/luch-request/luch-request/helpers/buildURL.js ***!
+  !*** E:/mini/coordinative/js_sdk/luch-request/luch-request/helpers/buildURL.js ***!
   \*********************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
@@ -10467,7 +10467,7 @@ function buildURL(url, params) {
 /***/ }),
 /* 22 */
 /*!**********************************************************************!*\
-  !*** D:/mini/coordinative/js_sdk/luch-request/luch-request/utils.js ***!
+  !*** E:/mini/coordinative/js_sdk/luch-request/luch-request/utils.js ***!
   \**********************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
@@ -10608,7 +10608,7 @@ function deepMerge() /* obj1, obj2, obj3, ... */{
 /***/ }),
 /* 23 */
 /*!***********************************************************************************!*\
-  !*** D:/mini/coordinative/js_sdk/luch-request/luch-request/core/buildFullPath.js ***!
+  !*** E:/mini/coordinative/js_sdk/luch-request/luch-request/core/buildFullPath.js ***!
   \***********************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
@@ -10638,7 +10638,7 @@ function buildFullPath(baseURL, requestedURL) {
 /***/ }),
 /* 24 */
 /*!**************************************************************************************!*\
-  !*** D:/mini/coordinative/js_sdk/luch-request/luch-request/helpers/isAbsoluteURL.js ***!
+  !*** E:/mini/coordinative/js_sdk/luch-request/luch-request/helpers/isAbsoluteURL.js ***!
   \**************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
@@ -10662,7 +10662,7 @@ function isAbsoluteURL(url) {
 /***/ }),
 /* 25 */
 /*!************************************************************************************!*\
-  !*** D:/mini/coordinative/js_sdk/luch-request/luch-request/helpers/combineURLs.js ***!
+  !*** E:/mini/coordinative/js_sdk/luch-request/luch-request/helpers/combineURLs.js ***!
   \************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
@@ -10686,7 +10686,7 @@ function combineURLs(baseURL, relativeURL) {
 /***/ }),
 /* 26 */
 /*!****************************************************************************!*\
-  !*** D:/mini/coordinative/js_sdk/luch-request/luch-request/core/settle.js ***!
+  !*** E:/mini/coordinative/js_sdk/luch-request/luch-request/core/settle.js ***!
   \****************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
@@ -10712,7 +10712,7 @@ function settle(resolve, reject, response) {
 /***/ }),
 /* 27 */
 /*!****************************************************************************************!*\
-  !*** D:/mini/coordinative/js_sdk/luch-request/luch-request/core/InterceptorManager.js ***!
+  !*** E:/mini/coordinative/js_sdk/luch-request/luch-request/core/InterceptorManager.js ***!
   \****************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
@@ -10773,7 +10773,7 @@ InterceptorManager;exports.default = _default;
 /***/ }),
 /* 28 */
 /*!*********************************************************************************!*\
-  !*** D:/mini/coordinative/js_sdk/luch-request/luch-request/core/mergeConfig.js ***!
+  !*** E:/mini/coordinative/js_sdk/luch-request/luch-request/core/mergeConfig.js ***!
   \*********************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
@@ -10872,7 +10872,7 @@ function _default(globalsConfig) {var config2 = arguments.length > 1 && argument
 /***/ }),
 /* 29 */
 /*!******************************************************************************!*\
-  !*** D:/mini/coordinative/js_sdk/luch-request/luch-request/core/defaults.js ***!
+  !*** E:/mini/coordinative/js_sdk/luch-request/luch-request/core/defaults.js ***!
   \******************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
@@ -10911,7 +10911,7 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 /***/ }),
 /* 30 */
 /*!*******************************************!*\
-  !*** D:/mini/coordinative/js_sdk/util.js ***!
+  !*** E:/mini/coordinative/js_sdk/util.js ***!
   \*******************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
@@ -11048,9 +11048,17 @@ var checkEmail = function checkEmail(val) {
 /* 80 */,
 /* 81 */,
 /* 82 */,
-/* 83 */
+/* 83 */,
+/* 84 */,
+/* 85 */,
+/* 86 */,
+/* 87 */,
+/* 88 */,
+/* 89 */,
+/* 90 */,
+/* 91 */
 /*!******************************************************!*\
-  !*** D:/mini/coordinative/js_sdk/auth/wechatAuth.js ***!
+  !*** E:/mini/coordinative/js_sdk/auth/wechatAuth.js ***!
   \******************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {

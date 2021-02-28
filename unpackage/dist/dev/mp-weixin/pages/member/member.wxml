@@ -1,1 +1,1 @@
-<view class="_div"></view>
+<view><nav-bar vue-id="31fc4540-1" title="上的困惑的是深灰色的分" bgColor="{{['#0081ff','#1cbbb4']}}" bind:__l="__l"></nav-bar></view>
