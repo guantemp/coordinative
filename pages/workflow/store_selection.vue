@@ -1,16 +1,13 @@
 <template>
 	<view class="store">
-		<view class="cu-bar bg-white search fixed" :style="[{top:navBar + 'rpx'}]">
-			<view class="search-form round">
-				<text class="cuIcon-search"></text>
-				<input type="text" placeholder="输入门店名称/城市拼音" confirm-type="search"></input>
-			</view>
-			<view class="action">
-				<button class="cu-btn bg-gradual-green shadow-blur round">搜索</button>
-			</view>
-		</view>
-		<scroll-view scroll-y class="indexes" :scroll-into-view="'indexes-'+ listCurID" :style="[{height:'calc(100vh - '+ navBar + 'rpx - 50rpx)'}]"
-		 :scroll-with-animation="true" :enable-back-to-top="true">
+		<!-- :backgroundColor="[1, ['#24bdab', '#80c54c', 45]]"  or :backgroundColor="['#80c54c'] -->
+		<navBar title="上的困惑的是深灰色的分" :backgroundColor="[1, ['#24bdab', '#80c54c', 45]]">
+		</navBar>
+		<view class="current"></view>
+		<view class="footprint"></view>
+		<scroll-view scroll-y class="indexes" :scroll-into-view="'indexes-'+ listCurID"
+			:style="[{height:'calc(100vh - '+ navBar + 'rpx - 50rpx)'}]" :scroll-with-animation="true"
+			:enable-back-to-top="true">
 			<block v-for="(item,index) in list" :key="index">
 				<view :class="'indexItem-' + item.name" :id="'indexes-' + item.name" :data-index="item.name">
 					<view class="padding">{{item.name}}</view>
@@ -18,7 +15,8 @@
 						<view class="cu-item" v-for="(items,sub) in 2" :key="sub">
 							<view class="cu-avatar round lg">{{item.name}}</view>
 							<view class="content">
-								<view class="text-grey">{{item.name}}<text class="text-abc">{{list[sub].name}}</text>君</view>
+								<view class="text-grey">{{item.name}}<text class="text-abc">{{list[sub].name}}</text>君
+								</view>
 								<view class="text-gray text-sm">
 									有{{sub+2}}个主子需要伺候
 								</view>
@@ -30,8 +28,10 @@
 		</scroll-view>
 		<view class="indexBar" :style="[{height:'calc(100vh - ' + navBar + 'px - 50px)'}]">
 			<view class="indexBar-box" @touchstart="tStart" @touchend="tEnd" @touchmove.stop="tMove">
-				<view class="indexBar-item" v-for="(item,index) in list" :key="index" :id="index" @touchstart="getCur" @touchend="setCur">
-					{{item.name}}</view>
+				<view class="indexBar-item" v-for="(item,index) in list" :key="index" :id="index" @touchstart="getCur"
+					@touchend="setCur">
+					{{item.name}}
+				</view>
 			</view>
 		</view>
 		<!--选择显示-->
@@ -42,7 +42,12 @@
 </template>
 
 <script>
+	import navBar from '@/components/navBar/navBar.vue';
 	export default {
+		components: {
+			navBar
+			//'HMfilterDropdown': HMfilterDropdown
+		},
 		data() {
 			return {
 				StatusBar: this.StatusBar,
@@ -92,12 +97,12 @@
 					this.listCur = that.list[num].name
 				};
 			},
-	
+
 			//触发全部开始选择
 			tStart() {
 				this.hidden = false
 			},
-	
+
 			//触发结束选择
 			tEnd() {
 				this.hidden = true;
@@ -120,19 +125,20 @@
 	}
 </script>
 
-<style scoped lang='scss'>	
+<style scoped lang='scss'>
 	.store {
 		width: 100vw;
 		height: 100vh;
 		background-color: #F8F8F8;
 	}
-	
-	
+
+	.current {}
+
 	.indexes {
 		position: relative;
 		margin-top: 120rpx;
 	}
-	
+
 	.indexBar {
 		position: fixed;
 		right: 0px;
@@ -141,7 +147,7 @@
 		display: flex;
 		align-items: center;
 	}
-	
+
 	.indexBar .indexBar-box {
 		width: 40upx;
 		height: auto;
@@ -152,7 +158,7 @@
 		box-shadow: 0 0 20upx rgba(0, 0, 0, 0.1);
 		border-radius: 10upx;
 	}
-	
+
 	.indexBar-item {
 		flex: 1;
 		width: 40upx;
@@ -163,14 +169,14 @@
 		font-size: 24upx;
 		color: #888;
 	}
-	
+
 	movable-view.indexBar-item {
 		width: 40upx;
 		height: 40upx;
 		z-index: 9;
 		position: relative;
 	}
-	
+
 	movable-view.indexBar-item::before {
 		content: "";
 		display: block;
@@ -181,7 +187,7 @@
 		width: 4upx;
 		background-color: #f37b1d;
 	}
-	
+
 	.indexToast {
 		position: fixed;
 		top: 0;
