@@ -1,7 +1,8 @@
 <template>
 	<view class="store">
 		<!-- :backgroundColor="[1, ['#24bdab', '#80c54c', 45]]"  or :backgroundColor="['#80c54c'] -->
-		<navBar title="上的困惑的是深灰色的分" :backgroundColor="[1, ['#24bdab', '#80c54c', 45]]">
+		<navBar title="上的困惑的是深灰色的分" :backgroundColor="[1, ['#24bdab', '#80c54c', 45]]"
+			backgroundImg="/static/workflow/xj.jpg" btnType="home" fontColor="#FFF">
 		</navBar>
 		<view class="current"></view>
 		<view class="footprint"></view>

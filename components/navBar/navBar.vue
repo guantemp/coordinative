@@ -2,20 +2,23 @@
 	<view class="navBar" :class="{navShadow:navShadow,width:barWidth}">
 		<view class="navBarContent"
 			:style="{height:barHeight,paddingTop: statusBarHeight,'background-color': navBarBackgroudColor,'background-image':navBarBackgroudColor}">
-			<view class="backImg" v-if="navBarBackgroudImg">
-				<image class="img" :style="{height:barHeight,width:barWidth}" src="background" mode="scaleToFill"></image>
+			<view class="backImg" v-if="navBarBackgroudImg" :style="{'opacity': 1}">
+				<image :style="{height:barHeight,width:barWidth}" :src="navBarBackgroudImg" mode="scaleToFill"></image>
 			</view>
-			<view class="searchBtn">
+			<view class="btn">
 				<slot name="btnSlot">
-					<view v-if="btnType==none"></view>
-					<view v-if="btnType=='back'" @click="navBack">
-						<text class="iconfont icon-left_arrow"></text>
+					<view v-if="btnType==='back'" @click="navBack">
+						<text class="iconfont icon-left_arrow" :style="{color:fontColor,}"></text>
 					</view>
+					<view v-if="btnType==='home'" @click="navBack">
+						<text class="iconfont icon-home" :style="{color:fontColor,}"></text>
+					</view>
+					<view v-else></view>
 				</slot>
 			</view>
 			<view class="surplus">
 				<slot name="surplusSlot">
-					<view v-if="false" :style="{color:fontColor,}" class="title">
+					<view v-if="true" :style="{color:fontColor,}" class="title">
 						<text>{{title}}</text>
 					</view>
 					<view v-else>
@@ -38,6 +41,17 @@
 <script>
 	export default {
 		props: {
+			backgroundColor: {
+				type: Array,
+				//背景色,参数一：透明度,参数二：背景颜色（array则为线性渐变，string为单色背景）渐变轴角度
+				// 比如：[1,['#24bdab','#80c54c'，45]]
+				default: []
+			},
+			backgroundImg: {
+				type: String,
+				// 背景图片
+				default: ''
+			},
 			fontColor: {
 				type: String,
 				default: '#000'
@@ -54,25 +68,9 @@
 				type: Boolean,
 				default: true
 			},
-			backgroundColor: {
-				type: Array,
-				//背景色,参数一：透明度,参数二：背景颜色（array则为线性渐变，string为单色背景）渐变轴角度
-				// 比如：[1,['#24bdab','#80c54c'，45]]
-				default: []
-			},
-			backgroundImg: {
-				type: [String, Array],
-				// 背景图片（array则为滑动切换背景图，string为单一背景图）
-				// 普通背景
-				// ['/static/xj.jpg']
-				// 切换功能参数说明：第一张图片，第二张图，第一张图透明度，第二张图透明度
-				// ['/static/xj.jpg','/static/xk.jpg',1,1]
-				default: null
-			},
 		},
 		data() {
 			return {
-				screenWidth: 0,
 				statusBarHeight: 0,
 				barWidth: 0,
 				barHeight: 0,
@@ -84,7 +82,6 @@
 					top: 0,
 					height: 0,
 				},
-
 
 				surplusTitleOrSearch: true,
 			}
@@ -115,8 +112,10 @@
 					this.barWidth = res.screenWidth + 'px';
 				}
 			});
-			this.setNavBarColor(this.backgroundColor);
-			//console.log(this.backgroundColor);
+			this.navBarBackgroudImg = this.backgroundImg;
+			if (!this.navBarBackgroudImg)
+				this.setNavBarColor(this.backgroundColor);
+			console.log(this.btnType);
 		},
 		methods: {
 			navBack() {
@@ -174,7 +173,6 @@
 
 <style lang="scss" scoped>
 	.navBar {
-		z-index: 1;
 		display: flex;
 		position: sticky;
 		top: 0;
@@ -186,32 +184,31 @@
 		align-content: center;
 		font-size: 32rpx;
 		width: 100%;
-	}
-	.backImg{
-		position: relative;
-		flex: 1;
-		z-index:1;
-		width: 100%;
-		flex-direction: column;
-		
-		.img {
+
+		.backImg {
 			position: absolute;
 			left: 0;
 			top: 0;
 			right: 0;
 			bottom: 0;
+			z-index: 1;
+		}
+
+		.btn {
+			border-radius: 0 !important;
+			display: flex;
+			align-items: center;
+			justify-content: center;
 			z-index: 2;
 		}
 	}
 
-	.titleBtn {
-		border-radius: 0 !important;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-	}
+
+
+
 
 	.surplus {
+		z-index: 2;
 
 		.title {
 			font-weight: 700;
