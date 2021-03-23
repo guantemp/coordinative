@@ -10,22 +10,22 @@
 				<view class="btn">
 					<slot name="btnSlot">
 						<view v-if="btnType==='back' && !firstPage" @click="navBack">
-							<text class="iconfont icon-left_arrow" :style="{color:fontColor}"></text>
+							<text class="iconfont icon-left_arrow" :style="{color:surplusTitle.color}"></text>
 						</view>
 						<view v-else-if="btnType==='home'" @click="navHome">
-							<text class="iconfont icon-home" :style="{color:fontColor,}"></text>
+							<text class="iconfont icon-home" :style="{color:surplusTitle.color}"></text>
 						</view>
 						<view v-else-if="btnType==='tower'" class="tower"
 							:style="{width:menuButtonBounding.width+'px','line-height':menuButtonBounding.height-2 + 'px'}">
 							<text class="iconfont icon-left_arrow" :style="{color:fontColor,}" @click="navBack"></text>
-							<text v-if="!firstPage" class="iconfont icon-home" :style="{color:fontColor,}"
+							<text v-if="!firstPage" class="iconfont icon-home" :style="{color:surplusTitle.color,}"
 								@click="navHome"></text>
 						</view>
 					</slot>
 				</view>
 				<view class="surplus">
 					<slot name="surplusSlot">
-						<view v-if="title" :style="{color:fontColor,}" class="title">
+						<view v-if="title" :style="{color:surplusTitle.color,'text-align':surplusTitle.align,'font-weight':surplusTitle.weight}" class="title">
 							<text>{{title}}</text>
 						</view>
 						<view v-else>
@@ -72,17 +72,15 @@
 				type: String,
 				default: ''
 			},
-			fontColor: {
-				type: String,
-				default: '#000'
+			titleFont: {
+				type: [String, Array],
+				//字体选项，颜色，排列,粗细
+				//['#000000', 'center', '400']
+				default: []
 			},
 			title: {
 				type: String,
 				default: '导航栏'
-			},
-			titleCenter: {
-				type: Boolean,
-				default: true
 			},
 		},
 		data() {
@@ -94,14 +92,21 @@
 
 				navBarBackgroudColor: '#FFF',
 				navBarBackgroudImg: null,
+
 				menuButtonBounding: {
 					top: 0,
 					height: 0,
+					width: 0,
+					right: 0,
 				},
-
 				firstPage: false,
 
 				surplusTitleOrSearch: true,
+				surplusTitle: {
+					color: '#000',
+					align: 'left',
+					weight: 400
+				}
 			}
 		},
 		watch: {
@@ -147,6 +152,7 @@
 			//判断是否是第一个页面，如果是有设置back为true的页面，将不显示返回箭头
 			if (pageLen == 1)
 				this.firstPage = true;
+			this.setSurplusTitle(this.titleFont);
 			console.log(this.menuButtonBounding.height);
 		},
 		methods: {
@@ -158,6 +164,20 @@
 				uni.switchTab({
 					url: this.tabPage
 				});
+			},
+			setSurplusTitle(value) {
+				if (Array.isArray(value)) {
+					if (value.length === 1) {
+						this.surplusTitle.color = value[0]
+					} else if (value.length === 2) {
+						this.surplusTitle.color = value[0]
+						this.surplusTitle.align = value[1]
+					} else if (value.length === 3) {
+						this.surplusTitle.color = value[0]
+						this.surplusTitle.align = value[1]
+						this.surplusTitle.weight = value[2]
+					}
+				}
 			},
 			setNavBarColor(backColor) {
 				if (Array.isArray(backColor) && backColor.length >= 2) {
@@ -235,12 +255,9 @@
 		.capsuleontent {
 			display: flex;
 			z-index: 2;
-			padding-left: 13rpx;
-			padding-right: 13rpx;
+			padding: 0 18rpx;
 
 			.btn {
-				padding-right: 13rpx;
-
 				.tower {
 					display: flex;
 					justify-content: space-between;
@@ -259,14 +276,16 @@
 			}
 
 			.surplus {
-				width:100%;
+				width: 100%;
+
 				.title {
+					padding-left: 16rpx;
 					font-size: 32rpx;
 					display: block;
 					white-space: nowrap;
 					overflow: hidden;
 					text-overflow: ellipsis;
-					text-align: center;
+
 				}
 			}
 		}
