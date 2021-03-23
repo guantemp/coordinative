@@ -1,25 +1,18 @@
 <template>
 	<view class="price_adjustment_sheet">
-		<view class="top">
-			<text class="back-btn iconfont icon-left_arrow" :class="'cuIcon-close'" @click="navBack"></text>
-			<text class="center">调价单</text>
-			<view class="cu-bar search bg-white">
-				<view class="search-form round">
-					<text class="cuIcon-search"></text>
-					<input @focus="InputFocus" @blur="InputBlur" :adjust-position="false" type="text" placeholder="按条码品名拼音搜索商品"
-					 confirm-type="search"></input>
-				</view>
-				<view class="action">
-					<button class="cu-btn bg-green shadow-blur round">过滤</button>
-				</view>
-			</view>
-			<image class="top-bg" src="/static/workflow/blue_back.png"></image>
-		</view>
+		<navBar title="调价单" :backgroundColor="[1, ['#24bdab', '#80c54c', 45]]"
+			backgroundImg="/static/workflow/blue_back.png" fontColor="#FFF">
+		</navBar>
 	</view>
 </template>
 
 <script>
+	import navBar from '@/components/navBar/navBar.vue';
 	export default {
+		components: {
+			navBar
+			//'HMfilterDropdown': HMfilterDropdown
+		},
 		methods: {
 			navBack() {
 				uni.navigateBack();

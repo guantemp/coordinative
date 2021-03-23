@@ -1,38 +1,46 @@
 <template>
-	<view class="navBar" :class="{navShadow:navShadow,width:barWidth}">
+	<view class="navBar">
 		<view class="navBarContent"
-			:style="{height:barHeight,paddingTop: statusBarHeight,'background-color': navBarBackgroudColor,'background-image':navBarBackgroudColor}">
+			:style="{width:barWidth,height:barHeight,'background-color': navBarBackgroudColor,'background-image':navBarBackgroudColor,navShadow:navShadow}">
 			<view class="backImg" v-if="navBarBackgroudImg" :style="{'opacity': 1}">
 				<image :style="{height:barHeight,width:barWidth}" :src="navBarBackgroudImg" mode="scaleToFill"></image>
 			</view>
-			<view class="btn">
-				<slot name="btnSlot">
-					<view v-if="btnType==='back'" @click="navBack">
-						<text class="iconfont icon-left_arrow" :style="{color:fontColor,}"></text>
-					</view>
-					<view v-if="btnType==='home'" @click="navBack">
-						<text class="iconfont icon-home" :style="{color:fontColor,}"></text>
-					</view>
-					<view v-else></view>
-				</slot>
-			</view>
-			<view class="surplus">
-				<slot name="surplusSlot">
-					<view v-if="true" :style="{color:fontColor,}" class="title">
-						<text>{{title}}</text>
-					</view>
-					<view v-else>
-						<view class="cu-bar search">
-							<view class="search-form round">
-								<text class="cuIcon-search"></text>
-								<input type="text" :placeholder=placeholder confirm-type="search"></input>
-							</view>
-							<view class="action">
-								<button class="cu-btn bg-gradual-green shadow-blur round">搜索</button>
+			<view class="capsuleontent"
+				:style="{maxWidth: barCapsuleContentMaxWidth,paddingTop:menuButtonBounding.top + 'px','line-height':menuButtonBounding.height + 'px'}">
+				<view class="btn">
+					<slot name="btnSlot">
+						<view v-if="btnType==='back' && !firstPage" @click="navBack">
+							<text class="iconfont icon-left_arrow" :style="{color:fontColor}"></text>
+						</view>
+						<view v-else-if="btnType==='home'" @click="navHome">
+							<text class="iconfont icon-home" :style="{color:fontColor,}"></text>
+						</view>
+						<view v-else-if="btnType==='tower'" class="tower"
+							:style="{width:menuButtonBounding.width+'px','line-height':menuButtonBounding.height-2 + 'px'}">
+							<text class="iconfont icon-left_arrow" :style="{color:fontColor,}" @click="navBack"></text>
+							<text v-if="!firstPage" class="iconfont icon-home" :style="{color:fontColor,}"
+								@click="navHome"></text>
+						</view>
+					</slot>
+				</view>
+				<view class="surplus">
+					<slot name="surplusSlot">
+						<view v-if="title" :style="{color:fontColor,}" class="title">
+							<text>{{title}}</text>
+						</view>
+						<view v-else>
+							<view class="cu-bar search">
+								<view class="search-form round">
+									<text class="cuIcon-search"></text>
+									<input type="text" :placeholder=placeholder confirm-type="search"></input>
+								</view>
+								<view class="action">
+									<button class="cu-btn bg-gradual-green shadow-blur round">搜索</button>
+								</view>
 							</view>
 						</view>
-					</view>
-				</slot>
+					</slot>
+				</view>
 			</view>
 		</view>
 	</view>
@@ -41,6 +49,10 @@
 <script>
 	export default {
 		props: {
+			surplusHeight: {
+				type: Number,
+				default: 0
+			},
 			backgroundColor: {
 				type: Array,
 				//背景色,参数一：透明度,参数二：背景颜色（array则为线性渐变，string为单色背景）渐变轴角度
@@ -52,13 +64,17 @@
 				// 背景图片
 				default: ''
 			},
-			fontColor: {
-				type: String,
-				default: '#000'
-			},
 			btnType: {
 				type: String,
 				default: 'back'
+			},
+			tabPage: {
+				type: String,
+				default: ''
+			},
+			fontColor: {
+				type: String,
+				default: '#000'
 			},
 			title: {
 				type: String,
@@ -74,7 +90,7 @@
 				statusBarHeight: 0,
 				barWidth: 0,
 				barHeight: 0,
-				clearHeight: 44,
+				barCapsuleContentMaxWidth: 0,
 
 				navBarBackgroudColor: '#FFF',
 				navBarBackgroudImg: null,
@@ -82,6 +98,8 @@
 					top: 0,
 					height: 0,
 				},
+
+				firstPage: false,
 
 				surplusTitleOrSearch: true,
 			}
@@ -104,22 +122,42 @@
 			// #ifdef MP-WEIXIN || MP-QQ || MP-BAIDU || MP-TOUTIAO
 			this.menuButtonBounding = uni.getMenuButtonBoundingClientRect();
 			// #endif
-			//获取屏幕宽度，状态栏高度
+			//计算导航栏宽度，高度
 			uni.getSystemInfo({
 				success: res => {
 					this.statusBarHeight = res.statusBarHeight + 'px';
-					this.barHeight = res.statusBarHeight + this.clearHeight + 'px';
 					this.barWidth = res.screenWidth + 'px';
+					this.barHeight = res.statusBarHeight + this.menuButtonBounding.height + (this
+						.menuButtonBounding.top - res.statusBarHeight) * 2 + this.surplusHeight + 'px';
+					// #ifdef MP-WEIXIN || MP-QQ || MP-BAIDU || MP-TOUTIAO
+					this.barCapsuleContentMaxWidth = res.screenWidth - this.menuButtonBounding.width - (res
+						.screenWidth - this.menuButtonBounding.right) + 'px';
+					// #endif
 				}
 			});
 			this.navBarBackgroudImg = this.backgroundImg;
-			if (!this.navBarBackgroudImg)
+			if (this.navBarBackgroudImg) {
+				this.isWhite = true;
+			} else {
 				this.setNavBarColor(this.backgroundColor);
-			console.log(this.btnType);
+			}
+			//获取所有页面
+			let currentPages = getCurrentPages();
+			let pageLen = currentPages.length;
+			//判断是否是第一个页面，如果是有设置back为true的页面，将不显示返回箭头
+			if (pageLen == 1)
+				this.firstPage = true;
+			console.log(this.menuButtonBounding.height);
 		},
 		methods: {
 			navBack() {
 				uni.navigateBack();
+			},
+			//返回首页
+			navHome() {
+				uni.switchTab({
+					url: this.tabPage
+				});
 			},
 			setNavBarColor(backColor) {
 				if (Array.isArray(backColor) && backColor.length >= 2) {
@@ -136,6 +174,7 @@
 						o = this.colorRgb(background[1]);
 						navBgColor += `rgba(${o[0]}, ${o[1]}, ${o[2]}, ${transparent})` + ')';
 						this.navBarBackgroudColor = navBgColor;
+						this.isWhite = true;
 					} else { //[1,#FFFFF]
 						let o = this.colorRgb(background);
 						this.navBarBackgroudColor = `rgba(${o[0]}, ${o[1]}, ${o[2]}, ${transparent})`
@@ -174,16 +213,15 @@
 <style lang="scss" scoped>
 	.navBar {
 		display: flex;
-		position: sticky;
 		top: 0;
-		box-shadow: 0 0 6rpx 0 #ddd;
+		left: 0;
+		overflow: hidden;
+		//box-shadow: 0 0 6rpx 0 #ddd;
 	}
 
 	.navBarContent {
 		display: flex;
-		align-content: center;
-		font-size: 32rpx;
-		width: 100%;
+		flex-direction: column;
 
 		.backImg {
 			position: absolute;
@@ -194,25 +232,43 @@
 			z-index: 1;
 		}
 
-		.btn {
-			border-radius: 0 !important;
+		.capsuleontent {
 			display: flex;
-			align-items: center;
-			justify-content: center;
 			z-index: 2;
-		}
-	}
+			padding-left: 13rpx;
+			padding-right: 13rpx;
 
+			.btn {
+				padding-right: 13rpx;
 
+				.tower {
+					display: flex;
+					justify-content: space-between;
+					align-items: center;
+					padding: 0 28rpx;
+					border-radius: 33px;
+					border-style: solid;
+					border-width: 2rpx;
+					border-color: rgba(0, 0, 0, 0.1);
+					background-color: rgba(255, 255, 255, 0.65);
+					/* #ifndef APP-PLUS-NVUE */
+					box-sizing: border-box;
+					/* #endif */
+					//transition: color,background 0.2s !important;
+				}
+			}
 
-
-
-	.surplus {
-		z-index: 2;
-
-		.title {
-			font-weight: 700;
-			line-height: 44px;
+			.surplus {
+				width:100%;
+				.title {
+					font-size: 32rpx;
+					display: block;
+					white-space: nowrap;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					text-align: center;
+				}
+			}
 		}
 	}
 

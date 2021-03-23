@@ -1,8 +1,8 @@
 <template>
 	<view class="store">
 		<!-- :backgroundColor="[1, ['#24bdab', '#80c54c', 45]]"  or :backgroundColor="['#80c54c'] -->
-		<navBar title="上的困惑的是深灰色的分" :backgroundColor="[1, ['#24bdab', '#80c54c', 45]]"
-			backgroundImg="/static/workflow/xj.jpg" btnType="home" fontColor="#FFF">
+		<navBar title="定位门店双方都是" :backgroundColor="[1, ['#24bdab', '#80c54c', 45]]"
+			backgroundImg="/static/workflow/xj.jpg" fontColor="#FFF" btnType="tower" tabPage="/pages/index/index">
 		</navBar>
 		<view class="current"></view>
 		<view class="footprint"></view>
