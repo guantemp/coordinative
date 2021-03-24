@@ -32,7 +32,7 @@
   -webkit-box-direction: normal;
   -webkit-flex-direction: column;
           flex-direction: column;
-  min-height: 64rpx;
+  min-height: 60rpx;
   background-color: #FFFFFF;
 }
 .first_line.data-v-733ebc09 {
@@ -42,20 +42,21 @@
   -webkit-box-pack: justify;
   -webkit-justify-content: space-between;
           justify-content: space-between;
-  padding-bottom: 20rpx;
+  padding-bottom: 16rpx;
 }
-.first_line .heading.data-v-733ebc09 {
+.first_line .left.data-v-733ebc09 {
   display: -webkit-box;
   display: -webkit-flex;
   display: flex;
   -webkit-box-align: center;
   -webkit-align-items: center;
           align-items: center;
+  padding-left: 16rpx;
 }
 .first_line .icon.data-v-733ebc09 {
-  margin-right: 12rpx;
   width: 48rpx;
   height: 48rpx;
+  margin-right: 16rpx;
 }
 .first_line .arrow.data-v-733ebc09 {
   margin-right: 16rpx;

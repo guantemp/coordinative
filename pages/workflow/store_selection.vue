@@ -1,10 +1,22 @@
 <template>
 	<view class="store">
 		<!-- :backgroundColor="[1, ['#24bdab', '#80c54c', 45]]"  or :backgroundColor="['#80c54c']  btnType="tower" tabPage="/pages/index/index"-->
-		<navBar :backgroundColor="[1, ['#24bdab', '#80c54c', 45]]" :titleFont="['#FFF','center']" placeholder="请输入门店名称/全拼/首字母">
+		<navBar :backgroundColor="[1, ['#24bdab', '#80c54c', 45]]" :titleFont="['#FFF','center']"
+			placeholder="请输入门店名称/全拼/首字母">
 		</navBar>
-		<view class="current"></view>
-		<view class="footprint"></view>
+		<view class="current">
+			<listCell title="当前门店" :arrow="false" borderStyle="dashed" />
+			<view class="shop padding">
+				<text>旺客隆关口店</text>
+				<view @click="location"><text class='cuIcon-locationfill text-orange margin-right-xs'></text><text>重新定位</text></view>
+			</view>
+		</view>
+		<view class="foot">
+			<listCell icon="/static/workflow/item.png" title="足迹" :arrow="false" />
+			<view class="padding">旺客隆关口店<text class='cuIcon-locationfill text-orange'></text>重新定位</view>
+		</view>
+
+
 		<scroll-view scroll-y class="indexes" :scroll-into-view="'indexes-'+ listCurID"
 			:style="[{height:'calc(100vh - '+ navBar + 'rpx - 50rpx)'}]" :scroll-with-animation="true"
 			:enable-back-to-top="true">
@@ -43,9 +55,11 @@
 
 <script>
 	import navBar from '@/components/navBar/navBar.vue';
+	import listCell from '@/components/list-cell';
 	export default {
 		components: {
-			navBar
+			navBar,
+			listCell
 			//'HMfilterDropdown': HMfilterDropdown
 		},
 		data() {
@@ -77,6 +91,18 @@
 			}).exec()
 		},
 		methods: {
+			//获取位置
+			location() {
+				uni.getLocation({
+					type: 'gcj02', //gcj02//wgs84
+					success: res => {
+						this.$util.toast('当前位置的经度：' + res.longitude + '\n当前位置的纬度：' + res.latitude);
+					},
+					fail: res => {
+						this.$util.toast("获取位置失败，请手动选择。");
+					},
+				});
+			},
 			//获取文字信息
 			getCur(e) {
 				this.hidden = false;
@@ -132,11 +158,35 @@
 		background-color: #F8F8F8;
 	}
 
-	.current {}
+	.current {
+		display: flex;
+		flex-direction: column;
+		height: 180rpx;
+		border-radius: 20rpx;
+		padding: 16rpx 16rpx 0rpx 16rpx;
+		background-color: #FFFFFF;
+		margin: 16rpx 16rpx 0 16rpx;
+
+		.shop {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
+	}
+
+	.foot {
+		display: flex;
+		flex-direction: column;
+		height: 260rpx;
+		border-radius: 20rpx;
+		padding: 20rpx 20rpx 0rpx 20rpx;
+		background-color: #FFFFFF;
+		margin: 10rpx 20rpx;
+	}
 
 	.indexes {
 		position: relative;
-		margin-top: 120rpx;
+		margin-top: 20rpx;
 	}
 
 	.indexBar {

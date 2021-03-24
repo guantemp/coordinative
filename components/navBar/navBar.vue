@@ -108,7 +108,6 @@
 				},
 				firstPage: false,
 
-				surplusTitleOrSearch: true,
 				surplusTitle: {
 					color: '#000',
 					align: 'left',
@@ -156,7 +155,7 @@
 			//获取所有页面
 			let currentPages = getCurrentPages();
 			let pageLen = currentPages.length;
-			//判断是否是第一个页面，如果是有设置back为true的页面，将不显示返回箭头
+			//判断是否是第一个页面，如果是将不显示左边按键
 			if (pageLen == 1)
 				this.firstPage = true;
 			this.setSurplusTitle(this.titleFont);
@@ -319,6 +318,7 @@
 					}
 
 					.input {
+						width:88%;
 						border-radius: 24rpx;
 						background-color: rgba(32, 32, 32, .35);
 						padding: 0 26rpx 0 60rpx;

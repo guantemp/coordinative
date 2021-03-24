@@ -1,11 +1,11 @@
 <template>
 	<view class="content">
 		<view class="first_line">
-			<view class="heading">
+			<view class="left">
 				<image v-if="icon" class="icon" :src="icon"></image>
-				<text class="text-black">{{ title }}</text>
+				<text>{{ title }}</text>
 			</view>
-			<image v-if="arrow" class="arrow" src="/static/user/arrow.png"></image>
+			<image v-if="arrow" class="arrow" src="/static/user/arrow.png" @click="arrowClick"></image>
 		</view>
 		<view class="second_line" :style="[lineStyle]" />
 	</view>
@@ -15,21 +15,10 @@
 	export default {
 		data() {
 			return {
-				typeList: {
-					left: 'iconzuo',
-					right: 'iconyou',
-					up: 'iconshang',
-					down: 'iconxia'
-				}
 			};
 		},
 		props: {
 			icon: {
-				type: String,
-				default: ''
-			},
-			//icon颜色
-			iconColor: {
 				type: String,
 				default: ''
 			},
@@ -41,22 +30,10 @@
 				type: Boolean,
 				default: true
 			},
-			hoverClass: {
-				type: String,
-				default: 'cell-hover'
-			},
 			// 线条的类型，solid-实线，dashed-方形虚线，dotted-圆点虚线
-			lineBorderStyle: {
+			borderStyle: {
 				type: String,
 				default: 'solid'
-			},
-			lineMargin: {
-				type: String,
-				default: ''
-			},
-			lineHair: {
-				type: Boolean,
-				default: true
 			},
 			lineColor: {
 				type: String,
@@ -64,8 +41,8 @@
 			}
 		},
 		methods: {
-			eventClick() {
-				this.$emit('eventClick');
+			arrowClick() {
+				this.$emit('arrowClick');
 			}
 		},
 		computed: {
@@ -78,7 +55,7 @@
 				style.borderBottomStyle = this.borderStyle;
 				//style.width = this.$u.addUnit(this.length);
 				if (this.hairLine) style.transform = 'scaleY(0.5)';
-				style.borderColor = this.color;
+				style.borderColor = this.lineColor;
 				return style;
 			}
 		}
@@ -89,24 +66,25 @@
 	.content {
 		display: flex;
 		flex-direction: column;
-		min-height: 64rpx;
+		min-height: 60rpx;
 		background-color: #FFFFFF;
 	}
 
 	.first_line {
 		display: flex;
 		justify-content: space-between;
-		padding-bottom: 20rpx;
+		padding-bottom: 16rpx;
 
-		.heading {
+		.left {
 			display: flex;
 			align-items: center;
+			padding-left: 16rpx;
 		}
 
 		.icon {
-			margin-right: 12rpx;
 			width: 48rpx;
 			height: 48rpx;
+			margin-right: 16rpx;
 		}
 
 		.arrow {
@@ -118,6 +96,6 @@
 
 	.second_line {
 		vertical-align: middle;
-		border-bottom: solid 1upx #f6f6f6;
+		border-bottom: solid 1rpx #f6f6f6;
 	}
 </style>

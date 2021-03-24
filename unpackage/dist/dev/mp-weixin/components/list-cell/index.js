@@ -140,22 +140,11 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 var _default =
 {
   data: function data() {
-    return {
-      typeList: {
-        left: 'iconzuo',
-        right: 'iconyou',
-        up: 'iconshang',
-        down: 'iconxia' } };
-
+    return {};
 
   },
   props: {
     icon: {
-      type: String,
-      default: '' },
-
-    //icon颜色
-    iconColor: {
       type: String,
       default: '' },
 
@@ -167,22 +156,10 @@ var _default =
       type: Boolean,
       default: true },
 
-    hoverClass: {
-      type: String,
-      default: 'cell-hover' },
-
     // 线条的类型，solid-实线，dashed-方形虚线，dotted-圆点虚线
-    lineBorderStyle: {
+    borderStyle: {
       type: String,
       default: 'solid' },
-
-    lineMargin: {
-      type: String,
-      default: '' },
-
-    lineHair: {
-      type: Boolean,
-      default: true },
 
     lineColor: {
       type: String,
@@ -190,8 +167,8 @@ var _default =
 
 
   methods: {
-    eventClick: function eventClick() {
-      this.$emit('eventClick');
+    arrowClick: function arrowClick() {
+      this.$emit('arrowClick');
     } },
 
   computed: {
@@ -204,7 +181,7 @@ var _default =
       style.borderBottomStyle = this.borderStyle;
       //style.width = this.$u.addUnit(this.length);
       if (this.hairLine) style.transform = 'scaleY(0.5)';
-      style.borderColor = this.color;
+      style.borderColor = this.lineColor;
       return style;
     } } };exports.default = _default;
 
