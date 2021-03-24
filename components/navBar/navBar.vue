@@ -7,9 +7,9 @@
 			</view>
 			<view class="capsuleontent"
 				:style="{maxWidth: barCapsuleContentMaxWidth,paddingTop:menuButtonBounding.top + 'px','line-height':menuButtonBounding.height + 'px'}">
-				<view class="btn">
+				<view class="btn" v-if="!firstPage">
 					<slot name="btnSlot">
-						<view v-if="btnType==='back' && !firstPage" @click="navBack">
+						<view v-if="btnType==='back'" @click="navBack">
 							<text class="iconfont icon-left_arrow" :style="{color:surplusTitle.color}"></text>
 						</view>
 						<view v-else-if="btnType==='home'" @click="navHome">
@@ -17,30 +17,33 @@
 						</view>
 						<view v-else-if="btnType==='tower'" class="tower"
 							:style="{width:menuButtonBounding.width+'px','line-height':menuButtonBounding.height-2 + 'px'}">
-							<text class="iconfont icon-left_arrow" :style="{color:fontColor,}" @click="navBack"></text>
-							<text v-if="!firstPage" class="iconfont icon-home" :style="{color:surplusTitle.color,}"
+							<text class="iconfont icon-left_arrow" :style="{color:surplusTitle.color}"
+								@click="navBack"></text>
+							<text class="iconfont icon-home" :style="{color:surplusTitle.color}"
 								@click="navHome"></text>
 						</view>
 					</slot>
 				</view>
 				<view class="surplus">
 					<slot name="surplusSlot">
-						<view v-if="title" :style="{color:surplusTitle.color,'text-align':surplusTitle.align,'font-weight':surplusTitle.weight}" class="title">
+						<view v-if="title"
+							:style="{color:surplusTitle.color,'text-align':surplusTitle.align,'font-weight':surplusTitle.weight}"
+							class="title">
 							<text>{{title}}</text>
 						</view>
-						<view v-else>
-							<view class="cu-bar search">
-								<view class="search-form round">
-									<text class="cuIcon-search"></text>
-									<input type="text" :placeholder=placeholder confirm-type="search"></input>
-								</view>
-								<view class="action">
-									<button class="cu-btn bg-gradual-green shadow-blur round">搜索</button>
-								</view>
-							</view>
+						<view v-else class="searchBtn" @click="searchClick">
+							<text class="iconfont icon-lookup searchIcon"></text>
+							<input type="text" class="input" placeholder-style="color:#dbdbdb;" confirm-type="search"
+								:placeholder="placeholder" @confirm="searchConfirm"
+								:style="{'height':menuButtonBounding.height +'px'}" />
 						</view>
 					</slot>
 				</view>
+			</view>
+			<view>
+				<slot name="extendSlot">
+
+				</slot>
 			</view>
 		</view>
 	</view>
@@ -75,13 +78,17 @@
 			titleFont: {
 				type: [String, Array],
 				//字体选项，颜色，排列,粗细
-				//['#000000', 'center', '400']
+				//比如：['#000', 'center', 400]
 				default: []
 			},
 			title: {
 				type: String,
-				default: '导航栏'
+				default: ''
 			},
+			placeholder: {
+				type: String,
+				default: '请输入搜索的关键字'
+			}
 		},
 		data() {
 			return {
@@ -226,6 +233,14 @@
 					return sColor;
 				}
 			},
+			// 搜索框，点击完成时触发
+			searchConfirm(event) {
+				this.$emit('searchConfirm', event.detail);
+			},
+			// 搜索框点击事件
+			searchClick(event) {
+				this.$emit('searchClick', true);
+			}
 		}
 	}
 </script>
@@ -255,7 +270,7 @@
 		.capsuleontent {
 			display: flex;
 			z-index: 2;
-			padding: 0 18rpx;
+			padding: 0 10rpx 0 18rpx;
 
 			.btn {
 				.tower {
@@ -273,29 +288,45 @@
 					/* #endif */
 					//transition: color,background 0.2s !important;
 				}
+
+				.line {
+					border-left: 2rpx solid;
+				}
 			}
 
 			.surplus {
 				width: 100%;
+				padding-left: 16rpx;
+				font-size: 32rpx;
 
 				.title {
-					padding-left: 16rpx;
-					font-size: 32rpx;
 					display: block;
 					white-space: nowrap;
-					overflow: hidden;
 					text-overflow: ellipsis;
+				}
 
+				.searchBtn {
+					position: relative;
+					display: flex;
+					justify-content: space-between;
+					align-items: center;
+
+					.searchIcon {
+						position: absolute;
+						left: 18rpx;
+						font-size: 30rpx;
+						color: #dbdbdb;
+					}
+
+					.input {
+						border-radius: 24rpx;
+						background-color: rgba(32, 32, 32, .35);
+						padding: 0 26rpx 0 60rpx;
+						color: #dbdbdb;
+						text-overflow: ellipsis;
+					}
 				}
 			}
 		}
-	}
-
-	.searchBtn {
-		border-radius: 0 !important;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		padding-top: 8rpx;
 	}
 </style>

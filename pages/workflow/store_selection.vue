@@ -1,8 +1,7 @@
 <template>
 	<view class="store">
-		<!-- :backgroundColor="[1, ['#24bdab', '#80c54c', 45]]"  or :backgroundColor="['#80c54c'] -->
-		<navBar title="定位门店双方都是" :backgroundColor="[1, ['#24bdab', '#80c54c', 45]]"
-			backgroundImg="/static/workflow/xj.jpg" fontColor="#FFF" btnType="tower" tabPage="/pages/index/index">
+		<!-- :backgroundColor="[1, ['#24bdab', '#80c54c', 45]]"  or :backgroundColor="['#80c54c']  btnType="tower" tabPage="/pages/index/index"-->
+		<navBar :backgroundColor="[1, ['#24bdab', '#80c54c', 45]]" :titleFont="['#FFF','center']" placeholder="请输入门店名称/全拼/首字母">
 		</navBar>
 		<view class="current"></view>
 		<view class="footprint"></view>

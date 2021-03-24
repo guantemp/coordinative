@@ -1,7 +1,7 @@
 <template>
 	<view class="price_adjustment_sheet">
 		<navBar title="调价单" :backgroundColor="[1, ['#24bdab', '#80c54c', 45]]"
-			backgroundImg="/static/workflow/blue_back.png" :titleFont="['#FFF','center']">
+			backgroundImg="/static/workflow/blue_back.png" :titleFont="['#FFF','center',700]">
 		</navBar>
 	</view>
 </template>

@@ -93,6 +93,29 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "recyclableRender", function() { return recyclableRender; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "components", function() { return components; });
 var components
+try {
+  components = {
+    navBar: function() {
+      return __webpack_require__.e(/*! import() | components/navBar/navBar */ "components/navBar/navBar").then(__webpack_require__.bind(null, /*! @/components/navBar/navBar.vue */ 141))
+    }
+  }
+} catch (e) {
+  if (
+    e.message.indexOf("Cannot find module") !== -1 &&
+    e.message.indexOf(".vue") !== -1
+  ) {
+    console.error(e.message)
+    console.error("1. 排查组件名称拼写是否正确")
+    console.error(
+      "2. 排查组件是否符合 easycom 规范，文档：https://uniapp.dcloud.net.cn/collocation/pages?id=easycom"
+    )
+    console.error(
+      "3. 若组件不符合 easycom 规范，需手动引入，并在 components 中注册该组件"
+    )
+  } else {
+    throw e
+  }
+}
 var render = function() {
   var _vm = this
   var _h = _vm.$createElement
@@ -170,7 +193,8 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var listCell = function listCell() {__webpack_require__.e(/*! require.ensure | components/list-cell/index */ "components/list-cell/index").then((function () {return resolve(__webpack_require__(/*! @/components/list-cell */ 134));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var _default =
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var listCell = function listCell() {__webpack_require__.e(/*! require.ensure | components/list-cell/index */ "components/list-cell/index").then((function () {return resolve(__webpack_require__(/*! @/components/list-cell */ 134));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var navBar = function navBar() {__webpack_require__.e(/*! require.ensure | components/navBar/navBar */ "components/navBar/navBar").then((function () {return resolve(__webpack_require__(/*! @/components/navBar/navBar.vue */ 141));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var _default =
+
 
 
 
@@ -244,12 +268,12 @@ __webpack_require__.r(__webpack_exports__);
 
 {
   components: {
-    listCell: listCell
+    listCell: listCell,
+    navBar: navBar
     //'HMfilterDropdown': HMfilterDropdown
   },
   data: function data() {
     return {};
-
   },
   onLoad: function onLoad() {},
   methods: {
@@ -265,7 +289,6 @@ __webpack_require__.r(__webpack_exports__);
         fail: function fail(res) {
           _this.$util.toast("获取位置失败，请手动选择。");
         } });
-
 
     } } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))

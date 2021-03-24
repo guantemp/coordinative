@@ -1,14 +1,14 @@
 <template>
 	<view class="workflow">
-		<view class="top">
-			<text class="flow">业务工作台</text>
-			<view class="store" @click="this.$util.navTo('/pages/workflow/store_selection')">
+		<navBar title="业务工作台" :backgroundColor="[1, ['#0081ff', '#1cbbb4', 45]]" surplusHeight="26"
+			:titleFont="['#FFF','center',700]">
+			<view slot="extendSlot" class="store" @click="this.$util.navTo('/pages/workflow/store_selection')">
 				<text class="iconfont icon-location"></text>
 				<text class="txt">旺客隆超市国美绿洲店</text>
 			</view>
-		</view>
+		</navBar>
 		<view class="item">
-			<listCell icon="/static/workflow/item.png" title="商品" :arrow="false"/>
+			<listCell icon="/static/workflow/item.png" title="商品" :arrow="false" />
 			<view class="cu-list grid col-4 no-border item_grid_list">
 				<view class="cu-item " @tap.stop="this.$util.navTo('/pages/public/not_implemented')">
 					<view class="text-red">
@@ -70,14 +70,15 @@
 
 <script>
 	import listCell from '@/components/list-cell';
+	import navBar from '@/components/navBar/navBar.vue';
 	export default {
 		components: {
 			listCell,
+			navBar
 			//'HMfilterDropdown': HMfilterDropdown
 		},
 		data() {
-			return {
-			}
+			return {}
 		},
 		onLoad: function() {},
 		methods: {
@@ -94,7 +95,6 @@
 						this.$util.toast("获取位置失败，请手动选择。");
 					},
 				});
-
 			}
 		},
 	}
@@ -107,40 +107,15 @@
 		background-color: #F8F8F8;
 	}
 
-	.top {
-		display: flex;
-		flex-direction: column;
-		z-index: 90;
-		background: linear-gradient(45deg, #0081ff, #1cbbb4);
-		height:210rpx;
-		top:0rpx;
+	.store {
+		font-size: 16rpx;
+		color: #FFF;
+		padding: 10rpx 20rpx;
+		align-items: center;
 
-		.flow {
-			padding-top: 78rpx;
-			padding-left: 30%;
-			font-size: 36rpx;
-			text-shadow: 1px 0px 1px rgba(0, 0, 0, .3);
-		}
-
-		.store {
-			font-size: 16rpx;
-			color: #FFF;
-			padding: 5rpx 20rpx;
-			align-items: center;
-			margin: 20rpx 0rpx;
-			
-			.txt{
-				margin: 0rpx 10rpx;
-				font-size: 30rpx;
-			}
-		}
-
-		.top-bg {
-			position: absolute;
-			min-width: 100vw;
-			top: 0rpx;
-			height: 200rpx;
-			opacity: .7;
+		.txt {
+			margin: 0rpx 10rpx;
+			font-size: 30rpx;
 		}
 	}
 

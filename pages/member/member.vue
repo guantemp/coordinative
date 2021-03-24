@@ -1,7 +1,7 @@
 <template>
 	<view>
-		<navBar title="我是测试你看我对不对住宿费送第三方公司的人四的股份哇问啊他到" :backgroundColor="[1, ['#24bdab', '#80c54c', 45]]" fontColor="#FFF" btnType="home" surplusHeight="88">
-			
+		<navBar title="会员管理" :backgroundColor="[1, ['#24bdab', '#80c54c', 45]]"
+			surplusHeight="88" tabPage="/pages/index/index" :titleFont="['#FFF','center']">
 		</navBar>
 	</view>
 </template>
