@@ -32,6 +32,7 @@
   -webkit-box-direction: normal;
   -webkit-flex-direction: column;
           flex-direction: column;
+  position: relative;
   min-height: 60rpx;
   background-color: #FFFFFF;
 }
@@ -56,7 +57,7 @@
 .first_line .icon.data-v-733ebc09 {
   width: 48rpx;
   height: 48rpx;
-  margin-right: 16rpx;
+  margin-right: 18rpx;
 }
 .first_line .arrow.data-v-733ebc09 {
   margin-right: 16rpx;

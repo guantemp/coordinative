@@ -2,8 +2,10 @@
 	<view class="content">
 		<view class="first_line">
 			<view class="left">
-				<image v-if="icon" class="icon" :src="icon"></image>
-				<text>{{ title }}</text>
+				<slot name="iconSlot">
+					<image v-if="icon" class="icon" :src="icon"></image>
+				</slot>
+				<text :style="{color:titleColor}">{{ title }}</text>
 			</view>
 			<image v-if="arrow" class="arrow" src="/static/user/arrow.png" @click="arrowClick"></image>
 		</view>
@@ -14,8 +16,7 @@
 <script>
 	export default {
 		data() {
-			return {
-			};
+			return {};
 		},
 		props: {
 			icon: {
@@ -38,6 +39,10 @@
 			lineColor: {
 				type: String,
 				default: '#e4e7ed'
+			},
+			titleColor: {
+				type: String,
+				default: ''
 			}
 		},
 		methods: {
@@ -66,6 +71,7 @@
 	.content {
 		display: flex;
 		flex-direction: column;
+		position: relative;
 		min-height: 60rpx;
 		background-color: #FFFFFF;
 	}
@@ -84,7 +90,7 @@
 		.icon {
 			width: 48rpx;
 			height: 48rpx;
-			margin-right: 16rpx;
+			margin-right: 18rpx;
 		}
 
 		.arrow {

@@ -1,6 +1,6 @@
 <template>
 	<view class="workflow">
-		<navBar title="业务工作台" :backgroundColor="[1, ['#0081ff', '#1cbbb4', 45]]" surplusHeight="26"
+		<navBar title="工作台" :backgroundColor="[1, ['#ec008c', '#6739b6', 45]]" surplusHeight="26"
 			:titleFont="['#FFF','center',700]">
 			<view slot="extendSlot" class="store" @click="this.$util.navTo('/pages/workflow/store_selection')">
 				<text class="iconfont icon-location"></text>

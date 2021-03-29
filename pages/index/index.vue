@@ -1,6 +1,8 @@
 <template>
 	<view class="content">
 		<text class="solid-bottom text-lg padding text-red">HOPRXI协助工具 - Release Notes</text>
+		<text class="solid-bottom text-lg text-blue padding">#version 0.0.7 2021-03-28</text>
+		<text class="solid-bottom text-brown">* 【重要】实现门店定位或手动选择 </text>
 		<text class="solid-bottom text-lg text-blue padding">#version 0.0.6 2021-03-15</text>
 		<text class="solid-bottom text-brown">* 【重要】实现自定义的导航栏组件 </text>
 		<text class="solid-bottom text-lg text-blue padding">#version 0.0.5 2021-02-06</text>

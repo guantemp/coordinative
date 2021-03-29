@@ -1,42 +1,73 @@
 <template>
 	<view class="store">
 		<!-- :backgroundColor="[1, ['#24bdab', '#80c54c', 45]]"  or :backgroundColor="['#80c54c']  btnType="tower" tabPage="/pages/index/index"-->
-		<navBar :backgroundColor="[1, ['#24bdab', '#80c54c', 45]]" :titleFont="['#FFF','center']"
-			placeholder="请输入门店名称/全拼/首字母">
+		<navBar :backgroundColor="[1, ['#9000ff', '#5e00ff', 45]]" :titleFont="['#FFF','center']"
+			placeholder="请输入门店名称/全拼/首字母" style="">
 		</navBar>
-		<view class="current">
-			<listCell title="当前门店" :arrow="false" borderStyle="dashed" />
-			<view class="shop padding">
-				<text>旺客隆关口店</text>
-				<view @click="location"><text class='cuIcon-locationfill text-orange margin-right-xs'></text><text>重新定位</text></view>
-			</view>
-		</view>
-		<view class="foot">
-			<listCell icon="/static/workflow/item.png" title="足迹" :arrow="false" />
-			<view class="padding">旺客隆关口店<text class='cuIcon-locationfill text-orange'></text>重新定位</view>
-		</view>
-
-
 		<scroll-view scroll-y class="indexes" :scroll-into-view="'indexes-'+ listCurID"
 			:style="[{height:'calc(100vh - '+ navBar + 'rpx - 50rpx)'}]" :scroll-with-animation="true"
 			:enable-back-to-top="true">
-			<block v-for="(item,index) in list" :key="index">
-				<view :class="'indexItem-' + item.name" :id="'indexes-' + item.name" :data-index="item.name">
-					<view class="padding">{{item.name}}</view>
-					<view class="cu-list menu-avatar no-padding">
-						<view class="cu-item" v-for="(items,sub) in 2" :key="sub">
-							<view class="cu-avatar round lg">{{item.name}}</view>
-							<view class="content">
-								<view class="text-grey">{{item.name}}<text class="text-abc">{{list[sub].name}}</text>君
-								</view>
-								<view class="text-gray text-sm">
-									有{{sub+2}}个主子需要伺候
+			<view class="current text-df">
+				<listCell title="当前门店" titleColor="#ff9700" :arrow="false" borderStyle="dashed" />
+				<view class="currentShop text-lg">
+					<text>{{currentShop}}</text>
+					<view @click="location">
+						<text class='cuIcon-locationfill text-orange margin-right-xs'></text>
+						<text class="text-olive">重新定位</text>
+					</view>
+				</view>
+			</view>
+			<view class="footprint text-df">
+				<listCell title="历史足迹" titleColor="#8dc63f" :arrow="false" borderStyle="dashed">
+					<view slot="iconSlot">
+						<text class="iconfont icon-footprint text-blue margin-right-sm"></text>
+					</view>
+				</listCell>
+				<view class="footprintShops text-lg">
+					<block v-for="(item, index) in shops" :key="index">
+						<view class="item padding-xs" @click="selectShop(item.value)" :data-id="item.value">
+							<text class="text-grey text-center">{{item.name}}</text>
+						</view>
+					</block>
+				</view>
+			</view>
+			<scroll-view scroll-x class="bg-white nav margin-top-xs">
+				<view class="flex text-center">
+					<view class="cu-item flex-sub" :class="index===TabCur?'text-orange cur':''"
+						v-for="(item,index) in tabList" :key="index" @tap="tabSelect" :data-id="index">
+						{{item}}
+					</view>
+				</view>
+			</scroll-view>
+			<!--
+			<swiper :current="TabCur3" class="swiper" duration="300" :circular="true"
+				indicator-color="rgba(255,255,255,0)" indicator-active-color="rgba(255,255,255,0)"
+				@change="swiperChange3">
+				<swiper-item v-for="(item,index) in tabList3" :key="index">
+					<div class="bg-white padding margin text-center text-black">{{item.name}}</div>
+				</swiper-item>
+			</swiper>
+			-->
+			<view>
+				<block v-for="(item,index) in list" :key="index">
+					<view :class="'indexItem-' + item.name" :id="'indexes-' + item.name" :data-index="item.name">
+						<view class="padding-xs">{{item.name}}</view>
+						<view class="cu-list menu-avatar no-padding">
+							<view class="cu-item" v-for="(items,sub) in 3" :key="sub">
+								<view class="cu-avatar round lg">{{item.name}}</view>
+								<view class="content">
+									<view class="text-grey">{{item.name}}<text
+											class="text-abc">{{list[sub].name}}</text>君
+									</view>
+									<view class="text-gray text-sm">
+										有{{sub+2}}个主子需要伺候
+									</view>
 								</view>
 							</view>
 						</view>
 					</view>
-				</view>
-			</block>
+				</block>
+			</view>
 		</scroll-view>
 		<view class="indexBar" :style="[{height:'calc(100vh - ' + navBar + 'px - 50px)'}]">
 			<view class="indexBar-box" @touchstart="tStart" @touchend="tEnd" @touchmove.stop="tMove">
@@ -59,16 +90,37 @@
 	export default {
 		components: {
 			navBar,
-			listCell
+			listCell,
 			//'HMfilterDropdown': HMfilterDropdown
 		},
 		data() {
 			return {
+				currentShop: '旺客隆关口店',
+				shops: [{
+						name: '旺客隆国美绿洲店',
+						value: 10034
+					},
+					{
+						name: '嘉诚超市',
+						value: 1733
+					},
+					{
+						name: '旺客隆超市纳溪店',
+						value: 1546
+					},
+				],
+
+				tabList: [
+					'区域',
+					'拼音'
+				],
+				TabCur: 0,
+
 				StatusBar: this.StatusBar,
 				navBar: 60,
 				hidden: true,
 				listCurID: '',
-				list: [],
+				list: ['B', 'C', 'D', 'F', 'G', 'H', 'J', 'L', 'M', 'N', 'P', 'S', 'W', 'X', 'Y', 'Z'],
 				listCur: '',
 			};
 		},
@@ -79,7 +131,7 @@
 				list[i].name = String.fromCharCode(65 + i);
 			}
 			this.list = list;
-			this.listCur = list[0];
+			this.listCur = this.list[0];
 		},
 		onReady() {
 			let that = this;
@@ -102,6 +154,13 @@
 						this.$util.toast("获取位置失败，请手动选择。");
 					},
 				});
+			},
+			tabSelect(e) {
+				this.TabCur = e.currentTarget.dataset.id;
+				this.scrollLeft = (e.currentTarget.dataset.id - 1) * 60
+			},
+			selectShop(id) {
+				console.log(id);
 			},
 			//获取文字信息
 			getCur(e) {
@@ -154,34 +213,51 @@
 <style scoped lang='scss'>
 	.store {
 		width: 100vw;
-		height: 100vh;
 		background-color: #F8F8F8;
 	}
 
 	.current {
 		display: flex;
 		flex-direction: column;
-		height: 180rpx;
 		border-radius: 20rpx;
-		padding: 16rpx 16rpx 0rpx 16rpx;
-		background-color: #FFFFFF;
-		margin: 16rpx 16rpx 0 16rpx;
+		padding: 16rpx;
+		background-color: #FFF;
+		margin: 0rpx 16rpx 8rpx 16rpx;
 
-		.shop {
+		.currentShop {
 			display: flex;
 			justify-content: space-between;
 			align-items: center;
+			padding: 20rpx 20rpx 4rpx 20rpx;
 		}
 	}
 
-	.foot {
+	.footprint {
 		display: flex;
 		flex-direction: column;
-		height: 260rpx;
 		border-radius: 20rpx;
-		padding: 20rpx 20rpx 0rpx 20rpx;
-		background-color: #FFFFFF;
-		margin: 10rpx 20rpx;
+		padding: 16rpx;
+		background-color: #FFF;
+		margin: 8rpx 16rpx 0rpx 16rpx;
+
+		.footprintShops {
+			display: flex;
+			flex-wrap: nowrap;
+			padding: 20rpx 2rpx 6rpx 2rpx;
+
+			.item {
+				flex: 0 0 33%;
+				margin-right: calc(5rpx*3 /2);
+				border-radius: 3px;
+				border: 2rpx solid #9b9b9b;
+
+				>text {
+					display: inline-flex;
+					line-height: 32rpx;
+					vertical-align: middle;
+				}
+			}
+		}
 	}
 
 	.indexes {

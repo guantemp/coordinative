@@ -299,7 +299,6 @@
 				font-size: 32rpx;
 
 				.title {
-					display: block;
 					white-space: nowrap;
 					text-overflow: ellipsis;
 				}
