@@ -4,9 +4,10 @@
 		<view class="user_info">
 			<image class="top-bg" src="/static/user/user-bg.png"></image>
 			<view class="user_portrait" @click="this.$util.navTo(hasLogin?'/pages/user/userInfo':'/pages/user/login')">
-				<image class="user_portrait_img" :src="userInfo.avatarUrl || '/static/user/face.png'" ></image>
+				<image class="user_portrait_img" :src="userInfo.avatarUrl || '/static/user/face.png'"></image>
 				<view class="user_portrait_hasLogin" v-if="hasLogin">
-					<text class="user_portrait_hasLogin_text">{{ userInfo.nickName || userInfo.username || '无名' }}</text>
+					<text
+						class="user_portrait_hasLogin_text">{{ userInfo.nickName || userInfo.username || '无名' }}</text>
 					<text class="user_portrait_hasLogin_bonus">积分：{{bonus}}</text>
 				</view>
 				<view class="user_portrait_noLogin_text" v-else>
@@ -19,26 +20,13 @@
 		</view>
 		<!--工资条-->
 		<view class="pay">
-			<list-Cell icon="/static/user/pay.png" title="我的工资" @eventClick="this.$util.navTo(hasLogin?'':'/pages/user/login')" />
+			<list-Cell decorateIcon="/static/user/pay.png" title="我的工资"
+				@eventClick="this.$util.navTo(hasLogin?'':'/pages/user/login')" />
 		</view>
-		<!--工作流-->
-		<view class="work">
-			<listCell icon="/static/user/attendance.png" title="工作流" />
-			<view class="cu-list grid col-5 no-border grid_list">
-				<view class="cu-item" v-for="(item, index) in attendanceList" @tap.stop="this.$util.navTo('/pages/public/not_implemented')">
-					<view class="text-red">
-						<image class="img" :src="item.icon" />
-						<view class="cu-tag badge">
-							<block>2</block>
-						</view>
-					</view>
-					<text>{{ item.title }}</text>
-				</view>
-			</view>
-		</view>
+
 		<!--个人服务-->
 		<view class="service">
-			<listCell icon="/static/user/service.png" title="我的服务" />
+			<listCell decorateIcon="/static/user/service.png" title="我的服务" />
 			<view class="cu-list grid col-3 no-border">
 				<view class="cu-item " @tap.stop="this.$util.navTo('/pages/public/not_implemented')">
 					<view class="text-red">
@@ -100,60 +88,6 @@
 		data() {
 			return {
 				bonus: 9999,
-				attendanceList: [{
-						icon: '/static/user/clock_in.png',
-						url: '/pages/user/clock_in',
-						title: '打卡',
-						color: '#ff6b81'
-					},
-					{
-						icon: '/static/user/work_overtime.png',
-						url: '/pages/user/work_overtime',
-						title: '加班',
-						color: '#ff6b81'
-					},
-					{
-						icon: '/static/user/leave.png',
-						url: '/pages/user/leave',
-						title: '请假',
-						color: '#ff6b81'
-					},
-					{
-						icon: '/static/user/apply_for_car.png',
-						url: '/pages/warehouse/warehouse',
-						title: '用车',
-						color: '#ff6b81'
-					},
-					{
-						icon: '/static/user/travel.png',
-						url: '/pages/warehouse/warehouse',
-						title: '出差',
-						color: '#ff6b81'
-					},
-					{
-						icon: '/static/user/repair.png',
-						url: '/pages/warehouse/warehouse',
-						title: '报修',
-						color: '#ff6b81'
-					},
-					{
-						icon: '/static/user/apply.png',
-						url: '/pages/warehouse/warehouse',
-						title: '申领',
-						color: '#ff6b81'
-					}, {
-						icon: '/static/user/purchase.png',
-						url: '/pages/warehouse/warehouse',
-						title: '申购',
-						color: '#ff6b81'
-					},
-					{
-						icon: '/static/user/reimbursement.png',
-						url: '/pages/user/go_out',
-						title: '报销',
-						color: '#ff6b81'
-					},
-				],
 			};
 		},
 		computed: {
@@ -258,25 +192,6 @@
 		.img {
 			width: 48rpx;
 			height: 48rpx;
-		}
-	}
-
-	.work {
-		display: flex;
-		flex-direction: column;
-		height: 376rpx;
-		border-radius: 20rpx;
-		padding: 20rpx 20rpx 0rpx 20rpx;
-		background-color: #FFFFFF;
-		margin: 20rpx 20rpx 0rpx 20rpx;
-
-		.img {
-			width: 48rpx;
-			height: 48rpx;
-		}
-
-		.grid_list {
-			padding: 20rpx 0rpx 0rpx 0rpx;
 		}
 	}
 

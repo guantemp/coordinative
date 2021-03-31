@@ -76,7 +76,7 @@
 				default: ''
 			},
 			titleFont: {
-				type: [String, Array],
+				type: Array,
 				//字体选项，颜色，排列,粗细
 				//比如：['#000', 'center', 400]
 				default: []
@@ -159,7 +159,7 @@
 			if (pageLen == 1)
 				this.firstPage = true;
 			this.setSurplusTitle(this.titleFont);
-			console.log(this.menuButtonBounding.height);
+			//console.log(this.menuButtonBounding.height);
 		},
 		methods: {
 			navBack() {
@@ -317,7 +317,7 @@
 					}
 
 					.input {
-						width:88%;
+						width: 88%;
 						border-radius: 24rpx;
 						background-color: rgba(32, 32, 32, .35);
 						padding: 0 26rpx 0 60rpx;

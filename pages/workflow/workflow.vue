@@ -1,6 +1,6 @@
 <template>
 	<view class="workflow">
-		<navBar title="工作台" :backgroundColor="[1, ['#ec008c', '#6739b6', 45]]" surplusHeight="26"
+		<navBar title="工作台" :backgroundColor="[1, ['#ec008c', '#6739b6', 60]]" surplusHeight="26"
 			:titleFont="['#FFF','center',700]">
 			<view slot="extendSlot" class="store" @click="this.$util.navTo('/pages/workflow/store_selection')">
 				<text class="iconfont icon-location"></text>
@@ -8,7 +8,7 @@
 			</view>
 		</navBar>
 		<view class="item">
-			<listCell icon="/static/workflow/item.png" title="商品" :arrow="false" />
+			<listCell decorateIcon="/static/workflow/item.png" title="商品" :arrow="false" />
 			<view class="cu-list grid col-4 no-border item_grid_list">
 				<view class="cu-item " @tap.stop="this.$util.navTo('/pages/public/not_implemented')">
 					<view class="text-red">
@@ -40,7 +40,7 @@
 			</view>
 		</view>
 		<view class="order">
-			<listCell icon="/static/workflow/order.png" title="采购" />
+			<listCell decorateIcon="/static/workflow/order.png" title="采购" :arrow="false"/>
 			<view class="cu-list grid col-4 no-border item_grid_list">
 				<view class="cu-item " @tap.stop="this.$util.navTo('/pages/public/not_implemented')">
 					<view class="text-red">
@@ -112,7 +112,6 @@
 	.item {
 		display: flex;
 		flex-direction: column;
-		height: 260rpx;
 		border-radius: 20rpx;
 		padding: 20rpx 20rpx 0rpx 20rpx;
 		background-color: #FFFFFF;
@@ -131,7 +130,6 @@
 	.order {
 		display: flex;
 		flex-direction: column;
-		height: 260rpx;
 		border-radius: 20rpx;
 		padding: 20rpx 20rpx 0rpx 20rpx;
 		background-color: #FFFFFF;

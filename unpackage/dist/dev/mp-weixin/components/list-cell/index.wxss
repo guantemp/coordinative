@@ -24,7 +24,7 @@
 /* 垂直间距 */
 /* 透明度 */
 /* 文章场景相关 */
-.content.data-v-733ebc09 {
+.cell.data-v-733ebc09 {
   display: -webkit-box;
   display: -webkit-flex;
   display: flex;
@@ -32,39 +32,34 @@
   -webkit-box-direction: normal;
   -webkit-flex-direction: column;
           flex-direction: column;
-  position: relative;
-  min-height: 60rpx;
-  background-color: #FFFFFF;
+  background-color: #FFF;
 }
-.first_line.data-v-733ebc09 {
+.show.data-v-733ebc09 {
   display: -webkit-box;
   display: -webkit-flex;
   display: flex;
   -webkit-box-pack: justify;
   -webkit-justify-content: space-between;
           justify-content: space-between;
-  padding-bottom: 16rpx;
 }
-.first_line .left.data-v-733ebc09 {
+.show .left.data-v-733ebc09 {
   display: -webkit-box;
   display: -webkit-flex;
   display: flex;
   -webkit-box-align: center;
   -webkit-align-items: center;
           align-items: center;
-  padding-left: 16rpx;
 }
-.first_line .icon.data-v-733ebc09 {
+.show .decorateIcon.data-v-733ebc09 {
   width: 48rpx;
   height: 48rpx;
   margin-right: 18rpx;
 }
-.first_line .arrow.data-v-733ebc09 {
-  margin-right: 16rpx;
+.show .executable.data-v-733ebc09 {
   width: 36rpx;
   height: 36rpx;
 }
-.second_line.data-v-733ebc09 {
+.line.data-v-733ebc09 {
   vertical-align: middle;
   border-bottom: solid 1rpx #f6f6f6;
 }

@@ -34,7 +34,7 @@
         "selectedIconPath": "static/index_selected.png"
       },
       {
-        "text": "业务流",
+        "text": "业务",
         "pagePath": "pages/workflow/workflow",
         "iconPath": "static/workflow.png",
         "selectedIconPath": "static/workflow_selected.png"
@@ -61,9 +61,9 @@
   },
   "permission": {
     "scope.userLocation": {
-      "desc": ""
+      "desc": "你的位置信息将用于定位你所处的门店"
     }
   },
   "usingComponents": {},
-  "sitemapLocation": "sitemap44.json"
+  "sitemapLocation": "sitemap45.json"
 }

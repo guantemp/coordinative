@@ -21,7 +21,7 @@
 			},
 			"permission": {
 				"scope.userLocation": {
-					"desc": "你的位置信息将用于定位你所在的门店"
+					"desc": "你的位置信息将用于定位你所处的门店"
 				}
 			}
 		},
@@ -129,7 +129,7 @@
 				"selectedIconPath": "static/index_selected.png"
 			},
 			{
-				"text": "业务流",
+				"text": "业务",
 				"pagePath": "pages/workflow/workflow",
 				"iconPath": "static/workflow.png",
 				"selectedIconPath": "static/workflow_selected.png"

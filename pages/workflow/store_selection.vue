@@ -5,7 +5,7 @@
 			placeholder="请输入门店名称/全拼/首字母" style="">
 		</navBar>
 		<scroll-view scroll-y class="indexes" :scroll-into-view="'indexes-'+ listCurID"
-			:style="[{height:'calc(100vh - '+ navBar + 'rpx - 50rpx)'}]" :scroll-with-animation="true"
+			:style="{height:'calc(100vh - '+ navBar + 'rpx - 50rpx)'}" :scroll-with-animation="true"
 			:enable-back-to-top="true">
 			<view class="current text-df">
 				<listCell title="当前门店" titleColor="#ff9700" :arrow="false" borderStyle="dashed" />
@@ -19,7 +19,7 @@
 			</view>
 			<view class="footprint text-df">
 				<listCell title="历史足迹" titleColor="#8dc63f" :arrow="false" borderStyle="dashed">
-					<view slot="iconSlot">
+					<view slot="decorateIconSlot">
 						<text class="iconfont icon-footprint text-blue margin-right-sm"></text>
 					</view>
 				</listCell>
