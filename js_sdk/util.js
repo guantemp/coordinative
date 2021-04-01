@@ -1,3 +1,7 @@
+import Vue from 'vue'
+import Vuex from 'vuex'
+Vue.use(Vuex);
+
 let _debounceTimeout = null,
 	_throttleRunning = false
 
@@ -59,9 +63,15 @@ export const navTo = (url) => {
 		url
 	})
 }
+
+const navBack = function(){
+	uni.navigateBack();
+}
+
 export const checkMobile = (val) => {
-	return /^[1](([3][0-9])|([4][5,7,9])|([5][^4,6,9])|([6][6])|([7][3,5,6,7,8])|([8][0-9])|([9][8,9]))[0-9]{8}$/.test(
-		val);
+	return /^[1](([3][0-9])|([4][5,7,9])|([5][^4,6,9])|([6][6])|([7][3,5,6,7,8])|([8][0-9])|([9][8,9]))[0-9]{8}$/
+		.test(
+			val);
 }
 
 export const checkPassword = (val) => {

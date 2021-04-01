@@ -97,6 +97,9 @@ try {
   components = {
     navBar: function() {
       return __webpack_require__.e(/*! import() | components/navBar/navBar */ "components/navBar/navBar").then(__webpack_require__.bind(null, /*! @/components/navBar/navBar.vue */ 136))
+    },
+    listCell: function() {
+      return __webpack_require__.e(/*! import() | components/listCell/listCell */ "components/listCell/listCell").then(__webpack_require__.bind(null, /*! @/components/listCell/listCell.vue */ 144))
     }
   }
 } catch (e) {
@@ -193,85 +196,78 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var listCell = function listCell() {__webpack_require__.e(/*! require.ensure | components/list-cell/index */ "components/list-cell/index").then((function () {return resolve(__webpack_require__(/*! @/components/list-cell */ 143));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var navBar = function navBar() {__webpack_require__.e(/*! require.ensure | components/navBar/navBar */ "components/navBar/navBar").then((function () {return resolve(__webpack_require__(/*! @/components/navBar/navBar.vue */ 136));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var _default =
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0; //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+var _default =
 {
-  components: {
-    listCell: listCell,
-    navBar: navBar
-    //'HMfilterDropdown': HMfilterDropdown
-  },
   data: function data() {
     return {};
   },

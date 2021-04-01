@@ -20,13 +20,13 @@
 		</view>
 		<!--工资条-->
 		<view class="pay">
-			<list-Cell decorateIcon="/static/user/pay.png" title="我的工资"
+			<listCell decorateIcon="/static/user/pay.png" title="我的工资"
 				@eventClick="this.$util.navTo(hasLogin?'':'/pages/user/login')" />
 		</view>
 
 		<!--个人服务-->
 		<view class="service">
-			<listCell decorateIcon="/static/user/service.png" title="我的服务" />
+			<listCell decorateIcon="/static/user/service.png" title="我的服务" arrow='true'/>
 			<view class="cu-list grid col-3 no-border">
 				<view class="cu-item " @tap.stop="this.$util.navTo('/pages/public/not_implemented')">
 					<view class="text-red">
@@ -80,11 +80,7 @@
 		mapState,
 		mapGetters
 	} from 'vuex'
-	import listCell from 'components/list-cell';
 	export default {
-		components: {
-			listCell,
-		},
 		data() {
 			return {
 				bonus: 9999,

@@ -4712,7 +4712,7 @@ scroll-view.cu-steps .cu-item {
 }
 .iconfont {
 	font-family: "iconfont" !important;
-	font-size: 16px;
+	font-size: 20rpx;
 	font-style: normal;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;

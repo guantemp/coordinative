@@ -159,7 +159,7 @@
 			if (pageLen == 1)
 				this.firstPage = true;
 			this.setSurplusTitle(this.titleFont);
-			//console.log(this.menuButtonBounding.height);
+			console.log(this.barHeight);
 		},
 		methods: {
 			navBack() {

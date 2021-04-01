@@ -61,9 +61,9 @@
   },
   "permission": {
     "scope.userLocation": {
-      "desc": "你的位置信息将用于定位你所处的门店"
+      "desc": "爱人分为而他认为"
     }
   },
   "usingComponents": {},
-  "sitemapLocation": "sitemap45.json"
+  "sitemapLocation": "sitemap63.json"
 }

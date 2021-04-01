@@ -2,7 +2,7 @@
 	<view class="cell">
 		<view v-if="isTop" class="line" :style="[lineStyle]" />
 		<view class="show" :style="{padding:isTop?'10rpx 0rpx 0rpx 0rpx':'0 16rpx 16rpx 16rpx'}">
-			<view class="left">
+			<view class="decorate">
 				<slot name="decorateIconSlot">
 					<image v-if="decorateIcon && !isTop" class="decorateIcon" :src="decorateIcon"></image>
 					<!-- 线在顶上不显示-->
@@ -10,7 +10,9 @@
 				<text
 					:style="{color:textDecorate.color,'fontSize':textDecorate.size + 'rpx','fontWeight':textDecorate.weight}">{{ title }}</text>
 			</view>
-			<image v-if="arrow" class="executable" :src="executableIcon" @click="executable"></image>
+			<slot name="executableSlot">
+				<text v-if="arrow" class="iconfont icon-right_arrow text-gray" @click="executable"></text>
+			</slot>
 		</view>
 		<view v-if="!isTop" class="line" :style="[lineStyle]" />
 	</view>
@@ -20,7 +22,6 @@
 	export default {
 		data() {
 			return {
-				lineValue: {},
 				isTop: false,
 				textDecorate: {
 					color: '#000',
@@ -39,9 +40,9 @@
 				type: String,
 				default: ''
 			},
-			executableIcon: {
+			executableClass: {
 				type: String,
-				default: '/static/user/arrow.png'
+				default: ''
 			},
 			title: {
 				type: String,
@@ -55,7 +56,7 @@
 			},
 			arrow: {
 				type: Boolean,
-				default: true
+				default: false
 			},
 			line: {
 				type: Array,
@@ -64,15 +65,6 @@
 				// 颜色
 				// 位置：bottom-底，top-顶
 				default: []
-			},
-			// 线条的类型，solid-实线，dashed-方形虚线，dotted-圆点虚线
-			borderStyle: {
-				type: String,
-				default: 'solid'
-			},
-			lineColor: {
-				type: String,
-				default: '#e4e7ed'
 			},
 		},
 		methods: {
@@ -135,8 +127,9 @@
 	.show {
 		display: flex;
 		justify-content: space-between;
+		align-items: center;
 
-		.left {
+		.decorate {
 			display: flex;
 			align-items: center;
 		}

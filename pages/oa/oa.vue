@@ -34,11 +34,7 @@
 </template>
 
 <script>
-	import listCell from 'components/list-cell';
 	export default {
-		components: {
-			listCell,
-		},
 		data() {
 			return {
 				attendanceList: [{

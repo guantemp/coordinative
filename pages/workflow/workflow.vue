@@ -69,14 +69,7 @@
 </template>
 
 <script>
-	import listCell from '@/components/list-cell';
-	import navBar from '@/components/navBar/navBar.vue';
 	export default {
-		components: {
-			listCell,
-			navBar
-			//'HMfilterDropdown': HMfilterDropdown
-		},
 		data() {
 			return {}
 		},
