@@ -36,7 +36,7 @@
 						</view>
 					</listCell>
 					<view class="sheetDetailed margin-top-sm padding-lr-xs"
-						@tap.stop="this.$util.navTo('/pages/public/not_implemented')">
+						@tap.stop="this.$util.navTo('/pages/workflow/price_adjustment_details')">
 						<text class="iconfont icon-price-adjustment left"
 							:style="[{color:selectColor(priceAdjustmentSheet[index])}]"></text>
 						<view class="show midlle">
@@ -46,7 +46,7 @@
 								:line="['dashed','#e4e7ed','top']">
 							</listCell>
 						</view>
-						<text class="iconfont icon-right_arrow text-gray margin-left-sm right"></text>
+						<text class="cuIcon-right text-gray margin-left-sm right"></text>
 					</view>
 				</view>
 			</block>

@@ -3,12 +3,12 @@
 		<navBar title="工作台" :backgroundColor="[1, ['#ec008c', '#6739b6', 60]]" surplusHeight="26"
 			:titleFont="['#FFF','center',700]">
 			<view slot="extendSlot" class="store" @click="this.$util.navTo('/pages/workflow/store_selection')">
-				<text class="iconfont icon-location"></text>
+				<text class="cuIcon-location txt"></text>
 				<text class="txt">旺客隆超市国美绿洲店</text>
 			</view>
 		</navBar>
 		<view class="item">
-			<listCell decorateIcon="/static/workflow/item.png" title="商品" :arrow="false" />
+			<listCell decorateIcon="/static/workflow/item.png" title="商品" />
 			<view class="cu-list grid col-4 no-border item_grid_list">
 				<view class="cu-item " @tap.stop="this.$util.navTo('/pages/public/not_implemented')">
 					<view class="text-red">
@@ -40,7 +40,7 @@
 			</view>
 		</view>
 		<view class="order">
-			<listCell decorateIcon="/static/workflow/order.png" title="采购" :arrow="false"/>
+			<listCell decorateIcon="/static/workflow/order.png" title="采购" />
 			<view class="cu-list grid col-4 no-border item_grid_list">
 				<view class="cu-item " @tap.stop="this.$util.navTo('/pages/public/not_implemented')">
 					<view class="text-red">

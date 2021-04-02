@@ -4,6 +4,7 @@
     "pages/workflow/workflow",
     "pages/workflow/store_selection",
     "pages/workflow/price_adjustment_sheet",
+    "pages/workflow/price_adjustment_details",
     "pages/member/member",
     "pages/oa/oa",
     "pages/user/user",
@@ -61,9 +62,8 @@
   },
   "permission": {
     "scope.userLocation": {
-      "desc": "爱人分为而他认为"
+      "desc": "大概热议忽然个"
     }
   },
-  "usingComponents": {},
-  "sitemapLocation": "sitemap63.json"
+  "usingComponents": {}
 }

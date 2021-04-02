@@ -10,16 +10,16 @@
 				<view class="btn" v-if="!firstPage">
 					<slot name="btnSlot">
 						<view v-if="btnType==='back'" @click="navBack">
-							<text class="iconfont icon-left_arrow" :style="{color:surplusTitle.color}"></text>
+							<text class="cuIcon-back" :style="{color:surplusTitle.color}"></text>
 						</view>
 						<view v-else-if="btnType==='home'" @click="navHome">
-							<text class="iconfont icon-home" :style="{color:surplusTitle.color}"></text>
+							<text class="cuIcon-home" :style="{color:surplusTitle.color}"></text>
 						</view>
 						<view v-else-if="btnType==='tower'" class="tower"
 							:style="{width:menuButtonBounding.width+'px','line-height':menuButtonBounding.height-2 + 'px'}">
-							<text class="iconfont icon-left_arrow" :style="{color:surplusTitle.color}"
+							<text class="cuIcon-back" :style="{color:surplusTitle.color}"
 								@click="navBack"></text>
-							<text class="iconfont icon-home" :style="{color:surplusTitle.color}"
+							<text class="cuIcon-home" :style="{color:surplusTitle.color}"
 								@click="navHome"></text>
 						</view>
 					</slot>
