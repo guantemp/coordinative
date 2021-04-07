@@ -9,8 +9,10 @@
 						confirm-type="search"></input>
 					<text class="cuIcon-scan text-blue text-bold" @tap="scan"></text>
 				</view>
-				<view class="action" @click="computedScrollViewHeight">
-					<text class="cuIcon-calendar text-white" style="height:100%,font-size:48rpx"></text>
+				<view class="action text-white" @click="computedScrollViewHeight">
+					<text class="cuIcon-close "></text>
+					<text>取消</text>
+					<text class="cuIcon-calendar margin-left-xs"></text>
 				</view>
 			</view>
 		</navBar>
@@ -27,7 +29,7 @@
 			<block v-for="(item,index) in priceAdjustmentSheet" :key="index">
 				<view class="sheet">
 					<listCell :title="'单据号: ' + priceAdjustmentSheet[index].sheetNumber" :titleFont="['#8dc63f',28,700]"
-						:line="['dashed','#e4e7ed']">
+						:line="['dashed','#e4e7ed']" decorateIconClass="cuIcon-comment">
 						<view slot="executableSlot">
 							<text
 								v-if="priceAdjustmentSheet[index].approval=='normal' || priceAdjustmentSheet[index].approval=='denied'"
@@ -82,7 +84,7 @@
 						sheetNumber: 9975254522998878,
 						applyDate: '2021-03-31 17:37:12',
 						effectDate: '2021-04-07 21:37:12',
-						proposer: "官莫莫",
+						proposer: "泸县盛源超市-官莫莫",
 						approval: 'denied'
 					}, {
 						sheetNumber: 9975254522998972,
@@ -95,7 +97,7 @@
 						sheetNumber: 9975254522102156,
 						applyDate: '2021-03-31 10:42:56',
 						effectDate: '2021-04-02 23:59:59',
-						proposer: "李憨憨",
+						proposer: "旺客隆国美绿洲店-李憨憨",
 						approval: 'pass'
 					},
 					{
@@ -109,14 +111,14 @@
 						sheetNumber: 9975254545697823,
 						applyDate: '2021-03-31 09:08:02',
 						effectDate: '2021-04-03 00:00:00',
-						proposer: "成都本和商贸有限公司-言语东",
+						proposer: "成都本和商贸有限公司-松本特磕埕",
 						approval: 'denied'
 					},
 					{
 						sheetNumber: 9975254545697823,
 						applyDate: '2021-03-31 09:07:02',
 						effectDate: '2021-04-03 00:00:00',
-						proposer: "成都本和商贸有限公司-松本特磕埕",
+						proposer: "旺客隆超市关口店-小灰灰",
 						approval: 'pass'
 					}
 				]

@@ -176,74 +176,142 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 var _default =
 {
   data: function data() {
     return {
-      tabList: [{
-        name: '区域' },
-      {
-        name: '拼音' },
-      {
-        name: '平分' }],
-
-      TabCur: 0,
-      iconColor: [
-      'red', 'orange', 'yellow', 'green', 'rgb(0,255,255)', 'blue', 'purple'],
-
-      iconStyle: [{
-        "type": "success",
-        "size": 30,
-        "color": "#32CD32" },
+      items: [{
+        name: '立白超洁清新无磷型洗衣粉',
+        barcode: 6907992100272,
+        specs: '250ml',
+        purchasePrice: '￥2.38/盒',
+        salePrice: {
+          old: '3.00/盒',
+          new: '2.98/盒' } },
 
       {
-        "type": "success_no_circle",
-        "size": 30,
-        "color": "orange" },
+        name: '精品沃柑',
+        plu: 13,
+        specs: '500g',
+        purchasePrice: '2.38/500g',
+        salePrice: {
+          old: '8.00/kg',
+          new: '4.98/500g' },
+
+        vipPrice: {
+          old: '2.50/500g',
+          new: '4.98/500g' } },
 
       {
-        "type": "info",
-        "size": 30,
-        "color": "yellow" },
+        name: '哇哈哈营养快线水果牛奶饮品（菠萝味）',
+        barcode: 6902083898625,
+        specs: '500ml',
+        purchasePrice: '￥4.38/瓶',
+        salePrice: {
+          old: '11.98/瓶',
+          new: '6.98/瓶' },
+
+        memberPrice: {
+          old: '10.98/瓶',
+          new: '5.98/瓶' },
+
+        vipPrice: {
+          old: '4.98/瓶',
+          new: '5.19/瓶' } },
 
       {
-        "type": "warn",
-        "size": 30,
-        "color": "green" },
+        name: '川骄无芯卷纸（白四层）',
+        barcode: 6970981171003,
+        specs: '1800g',
+        purchasePrice: '￥2.38/提',
+        salePrice: {
+          old: '11.98/提',
+          new: '6.98/提' } },
 
       {
-        "type": "waiting",
-        "size": 30,
-        "color": "rgb(0,255,255)" },
+        name: '云南三七牙膏（清新留兰）',
+        barcode: 6953067200880,
+        specs: '220g',
+        purchasePrice: '￥32.38/支',
+        salePrice: {
+          old: '34.88/支',
+          new: '28.58/支' },
 
-      {
-        "type": "cancel",
-        "size": 30,
-        "color": "blue" },
-
-      {
-        "type": "download",
-        "size": 30,
-        "color": "purple" },
-
-      {
-        "type": "search",
-        "size": 30,
-        "color": "#C4C4C4" },
-
-      {
-        "type": "clear",
-        "size": 30,
-        "color": "red" }] };
+        memberPrice: {
+          old: '32.88/支',
+          new: '27.58/支' } }] };
 
 
 
-  },
-  methods: {
-    tabSelect: function tabSelect(e) {
-      this.TabCur = e.currentTarget.dataset.id;
-      this.scrollLeft = (e.currentTarget.dataset.id - 1) * 60;
-    } } };exports.default = _default;
+  } };exports.default = _default;
 
 /***/ }),
 

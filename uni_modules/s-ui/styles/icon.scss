@@ -1,0 +1,79 @@
+@font-face {
+  font-family: "s-icon";
+  src: url('uni_modules/s-ui/styles/fonts/iconfont.eot?t=1573639726364');
+  /* IE9 */
+  src: url('uni_modules/s-ui/styles/fonts/iconfont.eot?t=1573639726364#iefix') format('embedded-opentype'),
+    /* IE6-IE8 */
+    url('data:application/x-font-woff2;charset=utf-8;base64,d09GMgABAAAAAAQ4AAsAAAAACXAAAAPrAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHEIGVgCDUgqFJIQTATYCJAMkCxQABCAFhG0HehsBCMgekiTQc35QQIECSkGBIgjHytkkh/TqW8Ws2JJCVCgk66+ucWxrdNmlpKv//3Tqtx0guCqvUwhQKaDgpCgGWRRgmks8BoapjMNCOJn4r90+9+GMUOQoK4GkG7E6/l7VTJDYt6yzZ3HbYwJGMEBrdYxB1oIUzGtimw2mV9Qz8NfsZgJda8XQnSyraQEnBTYF4r7AU+DU0igz+aEtNEdOLOIV2GunV38PwEr++/EPkuJE0siw8+y9UhYKqnP1MgzZhpxMccDdzwTjNDK2AYW4NWq5wlBGtjHoehE7u8C9FgXVy2YD1Tnl3HYeIcmKhvmP19ImmiDpE/lxtE11jhFBdUEkqisiU90QheqOaFA9EE2qJ6JF9dJoE7Ejm5axN8BPIp+UhJSlXBlTvMbLOWw5yEdZ82PXZq4MB/LcxvDVWX+8zWwEVLfgN2cvD/mx5zrX/fH60KWZAG7Zoy72zqzBqSfrrq7fpu7M8IbLye3Ls1eHr8xcUvQWdkVn2FxXXd3bHthl0A8mXHJRrNYDrnJiYycwevOiP7l+MZDfPO/vv751J18AvxN9A96LuzdedkZ3keRdYivqXlp6Wtr94hLEXZL8Dv+X7ky2kPeIbeJuOmbdJaaJfZKMBLfLYyaS3G/yCNsm7rXsCz89HG8H17015ZDTnHIsSjsd6ctOtgRbYjwDDh+13i2oxbs2o5Si0uZWGHIfO/tjjPfsC9iFct+e1PUfLLIrOQd8OXTf432PVvLE+G2NTcBPe8cTtKudhs4/f3YP7UHcVaprId8SU8RBelp6+n7U1BMiUzD4BLA2/TBkyC/1Ofn1aQDS4ezJas2vDSGAfFb/QKxY0e8CkL4YvuG/Ck59TPt0xjPnf9u1wOfvf+PIs1qL9dG2BJv7t+Ayh4rPh7ZT3O7jGoGO5R3Zqagr/ayCY+rDvrIFO5fQtqghaVkDWds6fCFvg4aefdDUdgS6tio/vWdGZhClY4txAWHsJiRDnyAbu48v5PfQsOQzNI1jgK5z4XvBng0RXIplTKmYRXQ3EhjRwkV61aXIb8K8ZqLkJj+ntmJZEfwoMS6hGy/HFizvsUfp4JNUlUOcLJpRmbgdNplEZJXFdsyocW2qas2Kj+fGvimOEc3g4gQZRlFhLITWDREwRBZcOlnl0vv5JhhPY0KRZ9p6rK0wmUKYHkkUJ4GBL5dYWG3v8hpFB14SlYqDcGQiM6RMmDCTjIgQ6/iydhhDFadtRcgqS7wyjuNK4s6Xmd9AttEFXt6JIS2VMVPmLOlZ9W7KstgZKwt8m+pSC9lYa3FyXqFZ7ThKMNlZTZpiz8iiojgqGsNgReGlmTCnAgAA') format('woff2'),
+    url('uni_modules/s-ui/styles/fonts/iconfont.woff?t=1573639726364') format('woff'),
+    url('uni_modules/s-ui/styles/fonts/iconfont.ttf?t=1573639726364') format('truetype'),
+    /* chrome, firefox, opera, Safari, Android, iOS 4.2+ */
+    url('uni_modules/s-ui/styles/fonts/iconfont.svg?t=1573639726364#iconfont') format('svg');
+  /* iOS 4.1- */
+}
+
+
+[class*=s-icon] {
+  font-family: "s-icon";
+  font-size: inherit;
+  font-style: normal;
+  display: inline-block;
+  position: relative;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.s-icon-arrow-right:before {
+  content: "\e609";
+}
+
+.s-icon-arrow-down:before {
+  content: "\e60a";
+}
+
+.s-icon-arrow-up:before {
+  content: "\e60b";
+}
+
+.s-icon-fail:before {
+  content: "\e60c";
+}
+
+.s-icon-plus:before {
+  content: "\e60d";
+}
+
+.s-icon-cross:before {
+  content: "\e60e";
+}
+
+.s-icon-success:before {
+  content: "\e60f";
+}
+
+.s-icon-arrow-left:before {
+  content: "\e610";
+}
+
+.s-icon-loading {
+  width: 1em;
+  height: 1em;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+
+  &::before {
+    content: "";
+    display: inline-block;
+    width: 60%;
+    height: 60%;
+    border-width: 4rpx;
+    border-style: solid;
+    border-radius: 50%;
+    border-top-color: currentColor;
+    border-right-color: currentColor;
+    border-bottom-color: currentColor;
+    border-left-color: transparent;
+    animation: s-animate-rotate .8s cubic-bezier(0, 0, 0.1, 0.1) infinite;
+  }
+}

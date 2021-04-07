@@ -3369,7 +3369,7 @@ scroll-view.cu-steps .cu-item {
 }
 .bg-yellow.light {
 	color: #fbbd08;
-	background-color: #fef2ced2;
+	background-color: #fef2ce;
 }
 .bg-olive.light {
 	color: #8dc63f;
@@ -3377,7 +3377,7 @@ scroll-view.cu-steps .cu-item {
 }
 .bg-green.light {
 	color: #39b54a;
-	background-color: #d7f0dbff;
+	background-color: #d7f0db;
 }
 .bg-cyan.light {
 	color: #1cbbb4;
@@ -4735,17 +4735,11 @@ scroll-view.cu-steps .cu-item {
 .icon-right_arrow:before{
 	content: "\e611";
 }
-.icon-shop:before{
-	content: "\e60b";
-}
 .icon-location::before{
 	content: "\e614";
 }
 .icon-lookup::before{
 	content: "\e615";
-}
-.icon-footprint::before{
-	content: "\e616";
 }
 .icon-price-adjustment::before{
 	content: "\e617";

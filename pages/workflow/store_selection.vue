@@ -20,7 +20,7 @@
 			<view class="footprint">
 				<listCell title="历史足迹" titleColor="#8dc63f" :arrow="false" borderStyle="dashed">
 					<view slot="decorateIconSlot">
-						<text class="iconfont icon-footprint text-blue margin-right-sm"></text>
+						<text class="cuIcon-footprint text-blue text-lg margin-right-sm"></text>
 					</view>
 				</listCell>
 				<view class="footprintShops text-lg">

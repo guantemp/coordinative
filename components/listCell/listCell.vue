@@ -4,7 +4,8 @@
 		<view class="show" :style="{padding:isTop?'10rpx 0rpx 0rpx 0rpx':'0 16rpx 16rpx 16rpx'}">
 			<view class="decorate">
 				<slot name="decorateIconSlot">
-					<image v-if="decorateIcon && !isTop" class="decorateIcon" :src="decorateIcon"></image>
+					<image v-if="decorateIcon && !isTop &&!decorateIconClass" class="decorateIcon" :src="decorateIcon"></image>
+					<text v-if="decorateIconClass && !isTop" class="margin-right-xs" :class="decorateIconClass"></text>
 					<!-- 线在顶上不显示-->
 				</slot>
 				<text
@@ -38,6 +39,10 @@
 		props: {
 			decorateIcon: {
 				type: String,
+				default: ''
+			},
+			decorateIconClass:{
+				type:String,
 				default: ''
 			},
 			executableClass: {

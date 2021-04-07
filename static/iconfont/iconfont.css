@@ -84,17 +84,11 @@
 .icon-right_arrow:before{
 	content: "\e611";
 }
-.icon-shop:before{
-	content: "\e60b";
-}
 .icon-location::before{
 	content: "\e614";
 }
 .icon-lookup::before{
 	content: "\e615";
-}
-.icon-footprint::before{
-	content: "\e616";
 }
 .icon-price-adjustment::before{
 	content: "\e617";
