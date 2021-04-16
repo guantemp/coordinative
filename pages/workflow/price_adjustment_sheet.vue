@@ -9,13 +9,18 @@
 						confirm-type="search"></input>
 					<text class="cuIcon-scan text-blue text-bold" @tap="scan"></text>
 				</view>
-				<view class="action text-white" @click="computedScrollViewHeight">
+				<view class="action text-white">
 					<text class="cuIcon-close "></text>
-					<text>取消</text>
-					<text class="cuIcon-calendar margin-left-xs"></text>
+					<text @click="computedScrollViewHeight">取消</text>
+					<text class="cuIcon-filter margin-left-xs" @click="query"></text>
 				</view>
 			</view>
 		</navBar>
+		<view class="dataSelect solid padding-tb-sm padding-lr-lg" v-if="dataSelect">
+			<text @click="selectDate(true)">{{formattedStartDate}}</text>
+			<text>至</text>
+			<text @click="selectDate(false)">{{formattedEndDate}}</text>
+		</view>
 		<scroll-view scroll-y :scroll-with-animation="true" :enable-back-to-top="true"
 			:style="{height:'calc(98vh - 148px - 16rpx)'}">
 			<view scroll-x class="bg-white nav margin-top-xs">
@@ -34,7 +39,8 @@
 							<text
 								v-if="priceAdjustmentSheet[index].approval=='normal' || priceAdjustmentSheet[index].approval=='denied'"
 								class="cuIcon-delete text-blue"
-								@click.stop="deleteSheet(priceAdjustmentSheet[index].sheetNumber)"></text>
+								@click.stop="showModal(priceAdjustmentSheet[index].sheetNumber,$event)"
+								data-target="DialogModalDelete"></text>
 						</view>
 					</listCell>
 					<view class="sheetDetailed margin-top-sm padding-lr-xs"
@@ -58,14 +64,48 @@
 				@tap.stop="this.$util.navTo('/pages/public/not_implemented')">
 				<text class="cuIcon-add margin-right-xl"></text>新增调价单</button>
 		</view>
+		<!-- 删除确认 -->
+		<view class="cu-modal" :class="modalName=='DialogModalDelete'?'show':''">
+			<view class="cu-dialog">
+				<view class="padding-xl bg-white">
+					<text class="text-bold">删除调价单据：</text>
+					<text class="text-bold text-blue">{{currentSheetNumber}}</text>
+				</view>
+				<view class="cu-bar bg-white">
+					<view class="action margin-0 flex-sub text-green " @tap="hideModal">取消</view>
+					<view class="action margin-0 flex-sub  solid-left" @tap="deleteSheet(currentSheetNumber)">确定</view>
+				</view>
+			</view>
+		</view>
+		<!-- 日期选择 -->
+		<view class="dateSelect">
+			<view class="mask" :class="{'visible':dateVisible}" @tap="onCancel" @touchmove.stop.prevent
+				catchtouchmove="true"></view>
+			<view class="dateSelect-cnt" :class="{'visible':dateVisible}">
+				<view class="dateSelect-header" @touchmove.stop.prevent catchtouchmove="true">
+					<text @tap.stop.prevent="onCancel">取消</text>
+					<text class="text-orange" @tap.stop.prevent="pickerConfirm">确定</text>
+				</view>
+				<date-picker :startYear="2020" fields="day" :current="current" :disabled-after="true" :value="initDate"
+					@change="handlerChange" @touchstart="touchStart" @touchend="touchEnd">
+				</date-picker>
+			</view>
+		</view>
 	</view>
 </template>
 
 <script>
+	import {
+		formatDate,
+	} from '../../js_sdk/util.js';
+	import priceAdjustmentSheetTestData from '../../test/priceAdjustmentSheetTestData.js'; //测试数据
 	export default {
 		data() {
 			return {
 				scanResult: '',
+				modalName: null,
+				currentSheetNumber: null,
+				dataSelect: true,
 				tabCur: 0,
 				tabList: [
 					'今日',
@@ -74,55 +114,24 @@
 					'上周',
 					'本月',
 				],
-				priceAdjustmentSheet: [{
-						sheetNumber: 9975254532998877,
-						applyDate: '2021-03-30 20:35:11',
-						effectDate: '2021-03-30 17:37:12',
-						proposer: "泸州共创商贸有限公司-图特哈蒙",
-						approval: 'pass'
-					}, {
-						sheetNumber: 9975254522998878,
-						applyDate: '2021-03-31 17:37:12',
-						effectDate: '2021-04-07 21:37:12',
-						proposer: "泸县盛源超市-官莫莫",
-						approval: 'denied'
-					}, {
-						sheetNumber: 9975254522998972,
-						applyDate: '2021-03-31 15:22:33',
-						effectDate: '2021-04-12 09:35:12',
-						proposer: "泸州建国调味品经营部-黎宇宇",
-						approval: 'normal'
-					},
-					{
-						sheetNumber: 9975254522102156,
-						applyDate: '2021-03-31 10:42:56',
-						effectDate: '2021-04-02 23:59:59',
-						proposer: "旺客隆国美绿洲店-李憨憨",
-						approval: 'pass'
-					},
-					{
-						sheetNumber: 9975254545697823,
-						applyDate: '2021-03-31 10:07:02',
-						effectDate: '2021-04-03 00:00:00',
-						proposer: "成都本和商贸有限公司-云中三月",
-						approval: 'denied'
-					},
-					{
-						sheetNumber: 9975254545697823,
-						applyDate: '2021-03-31 09:08:02',
-						effectDate: '2021-04-03 00:00:00',
-						proposer: "成都本和商贸有限公司-松本特磕埕",
-						approval: 'denied'
-					},
-					{
-						sheetNumber: 9975254545697823,
-						applyDate: '2021-03-31 09:07:02',
-						effectDate: '2021-04-03 00:00:00',
-						proposer: "旺客隆超市关口店-小灰灰",
-						approval: 'pass'
-					}
-				]
+				priceAdjustmentSheet: [],
+
+				initDate: null,
+				formattedStartDate: null,
+				formattedEndDate: null,
+				dateSign: true,
+				dateVisible: false,
+				confirmFlag: true,
+				result: {},
 			}
+		},
+		onLoad: function() {
+			//定时器模拟ajax异步请求数据
+			setTimeout(() => {
+				this.priceAdjustmentSheet = priceAdjustmentSheetTestData;
+			}, 300);
+			this.formattedStartDate = formatDate(new Date(), "yyyy-MM-dd 00:00:00");
+			this.formattedEndDate = formatDate(new Date(), "yyyy-MM-dd 23:59:59");
 		},
 		methods: {
 			scan() {
@@ -137,6 +146,10 @@
 					},
 				});
 			},
+			query() {
+				this.dataSelect = !this.dataSelect;
+			},
+
 			tabSelect(e) {
 				this.tabCur = e.currentTarget.dataset.id;
 				this.scrollLeft = (e.currentTarget.dataset.id - 1) * 60
@@ -148,15 +161,70 @@
 					return "#f37b1d";
 				return "#8799a3";
 			},
+			showModal(sheetNumber, event) {
+				this.currentSheetNumber = sheetNumber;
+				this.modalName = event.currentTarget.dataset.target;
+			},
+			hideModal(v) {
+				this.modalName = null;
+			},
+			deleteSheet(sheetNumber) {
+				this.hideModal();
+				this.priceAdjustmentSheet.forEach(function(item, index, arr) {
+					//console.log(item.sheetNumber);
+					if (item.sheetNumber == sheetNumber) {
+						arr.splice(index, 1);
+					}
+				});
+			},
+			//以下日期选择函数
+			selectDate(b) {
+				this.dateVisible = true;
+				if (b) {
+					this.dateSign = true;
+				} else {
+					this.dateSign = false;
+				}
+			},
+			touchStart() {
+				if (this.timeout) {
+					this.confirmFlag = false;
+				}
+			},
+			touchEnd() {
+				if (this.timeout) {
+					setTimeout(() => {
+						this.confirmFlag = true;
+					}, 500)
+				}
+			},
+			handlerChange(res) {
+				let _this = this;
+				this.result = {
+					...res
+				};
+			},
+			onCancel(res) {
+				this.dateVisible = false;
+			},
+			pickerConfirm() {
+				if (!this.confirmFlag) {
+					return;
+				};
+				console.log(this.result);
+				this.dateVisible = false;
+				this.dateSign ? this.formattedStartDate = formatDate(new Date(this.result.value), "yyyy-MM-dd 00:00:00") :
+					this
+					.formattedEndDate = formatDate(new Date(this.result.value), "yyyy-MM-dd 23:59:59");
+			},
+
 			computedScrollViewHeight() {
 				let query = wx.createSelectorQuery();
 				query.select('.bg-white.nav.margin-top-xs').boundingClientRect(rect => {
 					let clientHeight = rect.height;
-					console.log(clientHeight);
+					//console.log(clientHeight);
 				}).exec();
-			},
-			deleteSheet(sheetNumber) {
-				this.$util.toast(`演示删除：` + sheetNumber);
+				this.scanResult = null;
 			},
 		}
 	}
@@ -167,6 +235,13 @@
 		width: 100vw;
 		height: 100vh;
 		background-color: #F8F8F8;
+	}
+
+	.dataSelect {
+		display: flex;
+		justify-content: space-around;
+		align-items: center;
+		background-color: #FFF;
 	}
 
 	.sheet {
@@ -212,6 +287,73 @@
 
 		>button {
 			width: 88%;
+		}
+	}
+
+	.dateSelect {
+		z-index: 888;
+
+		.mask {
+			position: fixed;
+			z-index: 1000;
+			top: 0;
+			right: 0;
+			left: 0;
+			bottom: 0;
+			background: rgba(0, 0, 0, 0.6);
+			visibility: hidden;
+			opacity: 0;
+			transition: all 0.3s ease;
+		}
+
+		.mask.visible {
+			visibility: visible;
+			opacity: 1;
+		}
+
+		.dateSelect-cnt {
+			position: fixed;
+			bottom: 0;
+			left: 0;
+			width: 100%;
+			transition: all 0.3s ease;
+			transform: translateY(100%);
+			z-index: 3000;
+			background-color: #fff;
+		}
+
+		.dateSelect-cnt.visible {
+			transform: translateY(0);
+		}
+
+		.dateSelect-header {
+			display: flex;
+			align-items: center;
+			padding: 0 30upx;
+			height: 88upx;
+			background-color: #fff;
+			position: relative;
+			text-align: center;
+			font-size: 32upx;
+			justify-content: space-between;
+			border-bottom: solid 1px #eee;
+
+			.dateSelect-btn {
+				font-size: 30upx;
+			}
+		}
+
+		.dateSelect-hd:after {
+			content: ' ';
+			position: absolute;
+			left: 0;
+			bottom: 0;
+			right: 0;
+			height: 1px;
+			border-bottom: 1px solid #e5e5e5;
+			color: #e5e5e5;
+			transform-origin: 0 100%;
+			transform: scaleY(0.5);
 		}
 	}
 </style>

@@ -62,8 +62,9 @@
   },
   "permission": {
     "scope.userLocation": {
-      "desc": "的是高尚的人格"
+      "desc": "韩国你好v计划"
     }
   },
-  "usingComponents": {}
+  "usingComponents": {},
+  "sitemapLocation": "sitemap77.json"
 }
