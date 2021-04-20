@@ -82,7 +82,7 @@
         "usingComponents" : true,
         "permission" : {
             "scope.userLocation" : {
-                "desc" : ""
+                "desc" : "你的位置信息将用于定位你所处的门店"
             }
         }
     },

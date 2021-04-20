@@ -38,6 +38,12 @@
 			}
 		},
 		{
+			"path": "pages/workflow/price_adjustment_add",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		},
+		{
 			"path": "pages/member/member",
 			"style": {
 				"navigationBarTitleText": "会员",

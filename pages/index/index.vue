@@ -1,6 +1,9 @@
 <template>
 	<view class="content">
 		<text class="solid-bottom text-lg padding text-red">HOPRXI协助工具 - Release Notes</text>
+		<text class="solid-bottom text-lg text-blue padding">#version 0.0.8 2021-04-19</text>
+		<text class="solid-bottom text-brown">* 【重要】调价单据的优化及实现 </text>
+		<text class="solid-bottom text-brown">*  优化navbar组件，增加额外部分高度可变 </text>
 		<text class="solid-bottom text-lg text-blue padding">#version 0.0.7 2021-03-31</text>
 		<text class="solid-bottom text-brown">* 【重要】实现门店定位或手动选择 </text>
 		<text class="solid-bottom text-brown">* 【重要】调价单据的显示 </text>

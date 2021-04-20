@@ -1,6 +1,6 @@
 {
   "navigationStyle": "custom",
   "usingComponents": {
-    "list-cell": "/components/list-cell/index"
+    "list-cell": "/components/listCell/listCell"
   }
 }

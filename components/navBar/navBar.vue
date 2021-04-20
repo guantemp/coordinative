@@ -17,10 +17,8 @@
 						</view>
 						<view v-else-if="btnType==='tower'" class="tower"
 							:style="{width:menuButtonBounding.width+'px','line-height':menuButtonBounding.height-2 + 'px'}">
-							<text class="cuIcon-back" :style="{color:surplusTitle.color}"
-								@click="navBack"></text>
-							<text class="cuIcon-home" :style="{color:surplusTitle.color}"
-								@click="navHome"></text>
+							<text class="cuIcon-back" :style="{color:surplusTitle.color}" @click="navBack"></text>
+							<text class="cuIcon-home" :style="{color:surplusTitle.color}" @click="navHome"></text>
 						</view>
 					</slot>
 				</view>
@@ -116,7 +114,9 @@
 			}
 		},
 		watch: {
-
+			surplusHeight() {
+				this.computeBarHeight();
+			}
 		},
 		computed: {
 			//导航底部线是否显示
@@ -133,19 +133,7 @@
 			// #ifdef MP-WEIXIN || MP-QQ || MP-BAIDU || MP-TOUTIAO
 			this.menuButtonBounding = uni.getMenuButtonBoundingClientRect();
 			// #endif
-			//计算导航栏宽度，高度
-			uni.getSystemInfo({
-				success: res => {
-					this.statusBarHeight = res.statusBarHeight + 'px';
-					this.barWidth = res.screenWidth + 'px';
-					this.barHeight = res.statusBarHeight + this.menuButtonBounding.height + (this
-						.menuButtonBounding.top - res.statusBarHeight) * 2 + this.surplusHeight + 'px';
-					// #ifdef MP-WEIXIN || MP-QQ || MP-BAIDU || MP-TOUTIAO
-					this.barCapsuleContentMaxWidth = res.screenWidth - this.menuButtonBounding.width - (res
-						.screenWidth - this.menuButtonBounding.right) + 'px';
-					// #endif
-				}
-			});
+			this.computeBarHeight();
 			this.navBarBackgroudImg = this.backgroundImg;
 			if (this.navBarBackgroudImg) {
 				this.isWhite = true;
@@ -162,6 +150,20 @@
 			//console.log(this.barHeight);
 		},
 		methods: {
+			computeBarHeight() {
+				uni.getSystemInfo({
+					success: res => {
+						this.statusBarHeight = res.statusBarHeight + 'px';
+						this.barWidth = res.screenWidth + 'px';
+						this.barHeight = res.statusBarHeight + this.menuButtonBounding.height + (this
+							.menuButtonBounding.top - res.statusBarHeight) * 2 + this.surplusHeight + 'px';
+						// #ifdef MP-WEIXIN || MP-QQ || MP-BAIDU || MP-TOUTIAO
+						this.barCapsuleContentMaxWidth = res.screenWidth - this.menuButtonBounding.width - (res
+							.screenWidth - this.menuButtonBounding.right) + 'px';
+						// #endif
+					}
+				});
+			},
 			navBack() {
 				uni.navigateBack();
 			},

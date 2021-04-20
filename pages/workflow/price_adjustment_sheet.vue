@@ -16,13 +16,13 @@
 				</view>
 			</view>
 		</navBar>
-		<view class="dataSelect solid padding-tb-sm padding-lr-lg" v-if="dataSelect">
+		<view class="dateShow solid padding-tb-sm padding-lr-lg" v-if="dateShow">
 			<text @click="selectDate(true)">{{formattedStartDate}}</text>
 			<text>至</text>
 			<text @click="selectDate(false)">{{formattedEndDate}}</text>
 		</view>
 		<scroll-view scroll-y :scroll-with-animation="true" :enable-back-to-top="true"
-			:style="{height:'calc(98vh - 148px - 16rpx)'}">
+			:style="{height:dateShow?'calc(98vh - 188px - 10rpx)':'calc(98vh - 150px - 10rpx)'}">
 			<view scroll-x class="bg-white nav margin-top-xs">
 				<view class="flex text-center">
 					<view class="cu-item flex-sub" :class="index===tabCur?'text-orange cur':''"
@@ -61,10 +61,10 @@
 		</scroll-view>
 		<view class="add">
 			<button class="cu-btn block lg radius shadow confirmBtn bg-gradual-orange"
-				@tap.stop="this.$util.navTo('/pages/public/not_implemented')">
+				@tap.stop="this.$util.navTo('/pages/workflow/price_adjustment_add')">
 				<text class="cuIcon-add margin-right-xl"></text>新增调价单</button>
 		</view>
-		<!-- 删除确认 -->
+		<!-- 删除确认模态对话框 -->
 		<view class="cu-modal" :class="modalName=='DialogModalDelete'?'show':''">
 			<view class="cu-dialog">
 				<view class="padding-xl bg-white">
@@ -98,14 +98,14 @@
 	import {
 		formatDate,
 	} from '../../js_sdk/util.js';
-	import priceAdjustmentSheetTestData from '../../test/priceAdjustmentSheetTestData.js'; //测试数据
+	import priceAdjustmentSheetTestData from '../../test/price_adjustment_sheet_test_data.js'; //测试数据
 	export default {
 		data() {
 			return {
 				scanResult: '',
 				modalName: null,
 				currentSheetNumber: null,
-				dataSelect: true,
+				dateShow: false,
 				tabCur: 0,
 				tabList: [
 					'今日',
@@ -147,7 +147,7 @@
 				});
 			},
 			query() {
-				this.dataSelect = !this.dataSelect;
+				this.dateShow = !this.dateShow;
 			},
 
 			tabSelect(e) {
@@ -220,9 +220,9 @@
 
 			computedScrollViewHeight() {
 				let query = wx.createSelectorQuery();
-				query.select('.bg-white.nav.margin-top-xs').boundingClientRect(rect => {
+				query.select('.dateShow.solid.padding-tb-sm').boundingClientRect(rect => {
 					let clientHeight = rect.height;
-					//console.log(clientHeight);
+					console.log(clientHeight);
 				}).exec();
 				this.scanResult = null;
 			},
@@ -237,7 +237,7 @@
 		background-color: #F8F8F8;
 	}
 
-	.dataSelect {
+	.dateShow {
 		display: flex;
 		justify-content: space-around;
 		align-items: center;
@@ -278,12 +278,11 @@
 	}
 
 	.add {
-		position: fixed;
 		display: flex;
 		justify-content: center;
 		width: 100vw;
-		bottom: 2vh;
-		z-index: 1;
+		position: fixed;
+		bottom: 1.5vh;
 
 		>button {
 			width: 88%;
