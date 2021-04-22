@@ -1,7 +1,7 @@
 <template>
 	<view class="price_adjustment_add">
 		<navBar title="调价明细" :backgroundColor="[1, ['#9000ff', '#5e00ff', 180]]" tabPage="/pages/index/index"
-			:titleFont="['#FFF']" :surplusHeight="fold?'80':'15'">
+			:titleFont="['#FFF']" :surplusHeight="fold?'80':'15'" id="navBar">
 			<view slot="extendSlot">
 				<view v-show="fold">
 					<view class="article text-white margin-tb-xs margin-lr">
@@ -26,15 +26,33 @@
 			</view>
 		</navBar>
 
-		<view class="bottom cu-bar bg-white tabbar border">
+		<!--items show-->
+		<view v-if="items||items.length === 0" class="empty padding-bottom-lg"
+			:style="{height: fold?'calc(100vh - 190px)':'calc(100vh - 125px)'}">
+			<text class="cuIcon-like text-red margin-bottom tips"></text>
+			<text>空空如也...</text>
+		</view>
+		<scroll-view scroll-y :scroll-with-animation="true" :enable-back-to-top="true"
+			:style="{height: fold?'calc(100vh - 190px)':'calc(100vh - 125px)'}" v-else>
+
+		</scroll-view>
+
+		<!--bootom-->
+		<view class="bottom cu-bar bg-white tabbar border shop">
 			<button class="action" open-type="contact">
 				<view class="cuIcon-service text-green">
 					<view class="cu-tag badge"></view>
 				</view>
 				管理员
 			</button>
+			<view class="action">
+				<view class="cuIcon-tag">
+					<view v-if="items.length > 0" class="cu-tag badge">{{items.length}}</view>
+				</view>
+				数量
+			</view>
 			<view class="bg-orange submit" @click.stop="showModal" data-target="DialogModalAdd">添加商品</view>
-			<view class="bg-red submit">保存</view>
+			<view class="bg-red submit" @click="computedHeight">保存</view>
 		</view>
 
 		<!-- 日期选择 -->
@@ -51,6 +69,7 @@
 				</date-picker>
 			</view>
 		</view>
+
 		<!-- 添加商品明细模态对话框 -->
 		<view class="cu-modal bottom-modal" :class="modalName=='DialogModalAdd'?'show':''">
 			<view class="cu-dialog">
@@ -61,21 +80,21 @@
 					<view class="cu-bar search">
 						<view class="search-form radius">
 							<text class="cuIcon-search"></text>
-							<input v-model="scanResult" :adjust-position="false" type="text" placeholder="请输入商品条码、名称、拼音"
+							<input v-model="scanResult" :adjust-position="false" placeholder="请输入商品条码、名称、拼音"
 								confirm-type="search"></input>
 							<text class="cuIcon-scan text-blue text-bold" @tap="scan"></text>
 						</view>
 						<view class="action text-white">
 							<text class="cuIcon-close "></text>
 							<text @click="modalCancel">取消</text>
-							<text class="cuIcon-filter margin-left-xs" @click="query"></text>
+							<text class="cuIcon-filter margin-left-xs" @tap.stop="showUnitDrawerModal"></text>
 						</view>
 					</view>
 					<view class="item">
 						<text class="padding-lr-sm text-bold">品名：{{item.name||'--'}}</text>
 						<view class="flex justify-between padding-lr-sm padding-tb-xs">
-							<text v-if="item.barcode">商品条码：{{item.barcode||'--'}}</text>
 							<text v-if="item.plu">plu号：{{item.plu}}</text>
+							<text v-else>商品条码：{{item.barcode||'--'}}</text>
 							<text>规格：{{item.specs||'--'}}</text>
 						</view>
 					</view>
@@ -88,52 +107,86 @@
 						<view class='grid-item-child-3 padding-left-sm solid-right solid-bottom'>
 							<text class="cuIcon-vip" @click="showVip">区域参考进价</text>
 							<text
-								class="text-lg text-bold text-cyan text-price  padding-tb-xs">{{item.vip.referencePurchasePrice||'--'}}</text>
+								class="text-lg text-bold text-cyan text-price padding-tb-xs">{{item.vip.referencePurchasePrice||'--'}}</text>
 						</view>
 						<view class='grid-item-child-3 padding-left-sm solid-bottom'>
 							<text>最近入库价</text>
 							<text
-								class="text-lg text-bold text-cyan text-price  padding-tb-xs">{{item.storage.lastPurchasePrice||'--'}}</text>
+								class="text-lg text-bold text-price padding-tb-xs text-yellow">{{item.storage.lastPurchasePrice||'--'}}</text>
 						</view>
 						<view class='grid-item-child-3 padding-left-sm solid-right'>
 							<text class="padding-tb-xs">库存数量</text>
-							<text class="text-lg text-bold text-red">{{item.storage.number||'--'}}</text>
+							<text class="text-lg text-bold text-pink">{{item.storage.number||'--'}}</text>
 						</view>
 						<view class='grid-item-child-3 padding-left-sm solid-right '>
 							<text class="padding-tb-xs">库存金额</text>
-							<text class="text-lg text-bold text-red text-price">{{item.storage.amount||'--'}}</text>
+							<text class="text-lg text-bold text-pink text-price">{{item.storage.amount||'--'}}</text>
 						</view>
 						<view class='grid-item-child-3 padding-left-sm'>
-							<text class="padding-tb-xs cuIcon-creative">存货周转率</text>
-							<text class="text-lg text-bold text-red ">{{item.storage.stockTurn||'--'}}</text>
+							<text class="padding-tb-xs cuIcon-question">存货周转率</text>
+							<text class="text-lg text-bold text-green">{{item.storage.stockTurn||'--'}}</text>
 						</view>
 					</view>
-					<view class="flex justify-around">
-						<text>原零售价</text><text
-							class="text-price">{{items[index].salePrice.old||'--'}}</text><text>现零售价</text>
-						<text class="text-price"></text>
+					<view class="flex justify-between align-center margin-lr-sm">
+						<view class="basis-df">
+							<text>原零售价：</text>
+							<text class="text-price margin-left-xs text-blue">{{item.salePrice.old||'--'}}</text>
+						</view>
+						<view class="flex justify-between align-center">
+							<text class="basis-df">现零售价：</text>
+							<view class="price">
+								<text class="text-price margin-right-xs"></text>
+								<input :placeholder="item.salePrice.new" name="salePrice" type="digit"
+									@blur="supplementaryUnit('sale')"></input>
+								<text class="cuIcon-write text-orange" @tap.stop="showUnitDrawerModal"></text>
+							</view>
+						</view>
 					</view>
-					<view class="flex justify-around">
-						<text>原会员价</text><text
-							class="text-price">{{items[index].salePrice.old||'--'}}</text><text>现零售价</text>
-						<text class="text-price"></text>
+					<view class="flex justify-between align-center margin-lr-sm margin-tb-xs">
+						<view class="basis-df">
+							<text>原会员价：</text>
+							<text class="text-price margin-left-xs text-blue">{{item.memberPrice.old||'--'}}</text>
+						</view>
+						<view class="flex justify-between align-center">
+							<text class="basis-df">现会员价：</text>
+							<view class="price">
+								<text class="text-price margin-right-xs"></text>
+								<input :placeholder="item.memberPrice.new" name="memberPrice" type="digit"
+									@blur="supplementaryUnit('member')"></input>
+								<text class="cuIcon-write text-orange" @tap.stop="showUnitDrawerModal"></text>
+							</view>
+						</view>
 					</view>
-					<view class="flex justify-around">
-						<text>原VIP价</text><text
-							class="text-price">{{items[index].salePrice.old||'--'}}</text><text>现零售价</text>
-						<text class="text-price"></text>
+					<view class="flex justify-between align-center margin-lr-sm">
+						<view class="basis-df">
+							<text>原Vip价：</text>
+							<text class="text-price margin-left-xs text-blue">{{item.vipPrice.old||'--'}}</text>
+						</view>
+						<view class="flex justify-between align-center">
+							<text class="basis-df">现VIP价：</text>
+							<view class="price">
+								<text class="text-price margin-right-xs"></text>
+								<input :placeholder="item.vipPrice.new" name="vipPrice" type="digit"
+									@blur="supplementaryUnit('vip')"></input>
+								<text class="cuIcon-write text-orange" @tap.stop="showUnitDrawerModal"></text>
+							</view>
+						</view>
 					</view>
-					<view class="flex justify-end margin-right-xs padding-tb-sm">
-						<button class="cu-btn bg-mauve shadow basis-sm">增加</button>
-						<button class="cu-btn bg-pink shadow margin-left-xs basis-sm">确定</button>
+					<view class="flex justify-end margin-right-sm padding-tb-sm">
+						<button class="cu-btn block radius shadow confirmBtn bg-gradual-purple basis-sm"
+							@tap.stop="addItem">
+							<text class="cuIcon-add margin-right-sm"></text>增加</button>
+						<button class="cu-btn block radius shadow confirmBtn bg-gradual-purple basis-sm margin-left-xs"
+							@tap.stop="this.$util.navTo('/pages/workflow/price_adjustment_add')">
+							确定</button>
 					</view>
 				</view>
 			</view>
 		</view>
 		<!-- 单位选择抽屉 -->
-		<view class="cu-modal drawer-modal justify-end" :class="modalName=='DrawerModalR'?'show':''" @tap="hideModal">
+		<view class="cu-modal drawer-modal justify-end" :class="unitDrawerModal?'show':''" @tap="hideUnitDrawerModal">
 			<view class="cu-dialog basis-lg" @tap.stop=""
-				:style="[{top:CustomBar+'px',height:'calc(100vh - ' + CustomBar + 'px)'}]">
+				:style="[{top:140+'px',height:'calc(100vh - ' + 140 + 'px)'}]">
 				<view class="cu-list menu text-left">
 					<view class="cu-item arrow" v-for="(item,index) in 5" :key="index">
 						<view class="content">
@@ -154,6 +207,7 @@
 	export default {
 		data() {
 			return {
+				occupiedHeight: 0,
 				fold: true,
 				currentShop: '泸州市龙马潭区嘉诚超市',
 				remarks: null,
@@ -162,15 +216,17 @@
 				initDate: null,
 				dateVisible: false,
 				confirmFlag: true,
-				result: {},
+				resultDate: {},
 
 				modalName: null,
+				unitDrawerModal: false,
 				scanResult: null,
 
+				items: {},
 				item: {
 					name: '菊品郁金银屑片',
 					barcode: '6926094418474',
-					specs: '',
+					specs: '100片',
 					vip: {
 						referenceSalePrice: '45.25/瓶',
 						referencePurchasePrice: '23.33/瓶'
@@ -180,21 +236,38 @@
 						amount: 677.23,
 						number: 12,
 						stockTurn: 12.33
+					},
+					salePrice: {
+						old: '40.00/瓶',
+						new: '38.00/瓶',
+					},
+					vipPrice: {
+						old: '35.00/瓶',
+						new: '32.00/瓶',
+					},
+					memberPrice: {
+						old: null,
+						new: null,
 					}
+				},
+				unit: {
+					sale: null,
+					member: null,
+					vip: null
 				}
 			}
 		},
 		onLoad: function() {
 			//定时器模拟ajax异步请求数据
 			setTimeout(() => {
+				this.effectiveDate = formatDate(new Date(), "yyyy-MM-dd 00:00:00");
 				//this.items = price_adjustment_details_test_data;
 			}, 300);
-			this.effectiveDate = formatDate(new Date(), "yyyy-MM-dd 00:00:00");
+			
 		},
 		methods: {
 			foldClick() {
 				this.fold = !this.fold;
-				console.log(this.fold);
 			},
 
 			selectDate() {
@@ -214,7 +287,7 @@
 			},
 			handlerChange(res) {
 				let _this = this;
-				this.result = {
+				this.resultDate = {
 					...res
 				};
 			},
@@ -225,9 +298,9 @@
 				if (!this.confirmFlag) {
 					return;
 				};
-				console.log(this.result);
+				//console.log(this.resultDate);
 				this.dateVisible = false;
-				this.effectiveDate = formatDate(new Date(this.result.value), "yyyy-MM-dd hh:mm:ss")
+				this.effectiveDate = formatDate(new Date(this.resultDate.value), "yyyy-MM-dd hh:mm:ss")
 			},
 
 			showModal(event) {
@@ -235,6 +308,13 @@
 			},
 			hideModal(v) {
 				this.modalName = null;
+			},
+
+			hideUnitDrawerModal() {
+				this.unitDrawerModal = false;
+			},
+			showUnitDrawerModal() {
+				this.unitDrawerModal = true;
 			},
 			scan() {
 				var that = this;
@@ -248,12 +328,29 @@
 					},
 				});
 			},
-			modalCancel() {
+			queryCancel() {
 				this.scanResult = null;
 			},
 			showVip() {
-				this.$util.toast("普通用户定位到省，购买Vip将可以定位到周边5KM");
-			}
+				this.$util.toast("普通用户定位到省，付费用户精度可定位到周边3KM");
+			},
+			supplementaryUnit(unit) {
+
+			},
+			addItem() {
+				this.item = {};
+			},
+
+			computedHeight() {
+				const query = uni.createSelectorQuery();
+				query.select('#navBar').boundingClientRect(rect => {
+					this.occupiedHeight = rect.height;
+				}).exec();
+				query.select('.bottom').boundingClientRect(rect => {
+					this.occupiedHeight = this.occupiedHeight + rect.height;
+				}).exec();
+				this.$util.toast("height:" + this.occupiedHeight);
+			},
 		}
 	}
 </script>
@@ -301,6 +398,18 @@
 		width: 100%;
 		display: flex;
 		justify-content: center;
+	}
+
+	.empty {
+		width: 100%;
+		display: flex;
+		justify-content: center;
+		flex-direction: column;
+		align-items: center;
+
+		.tips {
+			font-size: 164rpx;
+		}
 	}
 
 	.dateSelect {
@@ -388,6 +497,12 @@
 		display: flex;
 		flex-direction: column;
 		width: 33.33333%;
+	}
+
+	.price {
+		display: flex;
+		border-bottom: 1px solid #fFF;
+		align-items: center;
 	}
 
 	.bottom {

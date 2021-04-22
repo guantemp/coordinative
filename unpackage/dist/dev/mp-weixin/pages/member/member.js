@@ -123,6 +123,12 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
+  if (!_vm._isMounted) {
+    _vm.e0 = function($event) {
+      $event.stopPropagation()
+      return this.$util.navTo("/pages/workflow/price_adjustment_add")
+    }
+  }
 }
 var recyclableRender = false
 var staticRenderFns = []
@@ -305,6 +311,59 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 var _util = __webpack_require__(/*! ../../js_sdk/util.js */ 30);
 
 
@@ -312,6 +371,7 @@ var _price_adjustment_details_test_data = _interopRequireDefault(__webpack_requi
 var _default = {
   data: function data() {
     return {
+      occupiedHeight: 0,
       fold: true,
       currentShop: '泸州市龙马潭区嘉诚超市',
       remarks: null,
@@ -320,15 +380,17 @@ var _default = {
       initDate: null,
       dateVisible: false,
       confirmFlag: true,
-      result: {},
+      resultDate: {},
 
       modalName: null,
+      unitDrawerModal: false,
       scanResult: null,
 
+      items: {},
       item: {
         name: '菊品郁金银屑片',
         barcode: '6926094418474',
-        specs: '',
+        specs: '100片',
         vip: {
           referenceSalePrice: '45.25/瓶',
           referencePurchasePrice: '23.33/瓶' },
@@ -337,22 +399,39 @@ var _default = {
           lastPurchasePrice: '22.47/瓶',
           amount: 677.23,
           number: 12,
-          stockTurn: 12.33 } } };
+          stockTurn: 12.33 },
 
+        salePrice: {
+          old: '40.00/瓶',
+          new: '38.00/瓶' },
+
+        vipPrice: {
+          old: '35.00/瓶',
+          new: '32.00/瓶' },
+
+        memberPrice: {
+          old: null,
+          new: null } },
+
+
+      unit: {
+        sale: null,
+        member: null,
+        vip: null } };
 
 
   },
-  onLoad: function onLoad() {
+  onLoad: function onLoad() {var _this2 = this;
     //定时器模拟ajax异步请求数据
     setTimeout(function () {
+      _this2.effectiveDate = (0, _util.formatDate)(new Date(), "yyyy-MM-dd 00:00:00");
       //this.items = price_adjustment_details_test_data;
     }, 300);
-    this.effectiveDate = (0, _util.formatDate)(new Date(), "yyyy-MM-dd 00:00:00");
+
   },
   methods: {
     foldClick: function foldClick() {
       this.fold = !this.fold;
-      console.log(this.fold);
     },
 
     selectDate: function selectDate() {
@@ -363,16 +442,16 @@ var _default = {
         this.confirmFlag = false;
       }
     },
-    touchEnd: function touchEnd() {var _this2 = this;
+    touchEnd: function touchEnd() {var _this3 = this;
       if (this.timeout) {
         setTimeout(function () {
-          _this2.confirmFlag = true;
+          _this3.confirmFlag = true;
         }, 500);
       }
     },
     handlerChange: function handlerChange(res) {
       var _this = this;
-      this.result = _objectSpread({},
+      this.resultDate = _objectSpread({},
       res);
 
     },
@@ -383,9 +462,9 @@ var _default = {
       if (!this.confirmFlag) {
         return;
       };
-      console.log(this.result);
+      //console.log(this.resultDate);
       this.dateVisible = false;
-      this.effectiveDate = (0, _util.formatDate)(new Date(this.result.value), "yyyy-MM-dd hh:mm:ss");
+      this.effectiveDate = (0, _util.formatDate)(new Date(this.resultDate.value), "yyyy-MM-dd hh:mm:ss");
     },
 
     showModal: function showModal(event) {
@@ -393,6 +472,13 @@ var _default = {
     },
     hideModal: function hideModal(v) {
       this.modalName = null;
+    },
+
+    hideUnitDrawerModal: function hideUnitDrawerModal() {
+      this.unitDrawerModal = false;
+    },
+    showUnitDrawerModal: function showUnitDrawerModal() {
+      this.unitDrawerModal = true;
     },
     scan: function scan() {
       var that = this;
@@ -406,11 +492,28 @@ var _default = {
         } });
 
     },
-    modalCancel: function modalCancel() {
+    queryCancel: function queryCancel() {
       this.scanResult = null;
     },
     showVip: function showVip() {
-      this.$util.toast("普通用户定位到省，购买Vip将可以定位到周边5KM");
+      this.$util.toast("普通用户定位到省，付费用户精度可定位到周边3KM");
+    },
+    supplementaryUnit: function supplementaryUnit(unit) {
+
+    },
+    addItem: function addItem() {
+      this.item = {};
+    },
+
+    computedHeight: function computedHeight() {var _this4 = this;
+      var query = uni.createSelectorQuery();
+      query.select('#navBar').boundingClientRect(function (rect) {
+        _this4.occupiedHeight = rect.height;
+      }).exec();
+      query.select('.bottom').boundingClientRect(function (rect) {
+        _this4.occupiedHeight = _this4.occupiedHeight + rect.height;
+      }).exec();
+      this.$util.toast("height:" + this.occupiedHeight);
     } } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 

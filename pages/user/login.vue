@@ -2,7 +2,7 @@
 	<view class="login">
 		<view class="right-top-sign"></view>
 		<view class="left-bottom-sign"></view>
-		<text class="back-btn iconfont icon-left_arrow" :class="'cuIcon-close'" @click="navBack"></text>
+		<text class="back-btn cuIcon-back" :class="'cuIcon-close'" @click="navBack"></text>
 		<view>
 			<view class="left-top-sign">LOGIN</view>
 			<view class="welcome">欢迎回来！</view>

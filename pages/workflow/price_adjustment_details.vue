@@ -3,7 +3,7 @@
 		<navBar title="调价明细" :backgroundColor="[1, ['#9000ff', '#5e00ff', 180]]" tabPage="/pages/index/index"
 			:titleFont="['#FFF']"></navBar>
 		<scroll-view scroll-y :scroll-with-animation="true" :enable-back-to-top="true"
-			:style="{height:'calc(98vh - 98px - 16rpx)'}">
+			:style="{height:'calc(98vh - 98px - 8rpx)'}">
 			<block v-for="(item,index) in items" :key="index">
 				<view class="item bg-white">
 					<view class='name padding-lr-sm padding-top-sm'>
@@ -65,21 +65,16 @@
 				</view>
 			</block>
 		</scroll-view>
-		<view class="cu-bar bg-white tabbar border shop">
+		<!--bootom-->
+		<view class="bottom cu-bar bg-white tabbar border">
 			<button class="action" open-type="contact">
 				<view class="cuIcon-service text-green">
 					<view class="cu-tag badge"></view>
 				</view>
-				备注
+				管理员
 			</button>
-			<view class="action">
-				<view class="cuIcon-cart">
-					<view class="cu-tag badge">99</view>
-				</view>
-				购物车
-			</view>
-			<view class="bg-orange submit">取消</view>
-			<view class="bg-red submit">提交</view>
+			<view class="bg-orange submit" @click.stop="showModal" data-target="DialogModalAdd">添加商品</view>
+			<view class="bg-red submit">保存</view>
 		</view>
 	</view>
 </template>
@@ -155,5 +150,11 @@
 		flex-direction: column;
 		width: 33.33333%;
 		align-content: center;
+	}
+
+	.bottom {
+		position: fixed;
+		bottom: 0;
+		width: 100vw;
 	}
 </style>
