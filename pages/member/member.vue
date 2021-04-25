@@ -87,11 +87,14 @@
 						<view class="action text-white">
 							<text class="cuIcon-close "></text>
 							<text @click="modalCancel">取消</text>
-							<text class="cuIcon-filter margin-left-xs" @tap.stop="showUnitDrawerModal"></text>
+							<text class="cuIcon-filter margin-left-xs" @tap.stop="query"></text>
 						</view>
 					</view>
 					<view class="item">
-						<text class="padding-lr-sm text-bold">品名：{{item.name||'--'}}</text>
+						<view class="flex justify-between padding-lr-sm">
+							<text class="text-bold">品名：{{item.name||'--'}}</text>
+							<text class="iconfont icon-unit text-blue text-lg" @tap.stop="showUnitDrawerModal"></text>
+						</view>
 						<view class="flex justify-between padding-lr-sm padding-tb-xs">
 							<text v-if="item.plu">plu号：{{item.plu}}</text>
 							<text v-else>商品条码：{{item.barcode||'--'}}</text>
@@ -130,45 +133,42 @@
 					<view class="flex justify-between align-center margin-lr-sm">
 						<view class="basis-df">
 							<text>原零售价：</text>
-							<text class="text-price margin-left-xs text-blue">{{item.salePrice.old||'--'}}</text>
+							<text class="text-price text-blue">{{item.salePrice.old||'--'}}</text>
 						</view>
 						<view class="flex justify-between align-center">
 							<text class="basis-df">现零售价：</text>
 							<view class="price">
-								<text class="text-price margin-right-xs"></text>
-								<input :placeholder="item.salePrice.new" name="salePrice" type="digit"
+								<text class="text-price"></text>
+								<input :placeholder="item.salePrice.new||'--'" type="digit" v-model="newSalePrice"
 									@blur="supplementaryUnit('sale')"></input>
-								<text class="cuIcon-write text-orange" @tap.stop="showUnitDrawerModal"></text>
 							</view>
 						</view>
 					</view>
 					<view class="flex justify-between align-center margin-lr-sm margin-tb-xs">
 						<view class="basis-df">
 							<text>原会员价：</text>
-							<text class="text-price margin-left-xs text-blue">{{item.memberPrice.old||'--'}}</text>
+							<text class="text-price text-blue">{{item.memberPrice.old||'--'}}</text>
 						</view>
 						<view class="flex justify-between align-center">
 							<text class="basis-df">现会员价：</text>
 							<view class="price">
-								<text class="text-price margin-right-xs"></text>
-								<input :placeholder="item.memberPrice.new" name="memberPrice" type="digit"
+								<text class="text-price"></text>
+								<input :placeholder="item.memberPrice.new||'--'" v-model="newMemberPrice" type="digit"
 									@blur="supplementaryUnit('member')"></input>
-								<text class="cuIcon-write text-orange" @tap.stop="showUnitDrawerModal"></text>
 							</view>
 						</view>
 					</view>
 					<view class="flex justify-between align-center margin-lr-sm">
 						<view class="basis-df">
 							<text>原Vip价：</text>
-							<text class="text-price margin-left-xs text-blue">{{item.vipPrice.old||'--'}}</text>
+							<text class="text-price text-blue">{{item.vipPrice.old||'--'}}</text>
 						</view>
 						<view class="flex justify-between align-center">
 							<text class="basis-df">现VIP价：</text>
 							<view class="price">
-								<text class="text-price margin-right-xs"></text>
-								<input :placeholder="item.vipPrice.new" name="vipPrice" type="digit"
+								<text class="text-price"></text>
+								<input :placeholder="item.vipPrice.new" v-model="newVipPrice" type="digit"
 									@blur="supplementaryUnit('vip')"></input>
-								<text class="cuIcon-write text-orange" @tap.stop="showUnitDrawerModal"></text>
 							</view>
 						</view>
 					</view>
@@ -185,14 +185,17 @@
 		</view>
 		<!-- 单位选择抽屉 -->
 		<view class="cu-modal drawer-modal justify-end" :class="unitDrawerModal?'show':''" @tap="hideUnitDrawerModal">
-			<view class="cu-dialog basis-lg" @tap.stop=""
+			<view class="cu-dialog basis-lg bg-white" @tap.stop=""
 				:style="[{top:140+'px',height:'calc(100vh - ' + 140 + 'px)'}]">
-				<view class="cu-list menu text-left">
-					<view class="cu-item arrow" v-for="(item,index) in 5" :key="index">
-						<view class="content">
-							<view>Item {{index +1}}</view>
-						</view>
-					</view>
+				<view class="padding-sm solid-bottom text-left">
+					<text class="cuIcon-titles text-pink"></text>
+					<text>重置价格单位</text>
+				</view>
+				<view class="units text-df">
+					<block v-for="(unit, index) in units" :key="index">
+						<text class="unit padding-tb-xs padding-lr text-center margin-top-sm bg-grey"
+							@tap.stop="selectUnit(unit)">{{unit}}</text>
+					</block>
 				</view>
 			</view>
 		</view>
@@ -202,12 +205,11 @@
 <script>
 	import {
 		formatDate,
-	} from '../../js_sdk/util.js';
-	import price_adjustment_add_test_data from '../../test/price_adjustment_details_test_data.js'; //测试数据
+	} from '@/js_sdk/util.js';
+	import price_adjustment_test_data from '@/test/price_adjustment_test_data.js'; //测试数据
 	export default {
 		data() {
 			return {
-				occupiedHeight: 0,
 				fold: true,
 				currentShop: '泸州市龙马潭区嘉诚超市',
 				remarks: null,
@@ -238,32 +240,45 @@
 						stockTurn: 12.33
 					},
 					salePrice: {
-						old: '40.00/瓶',
+						old: '450.3/瓶',
 						new: '38.00/瓶',
 					},
 					vipPrice: {
 						old: '35.00/瓶',
-						new: '32.00/瓶',
+						new: null,
 					},
 					memberPrice: {
 						old: null,
 						new: null,
 					}
 				},
-				unit: {
-					sale: null,
-					member: null,
-					vip: null
-				}
+				unit: '瓶',
+				units: [],
+				newSalePrice: '',
+				newMemberPrice: null,
+				newVipPrice: null,
 			}
 		},
 		onLoad: function() {
 			//定时器模拟ajax异步请求数据
 			setTimeout(() => {
 				this.effectiveDate = formatDate(new Date(), "yyyy-MM-dd 00:00:00");
-				//this.items = price_adjustment_details_test_data;
+				this.units = price_adjustment_test_data.units;
 			}, 300);
-			
+			let patt = new RegExp("/?[\u4e00-\u9fa5]{1,2}|500g|kg|pcs$", "i");
+			if (this.item.salePrice) {
+				//console.log(patt.exec(this.item.salePrice.old));
+			}
+			var hy = "450.3/";
+			var t = hy.replace(/\/?([\u4e00-\u9fa5]{1,2}|500g|kg|pcs)?$/, '');
+			console.log(t);
+		},
+		watch: {
+			item() {
+				if (this.item.salePrice) {
+					let patt = new RegExp("^([1-9][0-9]+(.[0-9]{1,4})?)/([\u4e00-\u9fa5]{1,2}|500g|kg|pcs)$", "i");
+				}
+			}
 		},
 		methods: {
 			foldClick() {
@@ -303,18 +318,22 @@
 				this.effectiveDate = formatDate(new Date(this.resultDate.value), "yyyy-MM-dd hh:mm:ss")
 			},
 
-			showModal(event) {
-				this.modalName = event.currentTarget.dataset.target;
-			},
-			hideModal(v) {
-				this.modalName = null;
-			},
-
 			hideUnitDrawerModal() {
 				this.unitDrawerModal = false;
 			},
 			showUnitDrawerModal() {
 				this.unitDrawerModal = true;
+			},
+			selectUnit(v) {
+				this.unit = v;
+				this.unitDrawerModal = false;
+			},
+
+			showModal(event) {
+				this.modalName = event.currentTarget.dataset.target;
+			},
+			hideModal(v) {
+				this.modalName = null;
 			},
 			scan() {
 				var that = this;
@@ -332,9 +351,29 @@
 				this.scanResult = null;
 			},
 			showVip() {
-				this.$util.toast("普通用户定位到省，付费用户精度可定位到周边3KM");
+				this.$util.toast("普通用户定位到省，vip用户定位到周边3-5KM");
 			},
-			supplementaryUnit(unit) {
+			supplementaryUnit(sign) {
+				switch (sign) {
+					case 'sale':
+						if (this.newSalePrice)
+							this.newSalePrice = this.newSalePrice.replace(/\/?([\u4e00-\u9fa5]{1,2}|500g|kg|pcs)?$/, '') +
+							"/" +
+							this.unit;
+						break;
+					case 'member':
+						if (this.newMemberPrice)
+							this.newMemberPrice = this.newMemberPrice.replace(/\/?([\u4e00-\u9fa5]{1,2}|500g|kg|pcs)?$/,
+								'') +
+							"/" + this.unit;
+						break;
+					case 'vip':
+						if (this.newVipPrice)
+							this.newVipPrice = this.newVipPrice.replace(/\/?([\u4e00-\u9fa5]{1,2}|500g|kg|pcs)?$/, '') +
+							"/" +
+							this.unit;
+						break;
+				}
 
 			},
 			addItem() {
@@ -342,14 +381,17 @@
 			},
 
 			computedHeight() {
+				let occupiedHeight;
 				const query = uni.createSelectorQuery();
 				query.select('#navBar').boundingClientRect(rect => {
-					this.occupiedHeight = rect.height;
+					occupiedHeight = rect.height;
+					this.$util.toast("height:" + occupiedHeight);
 				}).exec();
 				query.select('.bottom').boundingClientRect(rect => {
-					this.occupiedHeight = this.occupiedHeight + rect.height;
+					occupiedHeight = occupiedHeight + rect.height;
+
 				}).exec();
-				this.$util.toast("height:" + this.occupiedHeight);
+
 			},
 		}
 	}
@@ -509,5 +551,18 @@
 		position: fixed;
 		bottom: 0;
 		width: 100vw;
+	}
+
+	.units {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		padding: 0rpx 12rpx;
+
+		.unit {
+			border-radius: 3px;
+			border: 1rpx solid #9b9b9b;
+			margin-right: 10rpx;
+		}
 	}
 </style>

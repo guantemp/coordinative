@@ -1,7 +1,7 @@
 <template>
 	<view class="price_adjustment_add">
 		<navBar title="调价明细" :backgroundColor="[1, ['#9000ff', '#5e00ff', 180]]" tabPage="/pages/index/index"
-			:titleFont="['#FFF']" :surplusHeight="fold?'80':'15'">
+			:titleFont="['#FFF']" :surplusHeight="fold?'80':'15'" id="navBar">
 			<view slot="extendSlot">
 				<view v-show="fold">
 					<view class="article text-white margin-tb-xs margin-lr">
@@ -26,15 +26,33 @@
 			</view>
 		</navBar>
 
-		<view class="bottom cu-bar bg-white tabbar border">
+		<!--items show-->
+		<view v-if="items||items.length === 0" class="empty padding-bottom-lg"
+			:style="{height: fold?'calc(100vh - 190px)':'calc(100vh - 125px)'}">
+			<text class="cuIcon-like text-red margin-bottom tips"></text>
+			<text>空空如也...</text>
+		</view>
+		<scroll-view scroll-y :scroll-with-animation="true" :enable-back-to-top="true"
+			:style="{height: fold?'calc(100vh - 190px)':'calc(100vh - 125px)'}" v-else>
+
+		</scroll-view>
+
+		<!--bootom-->
+		<view class="bottom cu-bar bg-white tabbar border shop">
 			<button class="action" open-type="contact">
 				<view class="cuIcon-service text-green">
 					<view class="cu-tag badge"></view>
 				</view>
 				管理员
 			</button>
+			<view class="action">
+				<view class="cuIcon-tag">
+					<view v-if="items.length > 0" class="cu-tag badge">{{items.length}}</view>
+				</view>
+				数量
+			</view>
 			<view class="bg-orange submit" @click.stop="showModal" data-target="DialogModalAdd">添加商品</view>
-			<view class="bg-red submit">保存</view>
+			<view class="bg-red submit" @click="computedHeight">保存</view>
 		</view>
 
 		<!-- 日期选择 -->
@@ -51,6 +69,7 @@
 				</date-picker>
 			</view>
 		</view>
+
 		<!-- 添加商品明细模态对话框 -->
 		<view class="cu-modal bottom-modal" :class="modalName=='DialogModalAdd'?'show':''">
 			<view class="cu-dialog">
@@ -61,18 +80,21 @@
 					<view class="cu-bar search">
 						<view class="search-form radius">
 							<text class="cuIcon-search"></text>
-							<input v-model="scanResult" :adjust-position="false" type="text" placeholder="请输入商品条码、名称、拼音"
+							<input v-model="scanResult" :adjust-position="false" placeholder="请输入商品条码、名称、拼音"
 								confirm-type="search"></input>
 							<text class="cuIcon-scan text-blue text-bold" @tap="scan"></text>
 						</view>
 						<view class="action text-white">
 							<text class="cuIcon-close "></text>
 							<text @click="modalCancel">取消</text>
-							<text class="cuIcon-filter margin-left-xs" @click="query"></text>
+							<text class="cuIcon-filter margin-left-xs" @tap.stop="query"></text>
 						</view>
 					</view>
 					<view class="item">
-						<text class="padding-lr-sm text-bold">品名：{{item.name||'--'}}</text>
+						<view class="flex justify-between padding-lr-sm">
+							<text class="text-bold">品名：{{item.name||'--'}}</text>
+							<text class="iconfont icon-unit text-blue text-lg" @tap.stop="showUnitDrawerModal"></text>
+						</view>
 						<view class="flex justify-between padding-lr-sm padding-tb-xs">
 							<text v-if="item.plu">plu号：{{item.plu}}</text>
 							<text v-else>商品条码：{{item.barcode||'--'}}</text>
@@ -119,7 +141,6 @@
 								<text class="text-price margin-right-xs"></text>
 								<input :placeholder="item.salePrice.new" name="salePrice" type="digit"
 									@blur="supplementaryUnit('sale')"></input>
-								<text class="cuIcon-edit text-orange"></text>
 							</view>
 						</view>
 					</view>
@@ -132,9 +153,8 @@
 							<text class="basis-df">现会员价：</text>
 							<view class="price">
 								<text class="text-price margin-right-xs"></text>
-								<input :placeholder="item.memberPrice.new" name="memberPrice" type="digit"
+								<input :placeholder="item.memberPrice.new||'--'" name="memberPrice" type="digit"
 									@blur="supplementaryUnit('member')"></input>
-								<text class="cuIcon-edit text-orange"></text>
 							</view>
 						</view>
 					</view>
@@ -149,7 +169,6 @@
 								<text class="text-price margin-right-xs"></text>
 								<input :placeholder="item.vipPrice.new" name="vipPrice" type="digit"
 									@blur="supplementaryUnit('vip')"></input>
-								<text class="cuIcon-edit text-orange"></text>
 							</view>
 						</view>
 					</view>
@@ -165,15 +184,17 @@
 			</view>
 		</view>
 		<!-- 单位选择抽屉 -->
-		<view class="cu-modal drawer-modal justify-end" :class="modalName=='DrawerModalR'?'show':''" @tap="hideModal">
-			<view class="cu-dialog basis-lg" @tap.stop=""
-				:style="[{top:CustomBar+'px',height:'calc(100vh - ' + CustomBar + 'px)'}]">
-				<view class="cu-list menu text-left">
-					<view class="cu-item arrow" v-for="(item,index) in 5" :key="index">
-						<view class="content">
-							<view>Item {{index +1}}</view>
-						</view>
-					</view>
+		<view class="cu-modal drawer-modal justify-end" :class="unitDrawerModal?'show':''" @tap="hideUnitDrawerModal">
+			<view class="cu-dialog basis-lg bg-white" @tap.stop=""
+				:style="[{top:140+'px',height:'calc(100vh - ' + 140 + 'px)'}]">
+				<view class="padding-sm solid-bottom text-left">
+					<text class="cuIcon-titles ">选择价格单位</text>
+				</view>
+				<view class="units text-df">
+					<block v-for="(unit, index) in units" :key="index">
+						<text class="unit padding-tb-xs padding-lr text-center margin-top-sm bg-grey"
+							@tap.stop="selectUnit(unit)">{{unit}}</text>
+					</block>
 				</view>
 			</view>
 		</view>
@@ -183,8 +204,8 @@
 <script>
 	import {
 		formatDate,
-	} from '../../js_sdk/util.js';
-	import price_adjustment_add_test_data from '../../test/price_adjustment_details_test_data.js'; //测试数据
+	} from '@/js_sdk/util.js';
+	import price_adjustment_test_data from '@/test/price_adjustment_test_data.js'; //测试数据
 	export default {
 		data() {
 			return {
@@ -196,11 +217,13 @@
 				initDate: null,
 				dateVisible: false,
 				confirmFlag: true,
-				result: {},
+				resultDate: {},
 
 				modalName: null,
+				unitDrawerModal: false,
 				scanResult: null,
 
+				items: {},
 				item: {
 					name: '菊品郁金银屑片',
 					barcode: '6926094418474',
@@ -228,24 +251,21 @@
 						new: null,
 					}
 				},
-				unit: {
-					sale: null,
-					member: null,
-					vip: null
-				}
+				unit: null,
+				units:[]
 			}
 		},
 		onLoad: function() {
 			//定时器模拟ajax异步请求数据
 			setTimeout(() => {
-				//this.items = price_adjustment_details_test_data;
+				this.effectiveDate = formatDate(new Date(), "yyyy-MM-dd 00:00:00");
+				this.units = price_adjustment_test_data.units;
 			}, 300);
-			this.effectiveDate = formatDate(new Date(), "yyyy-MM-dd 00:00:00");
+
 		},
 		methods: {
 			foldClick() {
 				this.fold = !this.fold;
-				console.log(this.fold);
 			},
 
 			selectDate() {
@@ -265,7 +285,7 @@
 			},
 			handlerChange(res) {
 				let _this = this;
-				this.result = {
+				this.resultDate = {
 					...res
 				};
 			},
@@ -276,11 +296,22 @@
 				if (!this.confirmFlag) {
 					return;
 				};
-				console.log(this.result);
+				//console.log(this.resultDate);
 				this.dateVisible = false;
-				this.effectiveDate = formatDate(new Date(this.result.value), "yyyy-MM-dd hh:mm:ss")
+				this.effectiveDate = formatDate(new Date(this.resultDate.value), "yyyy-MM-dd hh:mm:ss")
 			},
 
+			hideUnitDrawerModal() {
+				this.unitDrawerModal = false;
+			},
+			showUnitDrawerModal() {
+				this.unitDrawerModal = true;
+			},
+			selectUnit(v) {
+				this.unit = v;
+				this.unitDrawerModal = false;
+			},
+			
 			showModal(event) {
 				this.modalName = event.currentTarget.dataset.target;
 			},
@@ -299,17 +330,31 @@
 					},
 				});
 			},
-			modalCancel() {
+			queryCancel() {
 				this.scanResult = null;
 			},
 			showVip() {
-				this.$util.toast("普通用户定位到省，付费用户将可以定位到周边5KM");
+				this.$util.toast("普通用户定位到省，付费用户可定位到周边3KM");
 			},
 			supplementaryUnit(unit) {
 
 			},
 			addItem() {
 				this.item = {};
+			},
+
+			computedHeight() {
+				let occupiedHeight;
+				const query = uni.createSelectorQuery();
+				query.select('#navBar').boundingClientRect(rect => {
+					occupiedHeight = rect.height;
+					this.$util.toast("height:" + occupiedHeight);
+				}).exec();
+				query.select('.bottom').boundingClientRect(rect => {
+					occupiedHeight = occupiedHeight + rect.height;
+					
+				}).exec();
+			
 			},
 		}
 	}
@@ -358,6 +403,18 @@
 		width: 100%;
 		display: flex;
 		justify-content: center;
+	}
+
+	.empty {
+		width: 100%;
+		display: flex;
+		justify-content: center;
+		flex-direction: column;
+		align-items: center;
+
+		.tips {
+			font-size: 164rpx;
+		}
 	}
 
 	.dateSelect {
@@ -449,7 +506,7 @@
 
 	.price {
 		display: flex;
-		border-bottom: 1px solid #f2f2f2;
+		border-bottom: 1px solid #fFF;
 		align-items: center;
 	}
 
@@ -457,5 +514,18 @@
 		position: fixed;
 		bottom: 0;
 		width: 100vw;
+	}
+
+	.units {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		padding: 0rpx 12rpx;
+
+		.unit {
+			border-radius: 3px;
+			border: 1rpx solid #9b9b9b;
+			margin-right: 10rpx;
+		}
 	}
 </style>

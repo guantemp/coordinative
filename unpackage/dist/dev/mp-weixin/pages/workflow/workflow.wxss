@@ -49,8 +49,7 @@
   -webkit-box-direction: normal;
   -webkit-flex-direction: column;
           flex-direction: column;
-  -webkit-border-radius: 20rpx;
-          border-radius: 20rpx;
+  border-radius: 20rpx;
   padding: 20rpx 20rpx 0rpx 20rpx;
   background-color: #FFFFFF;
   margin: 20rpx 20rpx 0rpx 20rpx;
@@ -70,8 +69,7 @@
   -webkit-box-direction: normal;
   -webkit-flex-direction: column;
           flex-direction: column;
-  -webkit-border-radius: 20rpx;
-          border-radius: 20rpx;
+  border-radius: 20rpx;
   padding: 20rpx 20rpx 0rpx 20rpx;
   background-color: #FFFFFF;
   margin: 20rpx 20rpx 0rpx 20rpx;

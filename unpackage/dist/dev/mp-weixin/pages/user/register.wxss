@@ -48,8 +48,7 @@
 .right-top-sign.data-v-f11a6d84:before {
   -webkit-transform: rotate(50deg);
           transform: rotate(50deg);
-  -webkit-border-top-right-radius: 50px;
-          border-top-right-radius: 50px;
+  border-top-right-radius: 50px;
 }
 .right-top-sign.data-v-f11a6d84:after {
   position: absolute;
@@ -57,16 +56,14 @@
   top: 0;
   -webkit-transform: rotate(-50deg);
           transform: rotate(-50deg);
-  -webkit-border-top-left-radius: 50px;
-          border-top-left-radius: 50px;
+  border-top-left-radius: 50px;
 }
 .left-bottom-sign.data-v-f11a6d84 {
   position: absolute;
   left: -270rpx;
   bottom: -320rpx;
   border: 100rpx solid #d0d1fd;
-  -webkit-border-radius: 80%;
-          border-radius: 80%;
+  border-radius: 80%;
   padding: 180rpx;
 }
 .back-btn.data-v-f11a6d84 {

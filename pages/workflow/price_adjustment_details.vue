@@ -80,7 +80,7 @@
 </template>
 
 <script>
-	import price_adjustment_details_test_data from '../../test/price_adjustment_details_test_data.js'; //测试数据
+	import price_adjustment_details_test_data from '@/test/price_adjustment_details_test_data.js'; //测试数据
 	export default {
 		data() {
 			return {
