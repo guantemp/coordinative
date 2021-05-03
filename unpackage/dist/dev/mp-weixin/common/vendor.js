@@ -2059,7 +2059,18 @@ store;exports.default = _default;
 
 /***/ }),
 
-/***/ 112:
+/***/ 12:
+/*!**********************************************************!*\
+  !*** ./node_modules/@babel/runtime/regenerator/index.js ***!
+  \**********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(/*! regenerator-runtime */ 13);
+
+/***/ }),
+
+/***/ 120:
 /*!******************************************************!*\
   !*** E:/mini/coordinative/js_sdk/auth/wechatAuth.js ***!
   \******************************************************/
@@ -2172,17 +2183,6 @@ store;exports.default = _default;
 
     } } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
-
-/***/ }),
-
-/***/ 12:
-/*!**********************************************************!*\
-  !*** ./node_modules/@babel/runtime/regenerator/index.js ***!
-  \**********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__(/*! regenerator-runtime */ 13);
 
 /***/ }),
 
@@ -11118,7 +11118,7 @@ module.exports = g;
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.formatDate = formatDate;exports.checkEmail = exports.checkSmsCode = exports.checkPassword = exports.checkMobile = exports.navBack = exports.navTo = exports.hasLogin = exports.toast = exports.debounce = exports.throttle = void 0;var _vue = _interopRequireDefault(__webpack_require__(/*! vue */ 2));
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.formatDate = formatDate;exports.formatMoney = formatMoney;exports.checkEmail = exports.checkSmsCode = exports.checkPassword = exports.checkMobile = exports.navBack = exports.navTo = exports.hasLogin = exports.toast = exports.debounce = exports.throttle = void 0;var _vue = _interopRequireDefault(__webpack_require__(/*! vue */ 2));
 var _vuex = _interopRequireDefault(__webpack_require__(/*! vuex */ 15));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
 _vue.default.use(_vuex.default);
 
@@ -11203,8 +11203,15 @@ var checkSmsCode = function checkSmsCode(val) {
 };exports.checkSmsCode = checkSmsCode;
 var checkEmail = function checkEmail(val) {
   return /^\\s*\\w+(?:\\.{0,1}[\\w-]+)*@[a-zA-Z0-9]+(?:[-.][a-zA-Z0-9]+)*\\.[a-zA-Z]+\\s*$/.test(val);
-};exports.checkEmail = checkEmail;
-
+};
+/**
+    *将 Date 转化为指定格式的String
+    *月(M)、日(d)、小时(h)、分(m)、秒(s)、季度(q) 可以用 1-2 个占位符，
+    *年(y)可以用 1-4 个占位符，毫秒(S)只能用 1 个占位符(是 1-3 位的数字)
+    *例子：
+    *(new Date()).Format("yyyy-MM-dd hh:mm:ss.S") ==> 2006-07-02 08:09:04.423
+    *(new Date()).Format("yyyy-M-d h:m:s.S")      ==> 2006-7-2 8:9:4.18
+    */exports.checkEmail = checkEmail;
 function formatDate(date, format) {
   var o = {
     "M+": date.getMonth() + 1, //月份
@@ -11224,30 +11231,22 @@ function formatDate(date, format) {
   return format;
 }
 
-/**
-   *对Date的扩展，将 Date 转化为指定格式的String
-   *月(M)、日(d)、小时(h)、分(m)、秒(s)、季度(q) 可以用 1-2 个占位符，
-   *年(y)可以用 1-4 个占位符，毫秒(S)只能用 1 个占位符(是 1-3 位的数字)
-   *例子：
-   *(new Date()).Format("yyyy-MM-dd hh:mm:ss.S") ==> 2006-07-02 08:09:04.423
-   *(new Date()).Format("yyyy-M-d h:m:s.S")      ==> 2006-7-2 8:9:4.18
-   */
-Date.prototype.format = function (fmt) {
-  var o = {
-    "M+": this.getMonth() + 1, //月份
-    "d+": this.getDate(), //日
-    "h+": this.getHours(), //小时
-    "m+": this.getMinutes(), //分
-    "s+": this.getSeconds(), //秒
-    "q+": Math.floor((this.getMonth() + 3) / 3), //季度
-    "S": this.getMilliseconds() //毫秒
-  };
-  if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
-  for (var k in o) {
-    if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, RegExp.$1.length == 1 ? o[k] : (
-    "00" + o[k]).substr(("" + o[k]).length));}
-  return fmt;
-};
+function formatMoney(money) {
+  var patt = new RegExp(/^(0+)([0-9]+(\.[0-9]{0,})?$)/);
+  money = money.replace(patt, function ($0, $1, $2) {
+    return $2;
+  });
+  patt = new RegExp(/^[1-9][0-9]*\.[0-9]{1}$|^0\.[0-9]{1}$/);
+  if (patt.test(money))
+  return money + '0';
+  patt = new RegExp("^[1-9][0-9]*$|^0$");
+  if (patt.test(money))
+  return money + '.00';
+  patt = new RegExp("^[1-9][0-9]*.$|^0.$");
+  if (patt.test(money))
+  return money + '00';
+  return money;
+}
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 
 /***/ }),
@@ -11274,18 +11273,21 @@ Date.prototype.format = function (fmt) {
 Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _default = [{
   sheetNumber: 99752545328877,
   applyDate: '2021-03-30 20:35:11',
+  store: '嘉诚超市、美佳乐大山坪店',
   effectDate: '2021-03-30 17:37:12',
   proposer: "泸州共创商贸有限公司-图特哈蒙",
   approval: 'pass' },
 {
   sheetNumber: 99752545229978,
   applyDate: '2021-03-31 17:37:12',
+  store: '泸县盛源超市',
   effectDate: '2021-04-07 21:37:12',
   proposer: "泸县盛源超市-狄仁杰",
   approval: 'denied' },
 {
   sheetNumber: 99752545298972,
   applyDate: '2021-03-31 15:22:33',
+  store: '旺客隆国美绿洲店、嘉诚超市、泸县盛源超市、纳溪店',
   effectDate: '2021-04-12 09:35:12',
   proposer: "泸州建国调味品经营部-黎宇宇",
   approval: 'normal' },
@@ -11293,6 +11295,7 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 {
   sheetNumber: 99752545222156,
   applyDate: '2021-03-31 10:42:56',
+  store: '旺客隆国美绿洲店',
   effectDate: '2021-04-02 23:59:59',
   proposer: "旺客隆国美绿洲店-李憨憨",
   approval: 'pass' },
@@ -11300,6 +11303,7 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 {
   sheetNumber: 33325945697823,
   applyDate: '2021-03-31 10:07:02',
+  store: '旺客隆国美绿洲店、嘉诚超市、旺客隆纳溪店',
   effectDate: '2021-04-13 00:00:00',
   proposer: "成都本和商贸有限公司-云中三月",
   approval: 'denied' },
@@ -11307,6 +11311,7 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 {
   sheetNumber: 975254545697,
   applyDate: '2021-03-31 09:08:02',
+  store: '旺客隆国美绿洲店、嘉诚超市',
   effectDate: '2021-04-03 00:00:00',
   proposer: "成都本和商贸有限公司-松本特磕埕",
   approval: 'denied' },
@@ -11314,30 +11319,35 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 {
   sheetNumber: 331556868441,
   applyDate: '2021-03-31 09:07:02',
+  store: '旺客隆超市关口店',
   effectDate: '2021-04-03 00:00:00',
   proposer: "旺客隆超市关口店-小灰灰",
   approval: 'pass' },
 {
   sheetNumber: 331547686845,
   applyDate: '2021-03-31 09:07:02',
+  store: '旺客隆超市关口店',
   effectDate: '2021-04-03 00:00:00',
   proposer: "旺客隆超市关口店-小灰灰",
   approval: 'normal' },
 {
   sheetNumber: 658155686849,
   applyDate: '2021-04-31 09:07:02',
+  store: '旺客隆超市关口店',
   effectDate: '2021-04-03 00:00:00',
   proposer: "旺客隆超市关口店-小灰灰",
   approval: 'normal' },
 {
   sheetNumber: 3315890622498,
   applyDate: '2021-04-01 09:07:02',
+  store: '旺客隆超市关口店',
   effectDate: '2021-04-03 00:00:00',
   proposer: "旺客隆超市关口店-小灰灰",
   approval: 'denied' },
 {
   sheetNumber: 3315568684564,
   applyDate: '2021-03-31 09:07:02',
+  store: '旺客隆超市关口店',
   effectDate: '2021-04-03 00:00:00',
   proposer: "旺客隆超市关口店-小灰灰",
   approval: 'denied' }];exports.default = _default;
@@ -11352,8 +11362,7 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _default = [
-{
+Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _default = [{
   sheetNumber: 99752545328877,
   items: [] },
 
@@ -11426,9 +11435,9 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 /***/ }),
 
 /***/ 79:
-/*!***************************************************************!*\
-  !*** E:/mini/coordinative/test/price_adjustment_test_data.js ***!
-  \***************************************************************/
+/*!******************************************************!*\
+  !*** E:/mini/coordinative/test/catalog_test_data.js ***!
+  \******************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -11447,13 +11456,108 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
   "袋",
   "套",
   "对",
-  "本",
+  "件",
   "把",
   "500g",
   "条",
-  "条",
+  "台",
   "罐",
-  "打"] };exports.default = _default;
+  "打",
+  "公斤",
+  "箱",
+  "卷"],
+
+  catalog: [{
+    id: "201451060435585024",
+    name: '彩虹柠檬香电热灭蚊香液',
+    barcode: 6907861191394,
+    specs: '150ml',
+    retailPrice: '19.59/盒',
+    memberPrice: '18.00/盒',
+    vipPrice: '0.00/盒',
+    vip: {
+      referenceSalePrice: '19.00/瓶',
+      referencePurchasePrice: '12.60/瓶' },
+
+    storage: {
+      lastPurchasePrice: '13.00/瓶',
+      amount: 226,
+      number: 12,
+      stockTurn: 1.33 } },
+
+  {
+    plu: 133,
+    name: '精品沃柑',
+    specs: '500g',
+    retailPrice: '4.59/500g',
+    memberPrice: '4.00/500g',
+    vipPrice: '2.50/500g',
+    vip: {
+      referenceSalePrice: '3.99/500g',
+      referencePurchasePrice: '1.99/500g' },
+
+    storage: {
+      lastPurchasePrice: '1.786/500g',
+      amount: 22.36,
+      number: 10.58,
+      stockTurn: 22.756 } },
+
+  {
+    id: '201452393217567744',
+    name: '哇哈哈营养快线水果牛奶饮品（菠萝味）',
+    barcode: 6902083898625,
+    specs: '550ml',
+    retailPrice: '11.98/瓶',
+    memberPrice: '10.98/瓶',
+    vipPrice: '4.98/瓶',
+    vip: {
+      referenceSalePrice: '12.00/瓶',
+      referencePurchasePrice: '6.98/瓶' },
+
+    storage: {
+      lastPurchasePrice: '5.98/瓶',
+      amount: 420,
+      number: 70,
+      stockTurn: 10.25 } },
+
+  {
+    id: '201452853459475457',
+    name: '川骄无芯卷纸（白四层）',
+    barcode: 6970981171003,
+    specs: '1800g',
+    retailPrice: '11.98/提',
+    memberPrice: '0.00/提',
+    vipPrice: '0.00/提' },
+  {
+    id: '201452966564125697',
+    name: '云南三七牙膏（清新留兰）',
+    barcode: 6953067200880,
+    specs: '220g',
+    retailPrice: '34.88/支',
+    memberPrice: '32.88/支',
+    vipPrice: '0.00/支',
+    vip: {
+      referenceSalePrice: '32.88/支',
+      referencePurchasePrice: '29.88/支' } },
+
+  {
+    id: '201452966564158972',
+    name: '菊品郁金银屑片',
+    barcode: '6926094418474',
+    specs: '100片',
+    vip: {
+      referenceSalePrice: '45.25/瓶',
+      referencePurchasePrice: '23.33/瓶' },
+
+    storage: {
+      lastPurchasePrice: '22.47/瓶',
+      amount: 240.23,
+      number: 12,
+      stockTurn: 7.33 },
+
+    retailPrice: '49.98/支',
+    memberPrice: '38.88/支',
+    vipPrice: '35.00/瓶' }] };exports.default = _default;
 
 /***/ })
 

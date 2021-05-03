@@ -25,7 +25,7 @@
 					</view>
 					<text>调价</text>
 				</view>
-				<view class="cu-item" @tap.stop="this.$util.navTo('/pages/public/not_implemented')">
+				<view class="cu-item" @tap.stop="this.$util.navTo('/pages/workflow/label/label')">
 					<view class="text-red">
 						<image class="item_img" src="/static/workflow/label_printer.png" />
 					</view>

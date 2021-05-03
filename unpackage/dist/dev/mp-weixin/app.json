@@ -6,6 +6,7 @@
     "pages/workflow/price_adjustment_sheet",
     "pages/workflow/price_adjustment_details",
     "pages/workflow/price_adjustment_add",
+    "pages/workflow/label/label",
     "pages/member/member",
     "pages/oa/oa",
     "pages/user/user",
@@ -66,5 +67,6 @@
       "desc": "你的位置信息将用于定位你所处的门店"
     }
   },
-  "usingComponents": {}
+  "usingComponents": {},
+  "sitemapLocation": "sitemap.json"
 }

@@ -16,13 +16,13 @@
 				</view>
 			</view>
 		</navBar>
-		<view class="dateShow solid padding-tb-sm padding-lr-lg" v-if="dateShow">
-			<text @click="selectDate(true)">{{formattedStartDate}}</text>
+		<view class="flex justify-around align-center bg-white solid padding-tb-sm padding-lr-lg" v-if="dateShow">
+			<text @click.stop="selectDate(true)">{{formattedStartDate}}</text>
 			<text>至</text>
-			<text @click="selectDate(false)">{{formattedEndDate}}</text>
+			<text @click.stop="selectDate(false)">{{formattedEndDate}}</text>
 		</view>
 		<scroll-view scroll-y :scroll-with-animation="true" :enable-back-to-top="true"
-			:style="{height:dateShow?'calc(98vh - 188px - 10rpx)':'calc(98vh - 150px - 10rpx)'}">
+			:style="{height:dateShow?'calc(98vh - 186px - 10rpx)':'calc(98vh - 148px - 10rpx)'}">
 			<view scroll-x class="bg-white nav margin-top-xs">
 				<view class="flex text-center">
 					<view class="cu-item flex-sub" :class="index===tabCur?'text-orange cur':''"
@@ -33,60 +33,63 @@
 			</view>
 			<block v-for="(item,index) in priceAdjustmentSheet" :key="index">
 				<view class="sheet">
-					<listCell :title="'单据号: ' + priceAdjustmentSheet[index].sheetNumber" :titleFont="['#8dc63f',28,700]"
+					<listCell :title="'单据号: ' + priceAdjustmentSheet[index].sheetNumber" :titleFont="['#8799a3',28,700]"
 						:line="['dashed','#e4e7ed']" decorateIconClass="cuIcon-comment">
 						<view slot="executableSlot">
 							<text
-								v-if="priceAdjustmentSheet[index].approval=='normal' || priceAdjustmentSheet[index].approval=='denied'"
+								v-if="priceAdjustmentSheet[index].approval==='normal' || priceAdjustmentSheet[index].approval==='denied'"
 								class="cuIcon-delete text-blue"
 								@click.stop="showModal(priceAdjustmentSheet[index].sheetNumber,$event)"
 								data-target="DialogModalDelete"></text>
 						</view>
 					</listCell>
-					<view class="sheetDetailed margin-top-sm padding-lr-xs"
+					<view class="sheetDetailed margin-top-xs padding-lr-xs"
 						@tap.stop="this.$util.navTo('/pages/workflow/price_adjustment_details')">
 						<text class="iconfont icon-price-adjustment left"
 							:style="[{color:selectColor(priceAdjustmentSheet[index])}]"></text>
-						<view class="show midlle">
+						<view class="flex flex-direction midlle text-cut">
 							<text>申请日期：{{priceAdjustmentSheet[index].applyDate}}</text>
-							<text class="margin-bottom-sm">生效日期：{{priceAdjustmentSheet[index].effectDate}}</text>
+							<text class="text-cut">适配门店：{{priceAdjustmentSheet[index].store}}</text>
+							<text class="margin-bottom-xs">生效日期：{{priceAdjustmentSheet[index].effectDate}}</text>
 							<listCell :title="'申请人：' + priceAdjustmentSheet[index].proposer"
 								:line="['dashed','#e4e7ed','top']">
 							</listCell>
 						</view>
-						<text class="cuIcon-right text-gray margin-left-sm right"></text>
+						<text class="cuIcon-right text-grey margin-left-sm right"></text>
 					</view>
 				</view>
 			</block>
 		</scroll-view>
 		<view class="add">
-			<button class="cu-btn block lg radius shadow confirmBtn bg-gradual-orange"
+			<button class="cu-btn lg radius shadow bg-gradual-orange basis-xl"
 				@tap.stop="this.$util.navTo('/pages/workflow/price_adjustment_add')">
 				<text class="cuIcon-add margin-right-xl"></text>新增调价单</button>
 		</view>
-		<!-- 删除确认模态对话框 -->
+		<!-- 删除对话框 -->
 		<view class="cu-modal" :class="modalName=='DialogModalDelete'?'show':''">
 			<view class="cu-dialog">
-				<view class="padding-xl bg-white">
-					<text class="text-bold">删除调价单据：</text>
-					<text class="text-bold text-blue">{{currentSheetNumber}}</text>
+				<view class="cu-bar bg-white">
+					<view class="content">删除提示</view>
+				</view>
+				<view class="padding-xl bg-white text-bold">
+					<text>删除调价单据：</text>
+					<text class="text-blue">{{currentSheetNumber}}</text>
 				</view>
 				<view class="cu-bar bg-white">
-					<view class="action margin-0 flex-sub text-green " @tap="hideModal">取消</view>
-					<view class="action margin-0 flex-sub  solid-left" @tap="deleteSheet(currentSheetNumber)">确定</view>
+					<view class="action margin-0 flex-sub text-green" @tap="hideModal">取消</view>
+					<view class="action margin-0 flex-sub solid-left" @tap="deleteSheet(currentSheetNumber)">确定</view>
 				</view>
 			</view>
 		</view>
 		<!-- 日期选择 -->
-		<view class="dateSelect">
-			<view class="mask" :class="{'visible':dateVisible}" @tap="onCancel" @touchmove.stop.prevent
-				catchtouchmove="true"></view>
-			<view class="dateSelect-cnt" :class="{'visible':dateVisible}">
-				<view class="dateSelect-header" @touchmove.stop.prevent catchtouchmove="true">
-					<text @tap.stop.prevent="onCancel">取消</text>
+		<view class="cu-modal bottom-modal" :class="dateModal?'show':''" @tap="hideDateModal">
+			<view class="cu-dialog" @tap.stop="">
+				<view
+					class="flex align-center justify-between padding-lr-lg padding-tb-sm bg-white solid-bottom text-lg">
+					<text @tap.stop.prevent="hideDateModal">取消</text>
 					<text class="text-orange" @tap.stop.prevent="pickerConfirm">确定</text>
 				</view>
-				<date-picker :startYear="2020" fields="day" :current="current" :disabled-after="true" :value="initDate"
+				<date-picker :startYear="startYear" fields="day" :current="current" :value="initDate"
 					@change="handlerChange" @touchstart="touchStart" @touchend="touchEnd">
 				</date-picker>
 			</view>
@@ -105,6 +108,7 @@
 				scanResult: '',
 				modalName: null,
 				currentSheetNumber: null,
+
 				dateShow: false,
 				tabCur: 0,
 				tabList: [
@@ -116,11 +120,12 @@
 				],
 				priceAdjustmentSheet: [],
 
+				dateModal: false,
+				startYear: null,
 				initDate: null,
 				formattedStartDate: null,
 				formattedEndDate: null,
 				dateSign: true,
-				dateVisible: false,
 				confirmFlag: true,
 				result: {},
 			}
@@ -130,8 +135,11 @@
 			setTimeout(() => {
 				this.priceAdjustmentSheet = priceAdjustmentSheetTestData;
 			}, 300);
-			this.formattedStartDate = formatDate(new Date(), "yyyy-MM-dd 00:00:00");
-			this.formattedEndDate = formatDate(new Date(), "yyyy-MM-dd 23:59:59");
+			var currentDate = new Date();
+			this.formattedStartDate = formatDate(currentDate, "yyyy-MM-dd 00:00:00");
+			this.formattedEndDate = formatDate(currentDate, "yyyy-MM-dd 23:59:59");
+			currentDate.setDate(currentDate.getDate() - 31);
+			this.startYear = currentDate.getFullYear();
 		},
 		methods: {
 			scan() {
@@ -152,39 +160,44 @@
 
 			tabSelect(e) {
 				this.tabCur = e.currentTarget.dataset.id;
-				this.scrollLeft = (e.currentTarget.dataset.id - 1) * 60
+				this.scrollLeft = (e.currentTarget.dataset.id - 1) * 60;
+				let er=e.currentTarget.dataset.id;
+				let _this=this;
+				this.tabList.forEach(function(item, index, arr) {
+					if (index === _this.tabCur) {
+						console.log(item);
+					}
+				});
 			},
 			selectColor(vaule) {
 				if (vaule.approval === "pass")
-					return "#1cbbb4";
+					return "#39b54a";
 				if (vaule.approval === "denied")
 					return "#f37b1d";
 				return "#8799a3";
 			},
 			showModal(sheetNumber, event) {
-				this.currentSheetNumber = sheetNumber;
 				this.modalName = event.currentTarget.dataset.target;
+				this.currentSheetNumber = sheetNumber;
 			},
-			hideModal(v) {
+			hideModal() {
 				this.modalName = null;
 			},
 			deleteSheet(sheetNumber) {
 				this.hideModal();
 				this.priceAdjustmentSheet.forEach(function(item, index, arr) {
 					//console.log(item.sheetNumber);
-					if (item.sheetNumber == sheetNumber) {
+					if (item.sheetNumber === sheetNumber) {
 						arr.splice(index, 1);
 					}
 				});
 			},
 			//以下日期选择函数
 			selectDate(b) {
-				this.dateVisible = true;
-				if (b) {
-					this.dateSign = true;
-				} else {
-					this.dateSign = false;
-				}
+				this.dateSign = b;
+				this.initDate = this.dateSign ? formatDate(new Date(this.formattedStartDate), "yyyy-MM-dd") : formatDate(
+					new Date(this.formattedEndDate), "yyyy-MM-dd");
+				this.dateModal = true;
 			},
 			touchStart() {
 				if (this.timeout) {
@@ -204,23 +217,23 @@
 					...res
 				};
 			},
-			onCancel(res) {
-				this.dateVisible = false;
+			hideDateModal() {
+				this.dateModal = false;
 			},
 			pickerConfirm() {
 				if (!this.confirmFlag) {
 					return;
 				};
-				console.log(this.result);
-				this.dateVisible = false;
+				this.dateModal = false;
 				this.dateSign ? this.formattedStartDate = formatDate(new Date(this.result.value), "yyyy-MM-dd 00:00:00") :
-					this
-					.formattedEndDate = formatDate(new Date(this.result.value), "yyyy-MM-dd 23:59:59");
+					this.formattedEndDate = formatDate(new Date(this.result.value), "yyyy-MM-dd 23:59:59");
+				this.initDate = this.dateSign ? formatDate(new Date(this.result.value), "yyyy-MM-dd") : formatDate(
+					new Date(this.result.value), "yyyy-MM-dd");
 			},
 
 			computedScrollViewHeight() {
 				let query = wx.createSelectorQuery();
-				query.select('.dateShow.solid.padding-tb-sm').boundingClientRect(rect => {
+				query.select('.flex.justify-around.align-center.bg-white').boundingClientRect(rect => {
 					let clientHeight = rect.height;
 					console.log(clientHeight);
 				}).exec();
@@ -237,17 +250,10 @@
 		background-color: #F8F8F8;
 	}
 
-	.dateShow {
-		display: flex;
-		justify-content: space-around;
-		align-items: center;
-		background-color: #FFF;
-	}
-
 	.sheet {
 		display: flex;
 		flex-direction: column;
-		border-radius: 20rpx;
+		border-radius: 16rpx;
 		padding: 16rpx;
 		background-color: #FFF;
 		margin: 16rpx 16rpx 8rpx 16rpx;
@@ -269,11 +275,6 @@
 				flex: 0 0 3%;
 				font-size: 24rpx;
 			}
-
-			.show {
-				display: flex;
-				flex-direction: column;
-			}
 		}
 	}
 
@@ -283,76 +284,5 @@
 		width: 100vw;
 		position: fixed;
 		bottom: 1.5vh;
-
-		>button {
-			width: 88%;
-		}
-	}
-
-	.dateSelect {
-		z-index: 888;
-
-		.mask {
-			position: fixed;
-			z-index: 1000;
-			top: 0;
-			right: 0;
-			left: 0;
-			bottom: 0;
-			background: rgba(0, 0, 0, 0.6);
-			visibility: hidden;
-			opacity: 0;
-			transition: all 0.3s ease;
-		}
-
-		.mask.visible {
-			visibility: visible;
-			opacity: 1;
-		}
-
-		.dateSelect-cnt {
-			position: fixed;
-			bottom: 0;
-			left: 0;
-			width: 100%;
-			transition: all 0.3s ease;
-			transform: translateY(100%);
-			z-index: 3000;
-			background-color: #fff;
-		}
-
-		.dateSelect-cnt.visible {
-			transform: translateY(0);
-		}
-
-		.dateSelect-header {
-			display: flex;
-			align-items: center;
-			padding: 0 30upx;
-			height: 88upx;
-			background-color: #fff;
-			position: relative;
-			text-align: center;
-			font-size: 32upx;
-			justify-content: space-between;
-			border-bottom: solid 1px #eee;
-
-			.dateSelect-btn {
-				font-size: 30upx;
-			}
-		}
-
-		.dateSelect-hd:after {
-			content: ' ';
-			position: absolute;
-			left: 0;
-			bottom: 0;
-			right: 0;
-			height: 1px;
-			border-bottom: 1px solid #e5e5e5;
-			color: #e5e5e5;
-			transform-origin: 0 100%;
-			transform: scaleY(0.5);
-		}
 	}
 </style>

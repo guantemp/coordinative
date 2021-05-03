@@ -1,10 +1,10 @@
 <template>
 	<view class="price_adjustment_add">
-		<navBar title="调价明细" :backgroundColor="[1, ['#9000ff', '#5e00ff', 180]]" tabPage="/pages/index/index"
+		<navBar title="调价明细" :backgroundColor="[1, ['#AC32E4', '#7918F2', -225]]" tabPage="/pages/index/index"
 			:titleFont="['#FFF']" :surplusHeight="fold?'80':'15'" id="navBar">
 			<view slot="extendSlot">
 				<view v-show="fold">
-					<view class="article text-white margin-tb-xs margin-lr">
+					<view class="flex flex-direction text-white margin-tb-xs margin-lr">
 						<view class="grid-item-container">
 							<text class="shop1">适用门店：</text>
 							<text class="shop2">{{currentShop}}</text>
@@ -12,59 +12,118 @@
 						<view class="grid-item-container">
 							<text class="shop1">生效日期：</text>
 							<text class="shop2">{{effectiveDate}}</text>
-							<text class="cuIcon-calendar" @click="selectDate"></text>
+							<text class="cuIcon-calendar" @click="showDateModal"></text>
 						</view>
 						<view class="grid-item-container">
 							<text class="shop1">备&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注：</text>
-							<input v-model="remarks" type="text" class="input shop2"
+							<input v-model="remarks" type="text" class="remarks shop2"
 								placeholder-style="color:#dbdbdb;" />
 						</view>
 					</view>
 				</view>
-				<text class="fold text-white text-bold" :class="fold?'cuIcon-fold':'cuIcon-unfold'"
+				<text class="flex justify-center text-white text-bold" :class="fold?'cuIcon-fold':'cuIcon-unfold'"
 					@click="foldClick"></text>
 			</view>
 		</navBar>
 
 		<!--items show-->
-		<view v-if="items||items.length === 0" class="empty padding-bottom-lg"
+		<view v-if="items.length === 0" class="flex justify-center flex-direction align-center padding-bottom-lg"
 			:style="{height: fold?'calc(100vh - 190px)':'calc(100vh - 125px)'}">
 			<text class="cuIcon-like text-red margin-bottom tips"></text>
 			<text>空空如也...</text>
 		</view>
 		<scroll-view scroll-y :scroll-with-animation="true" :enable-back-to-top="true"
-			:style="{height: fold?'calc(100vh - 190px)':'calc(100vh - 125px)'}" v-else>
-
+			:style="{height: fold?'calc(100vh - 190px)':'calc(100vh - 125px)'}">
+			<block v-for="(item,index) in items" :key="index">
+				<view class="flex flex-direction radius margin-xs bg-white light ">
+					<view class='flex justify-between padding-lr-sm padding-top-sm align-center'>
+						<text class="text-bold">品名：{{items[index].name}}</text>
+						<view>
+							<text class="cuIcon-edit text-red margin-right-xs"
+								@click='editItem(items[index].id||items[index].plu)'></text>
+							<text class="cuIcon-delete text-blue"
+								@click="deleteItem(items[index].id||items[index].plu)"></text>
+						</view>
+					</view>
+					<view class="flex justify-between padding-lr-sm margin-tb-xs dashed-bottom">
+						<text v-if="items[index].barcode">商品条码：{{items[index].barcode}}</text>
+						<text v-if="items[index].plu">plu号：{{items[index].plu}}</text>
+						<text>规格：{{items[index].specs}}</text>
+					</view>
+					<view
+						v-if="(items[index].retailPrice&&items[index].memberPrice)||(items[index].retailPrice&&items[index].vipPrice)||(items[index].memberPrice&&items[index].vipPrice)"
+						class='grid col-3'>
+						<view class='cu-item padding-left flex flex-direction'>
+							<text>原零售价</text>
+							<text
+								class="text-lg text-cyan text-price  padding-tb-xs">{{items[index].retailPrice.old||'--'}}</text>
+						</view>
+						<view class='cu-item padding-left flex flex-direction'>
+							<text>原会员价</text>
+							<text
+								class="text-lg text-cyan text-price padding-tb-xs">{{items[index].memberPrice.old||'--'}}</text>
+						</view>
+						<view class='cu-item padding-left flex flex-direction'>
+							<text>原VIP价</text>
+							<text
+								class="text-lg text-cyan text-price padding-tb-xs">{{items[index].vipPrice.old||'--'}}</text>
+						</view>
+						<view class='cu-item padding-left flex flex-direction'>
+							<text>现零售价</text>
+							<text
+								class="text-lg text-red text-price padding-tb-xs">{{items[index].retailPrice.new||'--'}}</text>
+						</view>
+						<view class='cu-item padding-left  flex flex-direction'>
+							<text>现会员价</text>
+							<text
+								class="text-lg text-red text-price padding-tb-xs">{{items[index].memberPrice.new||'--'}}</text>
+						</view>
+						<view class='cu-item padding-left flex flex-direction'>
+							<text>现VIP价</text>
+							<text
+								class="text-lg text-red text-price padding-tb-xs">{{items[index].vipPrice.new||'--'}}</text>
+						</view>
+					</view>
+					<view v-else class="grid col-2">
+						<view class='cu-item padding-left-lg flex flex-direction'>
+							<text>原零售价</text>
+							<text
+								class="text-lg text-cyan text-price padding-tb-xs">{{items[index].retailPrice.old}}</text>
+						</view>
+						<view class='cu-item padding-left-lg flex flex-direction'>
+							<text>现零售价</text>
+							<text
+								class="text-lg text-orange text-price padding-tb-xs">{{items[index].retailPrice.new}}</text>
+						</view>
+					</view>
+				</view>
+			</block>
 		</scroll-view>
 
 		<!--bootom-->
 		<view class="bottom cu-bar bg-white tabbar border shop">
-			<button class="action" open-type="contact">
-				<view class="cuIcon-service text-green">
-					<view class="cu-tag badge"></view>
-				</view>
-				管理员
-			</button>
-			<view class="action">
-				<view class="cuIcon-tag">
+			<view class="action" @tap.stop="this.$util.navTo('/pages/workflow/label/label')">
+				<view class="icon-label-print margin-bottom-xs" style="font-size: 38rpx"></view>打印标签
+			</view>
+			<view class="action" @tap.stop="clearItems">
+				<view class="cuIcon-delete">
 					<view v-if="items.length > 0" class="cu-tag badge">{{items.length}}</view>
 				</view>
-				数量
+				清空
 			</view>
-			<view class="bg-orange submit" @click.stop="showModal" data-target="DialogModalAdd">添加商品</view>
-			<view class="bg-red submit" @click="computedHeight">保存</view>
+			<view class="bg-red light submit" @click.stop="showModal" data-target="DialogModalAdd">添加商品</view>
+			<view class="bg-mauve submit" @click="computedHeight">保存</view>
 		</view>
 
 		<!-- 日期选择 -->
-		<view class="dateSelect">
-			<view class="mask" :class="{'visible':dateVisible}" @tap="onCancel" @touchmove.stop.prevent
-				catchtouchmove="true"></view>
-			<view class="dateSelect-cnt" :class="{'visible':dateVisible}">
-				<view class="dateSelect-header" @touchmove.stop.prevent catchtouchmove="true">
-					<text @tap.stop.prevent="onCancel">取消</text>
+		<view class="cu-modal bottom-modal" :class="dateModal?'show':''" @tap="hideDateModal">
+			<view class="cu-dialog" @tap.stop="">
+				<view
+					class="flex align-center justify-between padding-lr-lg padding-tb-sm bg-white solid-bottom text-lg">
+					<text @tap.stop.prevent="hideDateModal">取消</text>
 					<text class="text-orange" @tap.stop.prevent="pickerConfirm">确定</text>
 				</view>
-				<date-picker :startYear="2020" fields="second" :current="current" :value="initDate"
+				<date-picker :startYear="2021" fields="second" :current="current" :value="initDate"
 					@change="handlerChange" @touchstart="touchStart" @touchend="touchEnd">
 				</date-picker>
 			</view>
@@ -76,12 +135,12 @@
 				<view @tap="hideModal" class="bg-white text-right padding-tb-sm padding-lr-lg">
 					<text class="cuIcon-close text-red text-bold text-xl"></text>
 				</view>
-				<view class="modalContent bg-purple light text-left">
-					<view class="cu-bar search">
+				<view class="bg-purple light text-left">
+					<view v-if="addSign" class="cu-bar search">
 						<view class="search-form radius">
 							<text class="cuIcon-search"></text>
-							<input v-model="scanResult" :adjust-position="false" placeholder="请输入商品条码、名称、拼音"
-								confirm-type="search"></input>
+							<input v-model="scanResult" :adjust-position="false" focus placeholder="请输入商品条码、名称、拼音"
+								confirm-type="search" @confirm="serchConfirm"></input>
 							<text class="cuIcon-scan text-blue text-bold" @tap="scan"></text>
 						</view>
 						<view class="action text-white">
@@ -90,95 +149,121 @@
 							<text class="cuIcon-filter margin-left-xs" @tap.stop="query"></text>
 						</view>
 					</view>
-					<view class="item">
-						<view class="flex justify-between padding-lr-sm">
-							<text class="text-bold">品名：{{item.name||'--'}}</text>
-							<text class="iconfont icon-unit text-blue text-lg" @tap.stop="showUnitDrawerModal"></text>
-						</view>
-						<view class="flex justify-between padding-lr-sm padding-tb-xs">
-							<text v-if="item.plu">plu号：{{item.plu}}</text>
-							<text v-else>商品条码：{{item.barcode||'--'}}</text>
-							<text>规格：{{item.specs||'--'}}</text>
-						</view>
+					<view class="flex justify-between padding-lr-sm" :class="addSign?'':'padding-top-sm'">
+						<text class="text-bold">品名：{{item.name||'--'}}</text>
+						<text class="icon-unit text-blue" @tap.stop="showUnitDrawerModal"></text>
 					</view>
-					<view class='grid-item-vip dashed-bottom bg-purple padding-tb-sm'>
-						<view class='grid-item-child-3 padding-left-sm solid-right solid-bottom'>
+					<view class="flex justify-between padding-lr-sm padding-tb-xs">
+						<text v-if="item.plu">plu号：{{item.plu}}</text>
+						<text v-else>商品条码：{{item.barcode||'--'}}</text>
+						<text>规格：{{item.specs||'--'}}</text>
+					</view>
+					<view class="grid col-3 bg-purple padding-tb-sm margin-lr-sm radius margin-bottom-xs">
+						<view class='cu-item padding-left-sm flex flex-direction'>
 							<text class="cuIcon-vip" @click="showVip">区域参考售价</text>
 							<text
 								class="text-lg text-bold text-cyan text-price padding-tb-xs">{{item.vip.referenceSalePrice||'--'}}</text>
 						</view>
-						<view class='grid-item-child-3 padding-left-sm solid-right solid-bottom'>
+						<view class='cu-item padding-left-sm flex flex-direction'>
 							<text class="cuIcon-vip" @click="showVip">区域参考进价</text>
 							<text
 								class="text-lg text-bold text-cyan text-price padding-tb-xs">{{item.vip.referencePurchasePrice||'--'}}</text>
 						</view>
-						<view class='grid-item-child-3 padding-left-sm solid-bottom'>
+						<view class='cu-item padding-left-sm flex flex-direction'>
 							<text>最近入库价</text>
 							<text
 								class="text-lg text-bold text-price padding-tb-xs text-yellow">{{item.storage.lastPurchasePrice||'--'}}</text>
 						</view>
-						<view class='grid-item-child-3 padding-left-sm solid-right'>
+						<view class='cu-item padding-left-sm flex flex-direction'>
 							<text class="padding-tb-xs">库存数量</text>
 							<text class="text-lg text-bold text-pink">{{item.storage.number||'--'}}</text>
 						</view>
-						<view class='grid-item-child-3 padding-left-sm solid-right '>
+						<view class='cu-item padding-left-sm flex flex-direction'>
 							<text class="padding-tb-xs">库存金额</text>
 							<text class="text-lg text-bold text-pink text-price">{{item.storage.amount||'--'}}</text>
 						</view>
-						<view class='grid-item-child-3 padding-left-sm'>
+						<view class='cu-item padding-left-sm flex flex-direction'>
 							<text class="padding-tb-xs cuIcon-question">存货周转率</text>
 							<text class="text-lg text-bold text-green">{{item.storage.stockTurn||'--'}}</text>
 						</view>
 					</view>
-					<view class="flex justify-between align-center margin-lr-sm">
-						<view class="basis-df">
-							<text>原零售价：</text>
-							<text class="text-price text-blue">{{item.salePrice.old||'--'}}</text>
+					<view class="flex flex-direction margin-lr-sm">
+						<view>
+							<text class="cuIcon-sponsor margin-right-xs text-orange"></text>
+							<text class="text-black">零售价</text>
 						</view>
 						<view class="flex justify-between align-center">
-							<text class="basis-df">现零售价：</text>
-							<view class="price">
+							<view style="flex-basis:35%">
+								<text>原：</text>
+								<text class="text-price text-blue"
+									:style="(item.retailPrice||item.retailPrice.old)?'text-decoration:line-through':''">{{item.retailPrice||item.retailPrice.old||'--'}}</text>
+							</view>
+							<view class="flex align-center" style="flex-basis:35%">
+								<text>现：</text>
 								<text class="text-price"></text>
-								<input :placeholder="item.salePrice.new||'--'" type="digit" v-model="newSalePrice"
-									@blur="supplementaryUnit('sale')"></input>
+								<input :placeholder="item.retailPrice.new" type="digit" v-model="newRetailPrice"
+									@blur="blur('sale')" class="solid-bottom basis-xl text-red"></input>
+							</view>
+							<view class="flex align-center" style="flex-basis:30%">
+								<text>毛利率：</text>
+								<text class="text-black">{{retailGrossProfitRate}}</text>
 							</view>
 						</view>
 					</view>
-					<view class="flex justify-between align-center margin-lr-sm margin-tb-xs">
-						<view class="basis-df">
-							<text>原会员价：</text>
-							<text class="text-price text-blue">{{item.memberPrice.old||'--'}}</text>
+					<view class="flex flex-direction margin-lr-sm">
+						<view>
+							<text class="cuIcon-my text-orange margin-right-xs"></text>
+							<text class="text-black">会员价</text>
 						</view>
 						<view class="flex justify-between align-center">
-							<text class="basis-df">现会员价：</text>
-							<view class="price">
+							<view style="width: 35%">
+								<text>原：</text>
+								<text class="text-price text-blue"
+									:style="(item.memberPrice||item.memberPrice.old)?'text-decoration:line-through':''">{{item.memberPrice||item.memberPrice.old||'--'}}</text>
+							</view>
+							<view class="flex align-center" style="flex-basis:35%">
+								<text>现：</text>
 								<text class="text-price"></text>
-								<input :placeholder="item.memberPrice.new||'--'" v-model="newMemberPrice" type="digit"
-									@blur="supplementaryUnit('member')"></input>
+								<input :placeholder="item.memberPrice.new" v-model="newMemberPrice" type="digit"
+									@blur="blur('member')" class="solid-bottom basis-xl text-red"></input>
+							</view>
+							<view class="flex align-center" style="flex-basis:30%">
+								<text>毛利率：</text>
+								<text class="text-black">{{memberGrossProfitRate}}</text>
 							</view>
 						</view>
 					</view>
-					<view class="flex justify-between align-center margin-lr-sm">
-						<view class="basis-df">
-							<text>原Vip价：</text>
-							<text class="text-price text-blue">{{item.vipPrice.old||'--'}}</text>
+					<view class="flex flex-direction margin-lr-sm">
+						<view>
+							<text class="cuIcon-vip text-orange margin-right-xs"></text>
+							<text class="text-black">VIP价</text>
 						</view>
 						<view class="flex justify-between align-center">
-							<text class="basis-df">现VIP价：</text>
-							<view class="price">
+							<view style="width: 35%">
+								<text>原：</text>
+								<text class="text-price text-blue"
+									:style="(item.vipPrice||item.vipPrice.old)?'text-decoration:line-through':''">{{item.vipPrice||item.vipPrice.old||'--'}}</text>
+							</view>
+							<view class="flex align-center" style="flex-basis:35%">
+								<text>现：</text>
 								<text class="text-price"></text>
 								<input :placeholder="item.vipPrice.new" v-model="newVipPrice" type="digit"
-									@blur="supplementaryUnit('vip')"></input>
+									@blur="blur('vip')" class="solid-bottom basis-xl text-red"></input>
+							</view>
+							<view class="flex align-center" style="flex-basis:30%">
+								<text>毛利率：</text>
+								<text class="text-black">{{vipGrossProfitRate}}</text>
 							</view>
 						</view>
 					</view>
 					<view class="flex justify-end margin-right-sm padding-tb-sm">
-						<button class="cu-btn block radius shadow confirmBtn bg-gradual-purple basis-sm"
+						<button v-if="addSign" class="cu-btn block radius shadow confirmBtn bg-gradual-purple basis-sm"
 							@tap.stop="addItem">
 							<text class="cuIcon-add margin-right-sm"></text>增加</button>
-						<button class="cu-btn block radius shadow confirmBtn bg-gradual-purple basis-sm margin-left-xs"
+						<button class="cu-btn block radius shadow confirmBtn bg-gradual-purple margin-left-xs"
+							:class="addSign?'basis-sm':'basis-lg'"
 							@tap.stop="this.$util.navTo('/pages/workflow/price_adjustment_add')">
-							确定</button>
+							保存</button>
 					</view>
 				</view>
 			</view>
@@ -188,13 +273,14 @@
 			<view class="cu-dialog basis-lg bg-white" @tap.stop=""
 				:style="[{top:140+'px',height:'calc(100vh - ' + 140 + 'px)'}]">
 				<view class="padding-sm solid-bottom text-left">
-					<text class="cuIcon-titles text-pink"></text>
+					<text class="cuIcon-titles text-orange"></text>
 					<text>重置价格单位</text>
 				</view>
 				<view class="units text-df">
-					<block v-for="(unit, index) in units" :key="index">
-						<text class="unit padding-tb-xs padding-lr text-center margin-top-sm bg-grey"
-							@tap.stop="selectUnit(unit)">{{unit}}</text>
+					<block v-for="(unitItem, index) in units" :key="index">
+						<text class="padding-tb-xs padding-lr text-center margin-top-sm"
+							:class="unitItem===unit?'unitSelected text-red light bg-orange':'unit bg-grey'"
+							@tap.stop="selectUnit(unitItem)">{{unitItem}}</text>
 					</block>
 				</view>
 			</view>
@@ -205,8 +291,9 @@
 <script>
 	import {
 		formatDate,
+		formatMoney
 	} from '@/js_sdk/util.js';
-	import price_adjustment_test_data from '@/test/price_adjustment_test_data.js'; //测试数据
+	import catalog from '@/test/catalog_test_data.js'; //用例数据库
 	export default {
 		data() {
 			return {
@@ -214,70 +301,52 @@
 				currentShop: '泸州市龙马潭区嘉诚超市',
 				remarks: null,
 
+				dateModal: false,
 				effectiveDate: null,
 				initDate: null,
-				dateVisible: false,
 				confirmFlag: true,
 				resultDate: {},
 
-				modalName: null,
 				unitDrawerModal: false,
+
+				modalName: null,
 				scanResult: null,
 
-				items: {},
-				item: {
-					name: '菊品郁金银屑片',
-					barcode: '6926094418474',
-					specs: '100片',
-					vip: {
-						referenceSalePrice: '45.25/瓶',
-						referencePurchasePrice: '23.33/瓶'
-					},
-					storage: {
-						lastPurchasePrice: '22.47/瓶',
-						amount: 677.23,
-						number: 12,
-						stockTurn: 12.33
-					},
-					salePrice: {
-						old: '450.3/瓶',
-						new: '38.00/瓶',
-					},
-					vipPrice: {
-						old: '35.00/瓶',
-						new: null,
-					},
-					memberPrice: {
-						old: null,
-						new: null,
-					}
-				},
-				unit: '瓶',
+				items: [],
+				item: null,
+				addSign: false,
+				unit: 'PCS',
 				units: [],
-				newSalePrice: '',
-				newMemberPrice: null,
-				newVipPrice: null,
+				newRetailPrice: '',
+				newMemberPrice: '',
+				newVipPrice: '',
+				retailGrossProfitRate: '',
+				memberGrossProfitRate: '',
+				vipGrossProfitRate: '',
 			}
 		},
 		onLoad: function() {
-			//定时器模拟ajax异步请求数据
 			setTimeout(() => {
 				this.effectiveDate = formatDate(new Date(), "yyyy-MM-dd 00:00:00");
-				this.units = price_adjustment_test_data.units;
 			}, 300);
-			let patt = new RegExp("/?[\u4e00-\u9fa5]{1,2}|500g|kg|pcs$", "i");
-			if (this.item.salePrice) {
-				//console.log(patt.exec(this.item.salePrice.old));
-			}
-			var hy = "450.3/";
-			var t = hy.replace(/\/?([\u4e00-\u9fa5]{1,2}|500g|kg|pcs)?$/, '');
-			console.log(t);
+			this.units = catalog.units;
+			let patt = new RegExp(/\/?([\u4e00-\u9fa5]{1,2}|500g|kg|pcs)?$/);
+			console.log("".replace(patt, ''));
 		},
 		watch: {
 			item() {
-				if (this.item.salePrice) {
+				if (this.item) {
 					let patt = new RegExp("^([1-9][0-9]+(.[0-9]{1,4})?)/([\u4e00-\u9fa5]{1,2}|500g|kg|pcs)$", "i");
 				}
+			},
+			unit() {
+				let pattern = new RegExp(/\/?([\u4e00-\u9fa5]{1,2}|500g|kg|pcs)?$/);
+				if (this.newRetailPrice)
+					this.newRetailPrice = this.newRetailPrice.replace(pattern, '') + "/" + this.unit;
+				if (this.newMemberPrice)
+					this.newMemberPrice = this.newMemberPrice.replace(pattern, '') + "/" + this.unit;
+				if (this.newVipPrice)
+					this.newVipPrice = this.newVipPrice.replace(pattern, '') + "/" + this.unit;
 			}
 		},
 		methods: {
@@ -285,8 +354,11 @@
 				this.fold = !this.fold;
 			},
 
-			selectDate() {
-				this.dateVisible = true;
+			showDateModal() {
+				this.dateModal = true;
+			},
+			hideDateModal() {
+				this.dateModal = false;
 			},
 			touchStart() {
 				if (this.timeout) {
@@ -306,15 +378,11 @@
 					...res
 				};
 			},
-			onCancel(res) {
-				this.dateVisible = false;
-			},
 			pickerConfirm() {
 				if (!this.confirmFlag) {
 					return;
 				};
-				//console.log(this.resultDate);
-				this.dateVisible = false;
+				this.dateModal = false;
 				this.effectiveDate = formatDate(new Date(this.resultDate.value), "yyyy-MM-dd hh:mm:ss")
 			},
 
@@ -325,15 +393,40 @@
 				this.unitDrawerModal = true;
 			},
 			selectUnit(v) {
-				this.unit = v;
 				this.unitDrawerModal = false;
+				this.unit = v;
 			},
 
 			showModal(event) {
+				this.addSign = true;
 				this.modalName = event.currentTarget.dataset.target;
+				if (this.item) {
+					let pattern = new RegExp(/\/?([\u4e00-\u9fa5]{1,2}|500g|kg|pcs)?$/);
+					let cost = this.item.storage.lastPurchasePrice.replace(pattern, '');
+					if (this.item.retailPrice.new)
+						this.retailGrossProfitRate = this.computedGrossProfitRate(cost, this.item.retailPrice.new.replace(
+							pattern, ''));
+					if (this.item.memberPrice.new)
+						this.memberGrossProfitRate = this.computedGrossProfitRate(cost, this.item.memberPrice.new.replace(
+							pattern, ''));
+					if (this.item.vipPrice.new)
+						this.vipGrossProfitRate = this.computedGrossProfitRate(cost, this.item.vipPrice.new.replace(
+							pattern, ''));
+				}
 			},
 			hideModal(v) {
 				this.modalName = null;
+			},
+			editItem(key) {
+				this.addSign = false;
+				this.modalName = 'DialogModalAdd';
+				console.log(key);
+				for (const i of this.items) {
+					if (i.id == key || i.plu == key) {
+						this.item = i;
+						break;
+					}
+				}
 			},
 			scan() {
 				var that = this;
@@ -341,6 +434,7 @@
 					scanType: ['barCode'],
 					success: function(res) {
 						that.scanResult = res.result;
+						that.serchConfirm();
 					},
 					fail: function(res) {
 						console.log(JSON.stringify(res));
@@ -353,45 +447,129 @@
 			showVip() {
 				this.$util.toast("普通用户定位到省，vip用户定位到周边3-5KM");
 			},
-			supplementaryUnit(sign) {
+			blur(sign) {
+				let pattern = new RegExp(/\/?([\u4e00-\u9fa5]{1,}|500g|kg|pcs)?$/);
+				let cost = this.item ? this.item.storage.lastPurchasePrice.replace(pattern, '') :
+					0;
 				switch (sign) {
 					case 'sale':
-						if (this.newSalePrice)
-							this.newSalePrice = this.newSalePrice.replace(/\/?([\u4e00-\u9fa5]{1,2}|500g|kg|pcs)?$/, '') +
-							"/" +
-							this.unit;
+						if (this.newRetailPrice) {
+							let temp = this.newRetailPrice.replace(pattern, '');
+							this.retailGrossProfitRate = this.computedGrossProfitRate(cost, temp);
+							this.newRetailPrice = formatMoney(temp) + "/" + this.unit;
+						} else {
+							this.retailGrossProfitRate = this.computedGrossProfitRate(cost, this.item.retailPrice.replace(
+								pattern, ''));
+						}
 						break;
 					case 'member':
-						if (this.newMemberPrice)
-							this.newMemberPrice = this.newMemberPrice.replace(/\/?([\u4e00-\u9fa5]{1,2}|500g|kg|pcs)?$/,
-								'') +
-							"/" + this.unit;
+						if (this.newMemberPrice) {
+							let temp = this.newMemberPrice.replace(pattern, '');
+							this.memberGrossProfitRate = this.computedGrossProfitRate(cost, temp);
+							this.newMemberPrice = formatMoney(temp) + "/" + this.unit;
+						} else {
+							this.memberGrossProfitRate = this.computedGrossProfitRate(cost, this.item.memberPrice.replace(
+								pattern, ""));
+						}
 						break;
 					case 'vip':
-						if (this.newVipPrice)
-							this.newVipPrice = this.newVipPrice.replace(/\/?([\u4e00-\u9fa5]{1,2}|500g|kg|pcs)?$/, '') +
-							"/" +
-							this.unit;
+						if (this.newVipPrice) {
+							let temp = this.newVipPrice.replace(pattern, '');
+							this.vipGrossProfitRate = this.computedGrossProfitRate(cost, temp);
+							this.newVipPrice = formatMoney(temp) + "/" + this.unit;
+						} else {
+							this.vipGrossProfitRate = this.computedGrossProfitRate(cost, this.item.vipPrice.replace(
+								pattern, ''));
+						}
 						break;
 				}
-
+			},
+			computedGrossProfitRate(cost, price) {
+				if (cost === 0 || cost === '0')
+					return '100%';
+				if (price === 0 || price === '0' || price === '0.00' || price === '0.0')
+					return '0%';
+				let difference = price - cost;
+				return (difference / price * 100).toFixed(2) + '%';
+			},
+			serchConfirm() {
+				var that = this;
+				let patt = new RegExp(/\/?([\u4e00-\u9fa5]{1,2}|500g|kg|pcs)?$/);
+				for (const i of catalog.catalog) {
+					if (i.barcode == that.scanResult || i.plu == that.scanResult) {
+						that.unit = patt.exec(i.retailPrice)[1];
+						that.item = {
+							name: i.name,
+							specs: i.specs,
+							vip: {
+								referenceSalePrice: i.vip.referenceSalePrice,
+								referencePurchasePrice: i.vip.referencePurchasePrice,
+							},
+							storage: {
+								lastPurchasePrice: i.storage.lastPurchasePrice,
+								amount: i.storage.amount,
+								number: i.storage.number,
+								stockTurn: i.storage.stockTurn,
+							},
+							retailPrice: i.retailPrice,
+							memberPrice: i.memberPrice,
+							vipPrice: i.vipPrice,
+						};
+						if (i.id) {
+							that.item = {
+								id: i.id,
+								barcode: i.barcode,
+								...that.item
+							};
+						}
+						if (i.plu) {
+							that.item = {
+								plu: i.plu,
+								...that.item
+							};
+						}
+						let cost = i.storage.lastPurchasePrice.replace(patt, '');
+						that.retailGrossProfitRate = that.computedGrossProfitRate(cost, i.retailPrice.replace(patt, ''));
+						that.memberGrossProfitRate = that.computedGrossProfitRate(cost, i.memberPrice.replace(patt, ''));
+						that.vipGrossProfitRate = that.computedGrossProfitRate(cost, i.vipPrice.replace(patt, ''));
+						//console.log(that.item);
+						break;
+					}
+				}
 			},
 			addItem() {
-				this.item = {};
+				for (const i of this.items) {
+					if (i.id == this.item.id || i.plu == this.item.plu) {
+						this.$util.toast("编码" + (i.id || i.plu) + "的商品已存在，单据不允许重复录入！");
+						return;
+					}
+				}
+				if (this.newRetailPrice)
+					this.item.retailPrice.new = this.newRetailPrice;
+				if (this.newMemberPrice)
+					this.item.memberPrice.new = this.newMemberPrice;
+				if (this.newVipPrice)
+					this.item.vipPrice.new = this.newVipPrice;
+				this.items.push(this.item);
+				//console.log(this.item);
+				this.newRetailPrice = '';
+				this.newMemberPrice = '';
+				this.newVipPrice = '';
+				this.retailGrossProfitRate = '';
+				this.memberGrossProfitRate = '';
+				this.vipGrossProfitRate = '';
 			},
 
 			computedHeight() {
-				let occupiedHeight;
+				let that = this;
 				const query = uni.createSelectorQuery();
 				query.select('#navBar').boundingClientRect(rect => {
-					occupiedHeight = rect.height;
-					this.$util.toast("height:" + occupiedHeight);
+					that.occupiedHeight = rect.height;
 				}).exec();
 				query.select('.bottom').boundingClientRect(rect => {
-					occupiedHeight = occupiedHeight + rect.height;
-
+					that.occupiedHeight = that.occupiedHeight + rect.height;
 				}).exec();
-
+				this.$util.toast("height:" + this.occupiedHeight);
 			},
 		}
 	}
@@ -402,11 +580,6 @@
 		width: 100vw;
 		height: 100vh;
 		background-color: rgba(191, 200, 217, 0.3);
-	}
-
-	.article {
-		display: flex;
-		flex-direction: column;
 	}
 
 	.grid-item-container {
@@ -421,13 +594,9 @@
 		.shop2 {
 			flex: 1;
 		}
-
-		.shop3 {
-			width: 25%;
-		}
 	}
 
-	.input {
+	.remarks {
 		flex: 1;
 		border-radius: 10rpx;
 		background-color: rgba(32, 32, 32, .35);
@@ -436,115 +605,8 @@
 		text-overflow: ellipsis;
 	}
 
-	.fold {
-		width: 100%;
-		display: flex;
-		justify-content: center;
-	}
-
-	.empty {
-		width: 100%;
-		display: flex;
-		justify-content: center;
-		flex-direction: column;
-		align-items: center;
-
-		.tips {
-			font-size: 164rpx;
-		}
-	}
-
-	.dateSelect {
-		z-index: 888;
-
-		.mask {
-			position: fixed;
-			z-index: 1000;
-			top: 0;
-			right: 0;
-			left: 0;
-			bottom: 0;
-			background: rgba(0, 0, 0, 0.6);
-			visibility: hidden;
-			opacity: 0;
-			transition: all 0.3s ease;
-		}
-
-		.mask.visible {
-			visibility: visible;
-			opacity: 1;
-		}
-
-		.dateSelect-cnt {
-			position: fixed;
-			bottom: 0;
-			left: 0;
-			width: 100%;
-			transition: all 0.3s ease;
-			transform: translateY(100%);
-			z-index: 3000;
-			background-color: #fff;
-		}
-
-		.dateSelect-cnt.visible {
-			transform: translateY(0);
-		}
-
-		.dateSelect-header {
-			display: flex;
-			align-items: center;
-			padding: 0 30upx;
-			height: 88upx;
-			background-color: #fff;
-			position: relative;
-			text-align: center;
-			font-size: 32upx;
-			justify-content: space-between;
-			border-bottom: solid 1px #eee;
-
-			.dateSelect-btn {
-				font-size: 30upx;
-			}
-		}
-
-		.dateSelect-hd:after {
-			content: ' ';
-			position: absolute;
-			left: 0;
-			bottom: 0;
-			right: 0;
-			height: 1px;
-			border-bottom: 1px solid #e5e5e5;
-			color: #e5e5e5;
-			transform-origin: 0 100%;
-			transform: scaleY(0.5);
-		}
-	}
-
-	.item {
-		display: flex;
-		flex-direction: column;
-		width: 100%;
-	}
-
-	.grid-item-vip {
-		display: flex;
-		justify-content: space-between;
-		flex-wrap: wrap;
-		margin: 0rpx 16rpx 12rpx 16rpx;
-		border-radius: 16rpx;
-	}
-
-	.grid-item-child-3 {
-		display: flex;
-		flex-direction: column;
-		width: 33.33333%;
-	}
-
-	.price {
-		display: flex;
-		border-bottom: 1px solid #fFF;
-		align-items: center;
+	.tips {
+		font-size: 164rpx;
 	}
 
 	.bottom {
@@ -562,7 +624,13 @@
 		.unit {
 			border-radius: 3px;
 			border: 1rpx solid #9b9b9b;
-			margin-right: 10rpx;
+			margin-right: 14rpx;
+		}
+
+		.unitSelected {
+			border-radius: 3px;
+			border: 1rpx solid #fbbd08;
+			margin-right: 14rpx;
 		}
 	}
 </style>

@@ -96,10 +96,10 @@ var components
 try {
   components = {
     navBar: function() {
-      return __webpack_require__.e(/*! import() | components/navBar/navBar */ "components/navBar/navBar").then(__webpack_require__.bind(null, /*! @/components/navBar/navBar.vue */ 155))
+      return __webpack_require__.e(/*! import() | components/navBar/navBar */ "components/navBar/navBar").then(__webpack_require__.bind(null, /*! @/components/navBar/navBar.vue */ 163))
     },
     listCell: function() {
-      return __webpack_require__.e(/*! import() | components/listCell/listCell */ "components/listCell/listCell").then(__webpack_require__.bind(null, /*! @/components/listCell/listCell.vue */ 162))
+      return __webpack_require__.e(/*! import() | components/listCell/listCell */ "components/listCell/listCell").then(__webpack_require__.bind(null, /*! @/components/listCell/listCell.vue */ 170))
     }
   }
 } catch (e) {
@@ -140,7 +140,7 @@ var render = function() {
 
     _vm.e3 = function($event) {
       $event.stopPropagation()
-      return this.$util.navTo("/pages/public/not_implemented")
+      return this.$util.navTo("/pages/workflow/label/label")
     }
 
     _vm.e4 = function($event) {
