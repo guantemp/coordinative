@@ -27,20 +27,22 @@
 		</navBar>
 
 		<!--items show-->
-		<view v-if="items||items.length === 0" class="flex justify-center flex-direction align-center padding-bottom-lg"
+		<view v-if="items.length === 0" class="flex justify-center flex-direction align-center padding-bottom-lg"
 			:style="{height: fold?'calc(100vh - 190px)':'calc(100vh - 125px)'}">
 			<text class="cuIcon-like text-red margin-bottom tips"></text>
 			<text>空空如也...</text>
 		</view>
 		<scroll-view scroll-y :scroll-with-animation="true" :enable-back-to-top="true"
-			:style="{height: fold?'calc(100vh - 190px)':'calc(100vh - 125px)'}" v-else>
+			:style="{height: fold?'calc(100vh - 190px)':'calc(100vh - 125px)'}">
 			<block v-for="(item,index) in items" :key="index">
 				<view class="flex flex-direction radius margin-xs bg-white light ">
 					<view class='flex justify-between padding-lr-sm padding-top-sm align-center'>
 						<text class="text-bold">品名：{{items[index].name}}</text>
 						<view>
-							<text class="cuIcon-edit text-red margin-right-xs" @click='edit(items[index].id)'></text>
-							<text class="cuIcon-delete text-blue" @click="del(items[index].id)"></text>
+							<text class="cuIcon-edit text-red margin-right-xs"
+								@click='editItem(items[index].id||items[index].plu)'></text>
+							<text class="cuIcon-delete text-blue"
+								@click="deleteItem(items[index].id||items[index].plu)"></text>
 						</view>
 					</view>
 					<view class="flex justify-between padding-lr-sm margin-tb-xs dashed-bottom">
@@ -49,51 +51,77 @@
 						<text>规格：{{items[index].specs}}</text>
 					</view>
 					<view
-						v-if="(items[index].salePrice&&items[index].memberPrice)||(items[index].salePrice&&items[index].vipPrice)||(items[index].memberPrice&&items[index].vipPrice)"
+						v-if="(items[index].newRetailPrice&&items[index].newMemberPrice)||(items[index].newRetailPrice&&items[index].newVipPrice)||(items[index].newMemberPrice&&items[index].newVipPrice)"
 						class='grid col-3'>
 						<view class='cu-item padding-left flex flex-direction'>
 							<text>原零售价</text>
 							<text
-								class="text-lg text-cyan text-price  padding-tb-xs">{{items[index].salePrice.old||'--'}}</text>
+								class="text-lg text-cyan text-price  padding-tb-xs">{{items[index].retailPrice||'--'}}</text>
 						</view>
 						<view class='cu-item padding-left flex flex-direction'>
 							<text>原会员价</text>
 							<text
-								class="text-lg text-cyan text-price padding-tb-xs">{{items[index].memberPrice.old||'--'}}</text>
+								class="text-lg text-cyan text-price padding-tb-xs">{{items[index].memberPrice||'--'}}</text>
 						</view>
 						<view class='cu-item padding-left flex flex-direction'>
 							<text>原VIP价</text>
 							<text
-								class="text-lg text-cyan text-price padding-tb-xs">{{items[index].vipPrice.old||'--'}}</text>
+								class="text-lg text-cyan text-price padding-tb-xs">{{items[index].vipPrice||'--'}}</text>
 						</view>
 						<view class='cu-item padding-left flex flex-direction'>
 							<text>现零售价</text>
 							<text
-								class="text-lg text-red text-price padding-tb-xs">{{items[index].salePrice.new||'--'}}</text>
+								class="text-lg text-red text-price padding-tb-xs">{{items[index].newRetailPrice||'--'}}</text>
 						</view>
 						<view class='cu-item padding-left  flex flex-direction'>
 							<text>现会员价</text>
 							<text
-								class="text-lg text-red text-price padding-tb-xs">{{items[index].memberPrice.new||'--'}}</text>
+								class="text-lg text-red text-price padding-tb-xs">{{items[index].newMemberPrice||'--'}}</text>
 						</view>
 						<view class='cu-item padding-left flex flex-direction'>
 							<text>现VIP价</text>
 							<text
-								class="text-lg text-red text-price padding-tb-xs">{{items[index].vipPrice.new||'--'}}</text>
+								class="text-lg text-red text-price padding-tb-xs">{{items[index].newVipPrice||'--'}}</text>
 						</view>
 					</view>
-					<view v-else class="grid col-2">
-						<view class='cu-item padding-left-lg flex flex-direction'>
-							<text>原零售价</text>
-							<text
-								class="text-lg text-cyan text-price padding-tb-xs">{{items[index].salePrice.old}}</text>
+					<block v-else>
+						<view v-if="items[index].newRetailPrice" class="grid col-2">
+							<view class='cu-item padding-left-lg flex flex-direction'>
+								<text>原零售价</text>
+								<text
+									class="text-lg text-cyan text-price padding-tb-xs">{{items[index].retailPrice}}</text>
+							</view>
+							<view class='cu-item padding-left-lg flex flex-direction'>
+								<text>现零售价</text>
+								<text
+									class="text-lg text-orange text-price padding-tb-xs">{{items[index].newRetailPrice}}</text>
+							</view>
 						</view>
-						<view class='cu-item padding-left-lg flex flex-direction'>
-							<text>现零售价</text>
-							<text
-								class="text-lg text-orange text-price padding-tb-xs">{{items[index].salePrice.new}}</text>
+						<view v-else-if="items[index].newMemberPrice" class="grid col-2">
+							<view class='cu-item padding-left-lg flex flex-direction'>
+								<text>原会员价</text>
+								<text
+									class="text-lg text-cyan text-price padding-tb-xs">{{items[index].memberPrice}}</text>
+							</view>
+							<view class='cu-item padding-left-lg flex flex-direction'>
+								<text>现会员价</text>
+								<text
+									class="text-lg text-orange text-price padding-tb-xs">{{items[index].newMemberPrice}}</text>
+							</view>
 						</view>
-					</view>
+						<view v-else class="grid col-2">
+							<view class='cu-item padding-left-lg flex flex-direction'>
+								<text>原Vip价</text>
+								<text
+									class="text-lg text-cyan text-price padding-tb-xs">{{items[index].vipPrice}}</text>
+							</view>
+							<view class='cu-item padding-left-lg flex flex-direction'>
+								<text>现Vip价</text>
+								<text
+									class="text-lg text-orange text-price padding-tb-xs">{{items[index].newVipPrice}}</text>
+							</view>
+						</view>
+					</block>
 				</view>
 			</block>
 		</scroll-view>
@@ -103,14 +131,14 @@
 			<view class="action" @tap.stop="this.$util.navTo('/pages/workflow/label/label')">
 				<view class="icon-label-print margin-bottom-xs" style="font-size: 38rpx"></view>打印标签
 			</view>
-			<view class="action">
+			<view class="action" @tap.stop="clearItems">
 				<view class="cuIcon-delete">
 					<view v-if="items.length > 0" class="cu-tag badge">{{items.length}}</view>
 				</view>
 				清空
 			</view>
-			<view class="bg-orange submit" @click.stop="showModal" data-target="DialogModalAdd">添加商品</view>
-			<view class="bg-red submit" @click="computedHeight">保存</view>
+			<view class="bg-red light submit" @click.stop="showModal" data-target="DialogModalAdd">添加商品</view>
+			<view class="bg-mauve submit" @click="computedHeight">保存</view>
 		</view>
 
 		<!-- 日期选择 -->
@@ -137,8 +165,8 @@
 					<view v-if="addSign" class="cu-bar search">
 						<view class="search-form radius">
 							<text class="cuIcon-search"></text>
-							<input v-model="scanResult" :adjust-position="false" placeholder="请输入商品条码、名称、拼音"
-								confirm-type="search"></input>
+							<input v-model="scanResult" :adjust-position="false" focus placeholder="请输入商品条码、名称、拼音"
+								confirm-type="search" @confirm="serchConfirm"></input>
 							<text class="cuIcon-scan text-blue text-bold" @tap="scan"></text>
 						</view>
 						<view class="action text-white">
@@ -147,9 +175,9 @@
 							<text class="cuIcon-filter margin-left-xs" @tap.stop="query"></text>
 						</view>
 					</view>
-					<view class="flex justify-between padding-lr-sm">
+					<view class="flex justify-between padding-lr-sm" :class="addSign?'':'padding-top-sm'">
 						<text class="text-bold">品名：{{item.name||'--'}}</text>
-						<text class="iconfont icon-unit text-red text-lg" @tap.stop="showUnitDrawerModal"></text>
+						<text class="icon-unit text-blue" @tap.stop="showUnitDrawerModal"></text>
 					</view>
 					<view class="flex justify-between padding-lr-sm padding-tb-xs">
 						<text v-if="item.plu">plu号：{{item.plu}}</text>
@@ -194,13 +222,13 @@
 							<view style="flex-basis:35%">
 								<text>原：</text>
 								<text class="text-price text-blue"
-									:style="item.retailPrice.old?'text-decoration:line-through':''">{{item.retailPrice.old||'--'}}</text>
+									:style="(item.retailPrice||item.retailPrice.old)?'text-decoration:line-through':''">{{item.retailPrice||item.retailPrice.old||'--'}}</text>
 							</view>
 							<view class="flex align-center" style="flex-basis:35%">
 								<text>现：</text>
 								<text class="text-price"></text>
 								<input :placeholder="item.retailPrice.new" type="digit" v-model="newRetailPrice"
-									@blur="blurUnit('sale')" class="solid-bottom basis-xl text-red"></input>
+									@blur="blur('sale')" class="solid-bottom basis-xl text-red"></input>
 							</view>
 							<view class="flex align-center" style="flex-basis:30%">
 								<text>毛利率：</text>
@@ -217,13 +245,13 @@
 							<view style="width: 35%">
 								<text>原：</text>
 								<text class="text-price text-blue"
-									:style="item.memberPrice.old?'text-decoration:line-through':''">{{item.memberPrice.old||'--'}}</text>
+									:style="(item.memberPrice||item.memberPrice.old)?'text-decoration:line-through':''">{{item.memberPrice||item.memberPrice.old||'--'}}</text>
 							</view>
 							<view class="flex align-center" style="flex-basis:35%">
 								<text>现：</text>
 								<text class="text-price"></text>
 								<input :placeholder="item.memberPrice.new" v-model="newMemberPrice" type="digit"
-									@blur="blurUnit('member')" class="solid-bottom basis-xl text-red"></input>
+									@blur="blur('member')" class="solid-bottom basis-xl text-red"></input>
 							</view>
 							<view class="flex align-center" style="flex-basis:30%">
 								<text>毛利率：</text>
@@ -240,13 +268,13 @@
 							<view style="width: 35%">
 								<text>原：</text>
 								<text class="text-price text-blue"
-									:style="item.vipPrice.old?'text-decoration:line-through':''">{{item.vipPrice.old||'--'}}</text>
+									:style="(item.vipPrice||item.vipPrice.old)?'text-decoration:line-through':''">{{item.vipPrice||item.vipPrice.old||'--'}}</text>
 							</view>
 							<view class="flex align-center" style="flex-basis:35%">
 								<text>现：</text>
 								<text class="text-price"></text>
 								<input :placeholder="item.vipPrice.new" v-model="newVipPrice" type="digit"
-									@blur="blurUnit('vip')" class="solid-bottom basis-xl text-red"></input>
+									@blur="blur('vip')" class="solid-bottom basis-xl text-red"></input>
 							</view>
 							<view class="flex align-center" style="flex-basis:30%">
 								<text>毛利率：</text>
@@ -311,58 +339,25 @@
 				scanResult: null,
 
 				items: [],
-				item: {
-					name: '菊品郁金银屑片',
-					barcode: '6926094418474',
-					specs: '100片',
-					vip: {
-						referenceSalePrice: '45.25/瓶',
-						referencePurchasePrice: '23.33/瓶'
-					},
-					storage: {
-						lastPurchasePrice: '22.47/瓶',
-						amount: 240.23,
-						number: 12,
-						stockTurn: 7.33
-					},
-					retailPrice: {
-						old: '1450.30/公斤',
-						new: '38.00/瓶',
-					},
-					vipPrice: {
-						old: '35.00/瓶',
-						new: '32.00/瓶',
-					},
-					memberPrice: {
-						old: null,
-						new: '35.00/瓶',
-					}
-				},
+				item: null,
 				addSign: false,
 				unit: 'PCS',
 				units: [],
-				newRetailPrice: '',
-				newMemberPrice: '',
-				newVipPrice: '',
-				retailGrossProfitRate: '0.00%',
-				memberGrossProfitRate: '0.00%',
-				vipGrossProfitRate: '0.00%',
+				newRetailPrice: null,
+				newMemberPrice: null,
+				newVipPrice: null,
+				retailGrossProfitRate: '',
+				memberGrossProfitRate: '',
+				vipGrossProfitRate: '',
 			}
 		},
 		onLoad: function() {
-			//定时器模拟ajax异步请求数据
 			setTimeout(() => {
 				this.effectiveDate = formatDate(new Date(), "yyyy-MM-dd 00:00:00");
 			}, 300);
 			this.units = catalog.units;
-			let patt = new RegExp("^([1-9][0-9]+(.[0-9]{1,4})?)/([\u4e00-\u9fa5]{1,2}|500g|kg|pcs)$", "i");
-			if (this.item.retailPrice) {
-				console.log(patt.exec(this.item.retailPrice.old));
-				this.unit = patt.exec(this.item.retailPrice.old)[3];
-			}
-			//var t = "450.3/".replace(/\/?([\u4e00-\u9fa5]{1,2}|500g|kg|pcs)?$/, '');
-			//console.log(formatMoney(0));
-			//this.item.retailPrice.old="21.00/个";
+			let patt = new RegExp(/\/?([\u4e00-\u9fa5]{1,2}|500g|kg|pcs)?$/);
+			console.log("".replace(patt, ''));
 		},
 		watch: {
 			item() {
@@ -372,16 +367,10 @@
 			},
 			unit() {
 				let pattern = new RegExp(/\/?([\u4e00-\u9fa5]{1,2}|500g|kg|pcs)?$/);
-				if (this.item.retailPrice.new)
-					this.item.retailPrice.new = this.item.retailPrice.new.replace(pattern, '') + "/" + this.unit;
 				if (this.newRetailPrice)
 					this.newRetailPrice = this.newRetailPrice.replace(pattern, '') + "/" + this.unit;
-				if (this.item.memberPrice.new)
-					this.item.memberPrice.new = this.item.memberPrice.new.replace(pattern, '') + "/" + this.unit;
 				if (this.newMemberPrice)
 					this.newMemberPrice = this.newMemberPrice.replace(pattern, '') + "/" + this.unit;
-				if (this.item.vipPrice.new)
-					this.item.vipPrice.new = this.item.vipPrice.new.replace(pattern, '') + "/" + this.unit;
 				if (this.newVipPrice)
 					this.newVipPrice = this.newVipPrice.replace(pattern, '') + "/" + this.unit;
 			}
@@ -419,7 +408,6 @@
 				if (!this.confirmFlag) {
 					return;
 				};
-				//console.log(this.resultDate);
 				this.dateModal = false;
 				this.effectiveDate = formatDate(new Date(this.resultDate.value), "yyyy-MM-dd hh:mm:ss")
 			},
@@ -455,12 +443,24 @@
 			hideModal(v) {
 				this.modalName = null;
 			},
+			editItem(key) {
+				this.addSign = false;
+				this.modalName = 'DialogModalAdd';
+				console.log(key);
+				for (const i of this.items) {
+					if (i.id == key || i.plu == key) {
+						this.item = i;
+						break;
+					}
+				}
+			},
 			scan() {
 				var that = this;
 				uni.scanCode({
 					scanType: ['barCode'],
 					success: function(res) {
 						that.scanResult = res.result;
+						that.serchConfirm();
 					},
 					fail: function(res) {
 						console.log(JSON.stringify(res));
@@ -473,26 +473,39 @@
 			showVip() {
 				this.$util.toast("普通用户定位到省，vip用户定位到周边3-5KM");
 			},
-			blurUnit(sign) {
-				let pattern = new RegExp(/\/?([\u4e00-\u9fa5]{1,2}|500g|kg|pcs)?$/);
-				let cost = this.item.storage.lastPurchasePrice.replace(pattern, '');
+			blur(sign) {
+				let pattern = new RegExp(/\/?([\u4e00-\u9fa5]{1,}|500g|kg|pcs)?$/);
+				let cost = this.item ? this.item.storage.lastPurchasePrice.replace(pattern, '') :
+					0;
 				switch (sign) {
 					case 'sale':
 						if (this.newRetailPrice) {
-							this.retailGrossProfitRate = this.computedGrossProfitRate(cost, this.newRetailPrice);
-							this.newRetailPrice = formatMoney(this.newRetailPrice.replace(pattern, '')) + "/" + this.unit;
+							let temp = this.newRetailPrice.replace(pattern, '');
+							this.retailGrossProfitRate = this.computedGrossProfitRate(cost, temp);
+							this.newRetailPrice = formatMoney(temp) + "/" + this.unit;
+						} else {
+							this.retailGrossProfitRate = this.computedGrossProfitRate(cost, this.item.retailPrice.replace(
+								pattern, ''));
 						}
 						break;
 					case 'member':
 						if (this.newMemberPrice) {
-							this.memberGrossProfitRate = this.computedGrossProfitRate(cost, this.newMemberPrice);
-							this.newMemberPrice = formatMoney(this.newMemberPrice.replace(pattern, '')) + "/" + this.unit;
+							let temp = this.newMemberPrice.replace(pattern, '');
+							this.memberGrossProfitRate = this.computedGrossProfitRate(cost, temp);
+							this.newMemberPrice = formatMoney(temp) + "/" + this.unit;
+						} else {
+							this.memberGrossProfitRate = this.computedGrossProfitRate(cost, this.item.memberPrice.replace(
+								pattern, ""));
 						}
 						break;
 					case 'vip':
 						if (this.newVipPrice) {
-							this.vipGrossProfitRate = this.computedGrossProfitRate(cost, this.newVipPrice);
-							this.newVipPrice = formatMoney(this.newVipPrice.replace(pattern, '')) + "/" + this.unit;
+							let temp = this.newVipPrice.replace(pattern, '');
+							this.vipGrossProfitRate = this.computedGrossProfitRate(cost, temp);
+							this.newVipPrice = formatMoney(temp) + "/" + this.unit;
+						} else {
+							this.vipGrossProfitRate = this.computedGrossProfitRate(cost, this.item.vipPrice.replace(
+								pattern, ''));
 						}
 						break;
 				}
@@ -500,42 +513,92 @@
 			computedGrossProfitRate(cost, price) {
 				if (cost === 0 || cost === '0')
 					return '100%';
-				if (price === 0 || price === '0')
+				if (price === 0 || price === '0' || price === '0.00' || price === '0.0')
 					return '0%';
 				let difference = price - cost;
 				return (difference / price * 100).toFixed(2) + '%';
 			},
-			addItem() {
-				this.item = {
-					name: '',
-					barcode: '',
-					specs: '',
-					vip: {
-						referenceSalePrice: '',
-						referencePurchasePrice: ''
-					},
-					storage: {
-						lastPurchasePrice: '',
-						amount: '',
-						number: '',
-						stockTurn: ''
-					},
-					retailPrice: {
-						old: '',
-						new: '',
-					},
-					vipPrice: {
-						old: '',
-						new: '',
-					},
-					memberPrice: {
-						old: '',
-						new: '',
+			serchConfirm() {
+				var that = this;
+				let patt = new RegExp(/\/?([\u4e00-\u9fa5]{1,2}|500g|kg|pcs)?$/);
+				for (const i of catalog.catalog) {
+					if (i.barcode == that.scanResult || i.plu == that.scanResult) {
+						that.unit = patt.exec(i.retailPrice)[1];
+						that.item = {
+							name: i.name,
+							specs: i.specs,
+							vip: {
+								referenceSalePrice: i.vip.referenceSalePrice,
+								referencePurchasePrice: i.vip.referencePurchasePrice,
+							},
+							storage: {
+								lastPurchasePrice: i.storage.lastPurchasePrice,
+								amount: i.storage.amount,
+								number: i.storage.number,
+								stockTurn: i.storage.stockTurn,
+							},
+							retailPrice: i.retailPrice,
+							memberPrice: i.memberPrice,
+							vipPrice: i.vipPrice,
+						};
+						if (i.id) {
+							that.item = {
+								id: i.id,
+								barcode: i.barcode,
+								...that.item
+							};
+						}
+						if (i.plu) {
+							that.item = {
+								plu: i.plu,
+								...that.item
+							};
+						}
+						let cost = i.storage.lastPurchasePrice.replace(patt, '');
+						that.retailGrossProfitRate = that.computedGrossProfitRate(cost, i.retailPrice.replace(patt, ''));
+						that.memberGrossProfitRate = that.computedGrossProfitRate(cost, i.memberPrice.replace(patt, ''));
+						that.vipGrossProfitRate = that.computedGrossProfitRate(cost, i.vipPrice.replace(patt, ''));
+						break;
 					}
-				};
-				this.newRetailPrice = '';
-				this.newMemberPrice = '';
-				this.newVipPrice = '';
+				}
+			},
+			addItem() {
+				var that = this;
+				if (!that.item || (!that.newRetailPrice && !that.newMemberPrice && !that.newVipPrice)) {
+					that.$util.toast("没有数据被改变，商品未被加入调价单！");
+					return;
+				}
+				for (const i of that.items) {
+					if ((i.id && i.id === that.item.id) || (i.plu && i.plu === that.item.plu)) {
+						that.$util.toast("编码" + (i.id || i.plu) + "的商品已存在，单据不允许重复录入！");
+						return;
+					}
+				}
+				if (that.newRetailPrice) {
+					that.item = {
+						newRetailPrice: that.newRetailPrice,
+						...that.item
+					};
+				}
+				if (that.newMemberPrice) {
+					that.item = {
+						newMemberPrice: that.newMemberPrice,
+						...that.item
+					};
+				}
+				if (that.newVipPrice) {
+					that.item = {
+						newVipPrice: that.newVipPrice,
+						...that.item
+					};
+				}
+				that.items.push(that.item);
+				that.newRetailPrice = '';
+				that.newMemberPrice = '';
+				that.newVipPrice = '';
+				that.retailGrossProfitRate = '';
+				that.memberGrossProfitRate = '';
+				that.vipGrossProfitRate = '';
 			},
 
 			computedHeight() {
@@ -547,7 +610,7 @@
 				query.select('.bottom').boundingClientRect(rect => {
 					that.occupiedHeight = that.occupiedHeight + rect.height;
 				}).exec();
-				this.$util.toast("height:" + that.occupiedHeight);
+				this.$util.toast("height:" + this.occupiedHeight);
 			},
 		}
 	}

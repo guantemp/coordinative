@@ -458,6 +458,32 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 var _util = __webpack_require__(/*! @/js_sdk/util.js */ 30);
 
 
@@ -486,9 +512,9 @@ var _default = {
       addSign: false,
       unit: 'PCS',
       units: [],
-      newRetailPrice: '',
-      newMemberPrice: '',
-      newVipPrice: '',
+      newRetailPrice: null,
+      newMemberPrice: null,
+      newVipPrice: null,
       retailGrossProfitRate: '',
       memberGrossProfitRate: '',
       vipGrossProfitRate: '' };
@@ -701,32 +727,47 @@ var _default = {
             that.retailGrossProfitRate = that.computedGrossProfitRate(cost, i.retailPrice.replace(patt, ''));
             that.memberGrossProfitRate = that.computedGrossProfitRate(cost, i.memberPrice.replace(patt, ''));
             that.vipGrossProfitRate = that.computedGrossProfitRate(cost, i.vipPrice.replace(patt, ''));
-            //console.log(that.item);
             break;
           }
         }} catch (err) {_iterator2.e(err);} finally {_iterator2.f();}
     },
-    addItem: function addItem() {var _iterator3 = _createForOfIteratorHelper(
-      this.items),_step3;try {for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {var i = _step3.value;
-          if (i.id == this.item.id || i.plu == this.item.plu) {
-            this.$util.toast("编码" + (i.id || i.plu) + "的商品已存在，单据不允许重复录入！");
+    addItem: function addItem() {
+      var that = this;
+      if (!that.item || !that.newRetailPrice && !that.newMemberPrice && !that.newVipPrice) {
+        that.$util.toast("没有数据被改变，商品未被加入调价单！");
+        return;
+      }var _iterator3 = _createForOfIteratorHelper(
+      that.items),_step3;try {for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {var i = _step3.value;
+          if (i.id && i.id === that.item.id || i.plu && i.plu === that.item.plu) {
+            that.$util.toast("编码" + (i.id || i.plu) + "的商品已存在，单据不允许重复录入！");
             return;
           }
         }} catch (err) {_iterator3.e(err);} finally {_iterator3.f();}
-      if (this.newRetailPrice)
-      this.item.retailPrice.new = this.newRetailPrice;
-      if (this.newMemberPrice)
-      this.item.memberPrice.new = this.newMemberPrice;
-      if (this.newVipPrice)
-      this.item.vipPrice.new = this.newVipPrice;
-      this.items.push(this.item);
-      //console.log(this.item);
-      this.newRetailPrice = '';
-      this.newMemberPrice = '';
-      this.newVipPrice = '';
-      this.retailGrossProfitRate = '';
-      this.memberGrossProfitRate = '';
-      this.vipGrossProfitRate = '';
+      if (that.newRetailPrice) {
+        that.item = _objectSpread({
+          newRetailPrice: that.newRetailPrice },
+        that.item);
+
+      }
+      if (that.newMemberPrice) {
+        that.item = _objectSpread({
+          newMemberPrice: that.newMemberPrice },
+        that.item);
+
+      }
+      if (that.newVipPrice) {
+        that.item = _objectSpread({
+          newVipPrice: that.newVipPrice },
+        that.item);
+
+      }
+      that.items.push(that.item);
+      that.newRetailPrice = '';
+      that.newMemberPrice = '';
+      that.newVipPrice = '';
+      that.retailGrossProfitRate = '';
+      that.memberGrossProfitRate = '';
+      that.vipGrossProfitRate = '';
     },
 
     computedHeight: function computedHeight() {

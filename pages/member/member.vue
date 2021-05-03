@@ -51,51 +51,77 @@
 						<text>规格：{{items[index].specs}}</text>
 					</view>
 					<view
-						v-if="(items[index].retailPrice&&items[index].memberPrice)||(items[index].retailPrice&&items[index].vipPrice)||(items[index].memberPrice&&items[index].vipPrice)"
+						v-if="(items[index].newRetailPrice&&items[index].newMemberPrice)||(items[index].newRetailPrice&&items[index].newVipPrice)||(items[index].newMemberPrice&&items[index].newVipPrice)"
 						class='grid col-3'>
 						<view class='cu-item padding-left flex flex-direction'>
 							<text>原零售价</text>
 							<text
-								class="text-lg text-cyan text-price  padding-tb-xs">{{items[index].retailPrice.old||'--'}}</text>
+								class="text-lg text-cyan text-price  padding-tb-xs">{{items[index].retailPrice||'--'}}</text>
 						</view>
 						<view class='cu-item padding-left flex flex-direction'>
 							<text>原会员价</text>
 							<text
-								class="text-lg text-cyan text-price padding-tb-xs">{{items[index].memberPrice.old||'--'}}</text>
+								class="text-lg text-cyan text-price padding-tb-xs">{{items[index].memberPrice||'--'}}</text>
 						</view>
 						<view class='cu-item padding-left flex flex-direction'>
 							<text>原VIP价</text>
 							<text
-								class="text-lg text-cyan text-price padding-tb-xs">{{items[index].vipPrice.old||'--'}}</text>
+								class="text-lg text-cyan text-price padding-tb-xs">{{items[index].vipPrice||'--'}}</text>
 						</view>
 						<view class='cu-item padding-left flex flex-direction'>
 							<text>现零售价</text>
 							<text
-								class="text-lg text-red text-price padding-tb-xs">{{items[index].retailPrice.new||'--'}}</text>
+								class="text-lg text-red text-price padding-tb-xs">{{items[index].newRetailPrice||'--'}}</text>
 						</view>
 						<view class='cu-item padding-left  flex flex-direction'>
 							<text>现会员价</text>
 							<text
-								class="text-lg text-red text-price padding-tb-xs">{{items[index].memberPrice.new||'--'}}</text>
+								class="text-lg text-red text-price padding-tb-xs">{{items[index].newMemberPrice||'--'}}</text>
 						</view>
 						<view class='cu-item padding-left flex flex-direction'>
 							<text>现VIP价</text>
 							<text
-								class="text-lg text-red text-price padding-tb-xs">{{items[index].vipPrice.new||'--'}}</text>
+								class="text-lg text-red text-price padding-tb-xs">{{items[index].newVipPrice||'--'}}</text>
 						</view>
 					</view>
-					<view v-else class="grid col-2">
-						<view class='cu-item padding-left-lg flex flex-direction'>
-							<text>原零售价</text>
-							<text
-								class="text-lg text-cyan text-price padding-tb-xs">{{items[index].retailPrice.old}}</text>
+					<block v-else>
+						<view v-if="items[index].newRetailPrice" class="grid col-2">
+							<view class='cu-item padding-left-lg flex flex-direction'>
+								<text>原零售价</text>
+								<text
+									class="text-lg text-cyan text-price padding-tb-xs">{{items[index].retailPrice}}</text>
+							</view>
+							<view class='cu-item padding-left-lg flex flex-direction'>
+								<text>现零售价</text>
+								<text
+									class="text-lg text-orange text-price padding-tb-xs">{{items[index].newRetailPrice}}</text>
+							</view>
 						</view>
-						<view class='cu-item padding-left-lg flex flex-direction'>
-							<text>现零售价</text>
-							<text
-								class="text-lg text-orange text-price padding-tb-xs">{{items[index].retailPrice.new}}</text>
+						<view v-else-if="items[index].newMemberPrice" class="grid col-2">
+							<view class='cu-item padding-left-lg flex flex-direction'>
+								<text>原会员价</text>
+								<text
+									class="text-lg text-cyan text-price padding-tb-xs">{{items[index].memberPrice}}</text>
+							</view>
+							<view class='cu-item padding-left-lg flex flex-direction'>
+								<text>现会员价</text>
+								<text
+									class="text-lg text-orange text-price padding-tb-xs">{{items[index].newMemberPrice}}</text>
+							</view>
 						</view>
-					</view>
+						<view v-else class="grid col-2">
+							<view class='cu-item padding-left-lg flex flex-direction'>
+								<text>原Vip价</text>
+								<text
+									class="text-lg text-cyan text-price padding-tb-xs">{{items[index].vipPrice}}</text>
+							</view>
+							<view class='cu-item padding-left-lg flex flex-direction'>
+								<text>现Vip价</text>
+								<text
+									class="text-lg text-orange text-price padding-tb-xs">{{items[index].newVipPrice}}</text>
+							</view>
+						</view>
+					</block>
 				</view>
 			</block>
 		</scroll-view>
@@ -236,7 +262,7 @@
 					<view class="flex flex-direction margin-lr-sm">
 						<view>
 							<text class="cuIcon-vip text-orange margin-right-xs"></text>
-							<text class="text-black">VIP价</text>
+							<text class="text-black">88VIP价</text>
 						</view>
 						<view class="flex justify-between align-center">
 							<view style="width: 35%">
@@ -317,9 +343,9 @@
 				addSign: false,
 				unit: 'PCS',
 				units: [],
-				newRetailPrice: '',
-				newMemberPrice: '',
-				newVipPrice: '',
+				newRetailPrice: null,
+				newMemberPrice: null,
+				newVipPrice: null,
 				retailGrossProfitRate: '',
 				memberGrossProfitRate: '',
 				vipGrossProfitRate: '',
@@ -532,32 +558,47 @@
 						that.retailGrossProfitRate = that.computedGrossProfitRate(cost, i.retailPrice.replace(patt, ''));
 						that.memberGrossProfitRate = that.computedGrossProfitRate(cost, i.memberPrice.replace(patt, ''));
 						that.vipGrossProfitRate = that.computedGrossProfitRate(cost, i.vipPrice.replace(patt, ''));
-						//console.log(that.item);
 						break;
 					}
 				}
 			},
 			addItem() {
-				for (const i of this.items) {
-					if (i.id == this.item.id || i.plu == this.item.plu) {
-						this.$util.toast("编码" + (i.id || i.plu) + "的商品已存在，单据不允许重复录入！");
+				var that = this;
+				if (!that.item || (!that.newRetailPrice && !that.newMemberPrice && !that.newVipPrice)) {
+					that.$util.toast("没有数据被改变，商品未被加入调价单！");
+					return;
+				}
+				for (const i of that.items) {
+					if ((i.id && i.id === that.item.id) || (i.plu && i.plu === that.item.plu)) {
+						that.$util.toast("编码" + (i.id || i.plu) + "的商品已存在，单据不允许重复录入！");
 						return;
 					}
 				}
-				if (this.newRetailPrice)
-					this.item.retailPrice.new = this.newRetailPrice;
-				if (this.newMemberPrice)
-					this.item.memberPrice.new = this.newMemberPrice;
-				if (this.newVipPrice)
-					this.item.vipPrice.new = this.newVipPrice;
-				this.items.push(this.item);
-				//console.log(this.item);
-				this.newRetailPrice = '';
-				this.newMemberPrice = '';
-				this.newVipPrice = '';
-				this.retailGrossProfitRate = '';
-				this.memberGrossProfitRate = '';
-				this.vipGrossProfitRate = '';
+				if (that.newRetailPrice) {
+					that.item = {
+						newRetailPrice: that.newRetailPrice,
+						...that.item
+					};
+				}
+				if (that.newMemberPrice) {
+					that.item = {
+						newMemberPrice: that.newMemberPrice,
+						...that.item
+					};
+				}
+				if (that.newVipPrice) {
+					that.item = {
+						newVipPrice: that.newVipPrice,
+						...that.item
+					};
+				}
+				that.items.push(that.item);
+				that.newRetailPrice = '';
+				that.newMemberPrice = '';
+				that.newVipPrice = '';
+				that.retailGrossProfitRate = '';
+				that.memberGrossProfitRate = '';
+				that.vipGrossProfitRate = '';
 			},
 
 			computedHeight() {

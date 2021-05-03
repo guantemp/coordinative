@@ -114,5 +114,41 @@ export default {
 		retailPrice: '49.98/支',
 		memberPrice: '38.88/支',
 		vipPrice: '35.00/瓶',
+	}, {
+		id: '201452966564158973',
+		name: '阿维A胶囊',
+		barcode: '6920327600247',
+		specs: '10粒/板*3板',
+		vip: {
+			referenceSalePrice: '20.30/盒',
+			referencePurchasePrice: '12.45/盒'
+		},
+		storage: {
+			lastPurchasePrice: '11.11/盒',
+			amount: 14.43,
+			number: 1,
+			stockTurn: 0.33
+		},
+		retailPrice: '19.80/盒',
+		memberPrice: '18.80/盒',
+		vipPrice: '0.00/盒',
+	}, {
+		id: '201452966564158974',
+		name: '阿莫西林胶囊',
+		barcode: '6931435340314',
+		specs: '0.25g*50粒',
+		vip: {
+			referenceSalePrice: '20.30/盒',
+			referencePurchasePrice: '12.45/盒'
+		},
+		storage: {
+			lastPurchasePrice: '11.11/盒',
+			amount: 14.43,
+			number: 1,
+			stockTurn: 0.33
+		},
+		retailPrice: '9.80/盒',
+		memberPrice: '8.80/盒',
+		vipPrice: '0.00/盒',
 	}]
 }
