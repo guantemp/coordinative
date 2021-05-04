@@ -1,73 +1,119 @@
 <template>
 	<view class="price_adjustment_datails">
-		<navBar title="调价明细" :backgroundColor="[1, ['#9000ff', '#5e00ff', 180]]" tabPage="/pages/index/index"
-			:titleFont="['#FFF']"></navBar>
+		<navBar title="调价明细" :backgroundColor="[1, ['#AC32E4', '#7918F2', -225]]" tabPage="/pages/index/index"
+			:titleFont="['#FFF']" :surplusHeight="fold?'80':'15'">
+			<view slot="extendSlot">
+				<view v-show="fold">
+					<view class="flex flex-direction text-white margin-tb-xs margin-lr">
+						<view class="grid-item-container">
+							<text class="shop1">适用门店：</text>
+							<text class="shop2 text-cut">{{currentShop}}</text>
+						</view>
+						<view class="grid-item-container">
+							<text class="shop1">生效日期：</text>
+							<text class="shop2">{{effectiveDate}}</text>
+						</view>
+						<view class="grid-item-container">
+							<text class="shop1">备&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注：</text>
+							<text class="shop2">{{remark}}</text>
+						</view>
+					</view>
+				</view>
+				<text class="flex justify-center text-white text-bold" :class="fold?'cuIcon-fold':'cuIcon-unfold'"
+					@click="foldClick"></text>
+			</view>
+		</navBar>
 		<scroll-view scroll-y :scroll-with-animation="true" :enable-back-to-top="true"
-			:style="{height:'calc(98vh - 98px - 8rpx)'}">
-			<block v-for="(item,index) in items" :key="index">
+			:style="{height: fold?'calc(100vh - 190px)':'calc(100vh - 125px)'}">
+			<block v-for="(item,index) in price_adjustment[0].items" :key="index">
 				<view class="flex flex-direction radius margin-xs bg-white">
 					<view class='flex justify-between padding-lr-sm padding-top-sm align-center'>
-						<text class="text-bold text-cut">品名：{{items[index].name}}</text>
+						<text class="text-bold text-cut">品名：{{item.name}}</text>
 						<view>
-							<text class="cuIcon-edit text-red margin-right-xs" @click='edit(items[index].id)'></text>
-							<text class="cuIcon-delete text-blue" @click="del(items[index].id)"></text>
+							<text class="cuIcon-edit text-red margin-right-xs"
+								@click='editItem(item.id||item.plu)'></text>
+							<text class="cuIcon-delete text-blue" @click="deleteItem(item.id||item.plu)"></text>
 						</view>
 					</view>
 					<view class="flex justify-between margin-lr-sm padding-tb-xs dashed-bottom">
-						<text v-if="items[index].barcode">商品条码：{{items[index].barcode}}</text>
-						<text v-if="items[index].plu">plu号：{{items[index].plu}}</text>
-						<text>规格：{{items[index].specs}}</text>
+						<text v-if="item.barcode">商品条码：{{item.barcode}}</text>
+						<text v-if="item.plu">plu号：{{item.plu}}</text>
+						<text>规格：{{item.specs}}</text>
 					</view>
 					<view
-						v-if="(items[index].salePrice&&items[index].memberPrice)||(items[index].salePrice&&items[index].vipPrice)||(items[index].memberPrice&&items[index].vipPrice)"
-						class='grid col-3 margin-tb-xs margin-lr-sm'>
-						<view class='cu-item padding-left flex flex-direction solid-bottom solid-right'>
+						v-if="(item.newRetailPrice&&item.newMemberPrice)||(item.newRetailPrice&&item.newVipPrice)||(item.newMemberPrice&&item.newVipPrice)"
+						class='grid col-3'>
+						<view class='cu-item padding-left flex flex-direction'>
 							<text>原零售价</text>
-							<text class="text-lg text-cyan text-price padding-tb-xs">{{items[index].salePrice.old||'--'}}</text>
-						</view>
-						<view class='cu-item padding-left flex flex-direction solid-bottom solid-right'>
-							<text>原会员价</text>
-							<text class="text-lg text-cyan text-price padding-tb-xs">{{items[index].memberPrice.old||'--'}}</text>
-						</view>
-						<view class='cu-item padding-left flex flex-direction solid-bottom'>
-							<text>原VIP价</text>
-							<text class="text-lg text-cyan text-price padding-tb-xs">{{items[index].vipPrice.old||'--'}}</text>
-						</view>
-						<view class='cu-item padding-left flex flex-direction solid-right'>
-							<text class="padding-tb-xs">现零售价</text>
-							<text class="text-lg text-red text-price">{{items[index].salePrice.new||'--'}}</text>
-						</view>
-						<view class='cu-item padding-left flex flex-direction solid-right'>
-							<text class="padding-tb-xs">现会员价</text>
-							<text class="text-lg text-red text-price">{{items[index].memberPrice.new||'--'}}</text>
+							<text class="text-lg text-cyan text-price  padding-tb-xs">{{item.retailPrice||'--'}}</text>
 						</view>
 						<view class='cu-item padding-left flex flex-direction'>
-							<text class="padding-tb-xs">现VIP价</text>
-							<text class="text-lg text-red text-price">{{items[index].vipPrice.new||'--'}}</text>
+							<text>原会员价</text>
+							<text class="text-lg text-cyan text-price padding-tb-xs">{{item.memberPrice||'--'}}</text>
 						</view>
-					</view>
-					<view v-else class="grid col-2 margin-tb-xs">
-						<view class='cu-item padding-left-xl flex flex-direction solid-right'>
-							<text>原零售价</text>
-							<text
-								class="text-lg text-cyan text-price padding-top-xs">{{items[index].salePrice.old}}</text>
+						<view class='cu-item padding-left flex flex-direction'>
+							<text>原PLUS会员价</text>
+							<text class="text-lg text-cyan text-price padding-tb-xs">{{item.vipPrice||'--'}}</text>
 						</view>
-						<view class='cu-item padding-left-xl flex flex-direction'>
+						<view class='cu-item padding-left flex flex-direction'>
 							<text>现零售价</text>
-							<text
-								class="text-lg text-orange text-price padding-top-xs">{{items[index].salePrice.new}}</text>
+							<text class="text-lg text-red text-price padding-tb-xs">{{item.newRetailPrice||'--'}}</text>
+						</view>
+						<view class='cu-item padding-left  flex flex-direction'>
+							<text>现会员价</text>
+							<text class="text-lg text-red text-price padding-tb-xs">{{item.newMemberPrice||'--'}}</text>
+						</view>
+						<view class='cu-item padding-left flex flex-direction'>
+							<text>现PLUS会员价</text>
+							<text class="text-lg text-red text-price padding-tb-xs">{{item.newVipPrice||'--'}}</text>
 						</view>
 					</view>
+					<block v-else>
+						<view v-if="item.newRetailPrice" class="grid col-2">
+							<view class='cu-item padding-left-lg flex flex-direction'>
+								<text>原零售价</text>
+								<text class="text-lg text-cyan text-price padding-tb-xs">{{item.retailPrice}}</text>
+							</view>
+							<view class='cu-item padding-left-lg flex flex-direction'>
+								<text>现零售价</text>
+								<text
+									class="text-lg text-orange text-price padding-tb-xs">{{item.newRetailPrice}}</text>
+							</view>
+						</view>
+						<view v-else-if="item.newMemberPrice" class="grid col-2">
+							<view class='cu-item padding-left-lg flex flex-direction'>
+								<text>原会员价</text>
+								<text class="text-lg text-cyan text-price padding-tb-xs">{{item.memberPrice}}</text>
+							</view>
+							<view class='cu-item padding-left-lg flex flex-direction'>
+								<text>现会员价</text>
+								<text
+									class="text-lg text-orange text-price padding-tb-xs">{{item.newMemberPrice}}</text>
+							</view>
+						</view>
+						<view v-else class="grid col-2">
+							<view class='cu-item padding-left-lg flex flex-direction'>
+								<text>原PLUS会员价</text>
+								<text class="text-lg text-cyan text-price padding-tb-xs">{{item.vipPrice}}</text>
+							</view>
+							<view class='cu-item padding-left-lg flex flex-direction'>
+								<text>现PLUS会员价</text>
+								<text class="text-lg text-orange text-price padding-tb-xs">{{item.newVipPrice}}</text>
+							</view>
+						</view>
+					</block>
 				</view>
 			</block>
 		</scroll-view>
 		<!--bootom-->
 		<view class="bottom cu-bar bg-white tabbar border">
-			<view class="action">
-				<view class="cuIcon-tag">
-					<view v-if="items.length > 0" class="cu-tag badge">{{items.length}}</view>
+			<view class="action" @tap.stop="showClearModalDialog">
+				<view class="cuIcon-delete">
+					<view v-if="price_adjustment[0].items.length > 0" class="cu-tag badge">
+						{{price_adjustment[0].items.length}}
+					</view>
 				</view>
-				数量
+				清空
 			</view>
 			<view class="bg-orange submit" @click.stop="showModal" data-target="DialogModalAdd">添加商品</view>
 			<view class="bg-red submit">保存</view>
@@ -76,26 +122,46 @@
 </template>
 
 <script>
-	import price_adjustment_details_test_data from '@/test/price_adjustment_details_test_data.js'; //测试数据
+	import {
+		formatDate,
+	} from '@/js_sdk/util.js';
+	import price_adjustment from '@/test/price_adjustment_details_test_data.js'; //测试数据
 	export default {
 		data() {
 			return {
-				items: [],
-				currentItem: null,
+				fold: true,
+				currentShop: '泸州市旺可隆超市国美绿洲店',
+				effectiveDate: null,
+				remark: '',
+
+				price_adjustment: [],
 			}
 		},
-		onLoad: function() {
-			//定时器模拟ajax异步请求数据
+		onLoad(options) {
 			setTimeout(() => {
-				this.items = price_adjustment_details_test_data;
+				this.price_adjustment = price_adjustment.price_adjustment;
 			}, 300);
+			this.effectiveDate = formatDate(new Date(), "yyyy-MM-dd hh:mm:ss");
+			let sheetNumber = options.sheetNumber || 'a';
+			console.log(sheetNumber);
 		},
 		methods: {
-			edit(id) {
-				this.$util.toast(`演示编辑：` + id);
+			foldClick() {
+				this.fold = !this.fold;
 			},
-			del(id) {
-				this.$util.toast(`演示删除：` + id);
+			editItem(key) {
+				this.$util.toast(`演示编辑：` + key);
+			},
+			deleteItem(key) {
+				var that = this;
+				let index = 0;
+				for (const item of that.items) {
+					if (item.id === key || item.plu === key) {
+						that.items.splice(index, 1);
+						break;
+					}
+					index += 1;
+				}
 			}
 		}
 	}
@@ -106,6 +172,20 @@
 		width: 100vw;
 		height: 100vh;
 		background-color: rgba(191, 200, 217, 0.3);
+	}
+
+	.grid-item-container {
+		display: flex;
+		justify-content: space-around;
+		flex-wrap: wrap;
+
+		.shop1 {
+			width: 22%;
+		}
+
+		.shop2 {
+			flex: 1;
+		}
 	}
 
 	.bottom {

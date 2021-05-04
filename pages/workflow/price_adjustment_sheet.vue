@@ -1,6 +1,6 @@
 <template>
 	<view class="price_adjustment_sheet">
-		<navBar title="调价单" :backgroundColor="[1, ['#9000ff', '#5e00ff', 180]]" :titleFont="['#FFF','left',700]"
+		<navBar title="调价单" :backgroundColor="[1, ['#AC32E4', '#7918F2', 90]]" :titleFont="['#FFF','left',700]"
 			surplusHeight=43>
 			<view slot="extendSlot" class="cu-bar search">
 				<view class="search-form radius">
@@ -31,28 +31,24 @@
 					</view>
 				</view>
 			</view>
-			<block v-for="(item,index) in priceAdjustmentSheet" :key="index">
+			<block v-for="(sheet,index) in priceAdjustmentSheet" :key="index">
 				<view class="sheet">
-					<listCell :title="'单据号: ' + priceAdjustmentSheet[index].sheetNumber" :titleFont="['#8799a3',28,700]"
+					<listCell :title="'单据号: ' + sheet.sheetNumber" :titleFont="['#8799a3',28,700]"
 						:line="['dashed','#e4e7ed']" decorateIconClass="cuIcon-comment">
 						<view slot="executableSlot">
-							<text
-								v-if="priceAdjustmentSheet[index].approval==='normal' || priceAdjustmentSheet[index].approval==='denied'"
-								class="cuIcon-delete text-blue"
-								@click.stop="showModal(priceAdjustmentSheet[index].sheetNumber,$event)"
+							<text v-if="sheet.approval==='normal' || sheet.approval==='denied'"
+								class="cuIcon-delete text-blue" @click.stop="showModal(sheet.sheetNumber,$event)"
 								data-target="DialogModalDelete"></text>
 						</view>
 					</listCell>
 					<view class="sheetDetailed margin-top-xs padding-lr-xs"
-						@tap.stop="this.$util.navTo('/pages/workflow/price_adjustment_details')">
-						<text class="iconfont icon-price-adjustment left"
-							:style="[{color:selectColor(priceAdjustmentSheet[index])}]"></text>
+						@tap.stop="this.$util.navTo('/pages/workflow/price_adjustment_details?sheetNumber='+sheet.sheetNumber)">
+						<text class="iconfont icon-price-adjustment left" :style="[{color:selectColor(sheet)}]"></text>
 						<view class="flex flex-direction midlle text-cut">
-							<text>申请日期：{{priceAdjustmentSheet[index].applyDate}}</text>
-							<text class="text-cut">适配门店：{{priceAdjustmentSheet[index].store}}</text>
-							<text class="margin-bottom-xs">生效日期：{{priceAdjustmentSheet[index].effectDate}}</text>
-							<listCell :title="'申请人：' + priceAdjustmentSheet[index].proposer"
-								:line="['dashed','#e4e7ed','top']">
+							<text>申请日期：{{sheet.applyDate}}</text>
+							<text class="text-cut">适配门店：{{sheet.store}}</text>
+							<text class="margin-bottom-xs">生效日期：{{sheet.effectDate}}</text>
+							<listCell :title="'申请人：' + sheet.proposer" :line="['dashed','#e4e7ed','top']">
 							</listCell>
 						</view>
 						<text class="cuIcon-right text-grey margin-left-sm right"></text>
@@ -62,7 +58,7 @@
 		</scroll-view>
 		<view class="add">
 			<button class="cu-btn lg radius shadow bg-gradual-orange basis-xl"
-				@tap.stop="this.$util.navTo('/pages/workflow/price_adjustment_add')">
+				@tap.stop="this.$util.navTo('/pages/workflow/price_adjustment_add?sign=add')">
 				<text class="cuIcon-add margin-right-xl"></text>新增调价单</button>
 		</view>
 		<!-- 删除对话框 -->
@@ -82,7 +78,7 @@
 			</view>
 		</view>
 		<!-- 日期选择 -->
-		<view class="cu-modal bottom-modal" :class="dateModal?'show':''" @tap="hideDateModal">
+		<view class="cu-modal bottom-modal" :class="dateSelectModalDialog?'show':''" @tap="hideDateModal">
 			<view class="cu-dialog" @tap.stop="">
 				<view
 					class="flex align-center justify-between padding-lr-lg padding-tb-sm bg-white solid-bottom text-lg">
@@ -116,11 +112,10 @@
 					'昨日',
 					'本周',
 					'上周',
-					'本月',
 				],
 				priceAdjustmentSheet: [],
 
-				dateModal: false,
+				dateSelectModalDialog: false,
 				startYear: null,
 				initDate: null,
 				formattedStartDate: null,
@@ -161,8 +156,8 @@
 			tabSelect(e) {
 				this.tabCur = e.currentTarget.dataset.id;
 				this.scrollLeft = (e.currentTarget.dataset.id - 1) * 60;
-				let er=e.currentTarget.dataset.id;
-				let _this=this;
+				let er = e.currentTarget.dataset.id;
+				let _this = this;
 				this.tabList.forEach(function(item, index, arr) {
 					if (index === _this.tabCur) {
 						console.log(item);
@@ -197,7 +192,7 @@
 				this.dateSign = b;
 				this.initDate = this.dateSign ? formatDate(new Date(this.formattedStartDate), "yyyy-MM-dd") : formatDate(
 					new Date(this.formattedEndDate), "yyyy-MM-dd");
-				this.dateModal = true;
+				this.dateSelectModalDialog = true;
 			},
 			touchStart() {
 				if (this.timeout) {
@@ -218,13 +213,13 @@
 				};
 			},
 			hideDateModal() {
-				this.dateModal = false;
+				this.dateSelectModalDialog = false;
 			},
 			pickerConfirm() {
 				if (!this.confirmFlag) {
 					return;
 				};
-				this.dateModal = false;
+				this.dateSelectModalDialog = false;
 				this.dateSign ? this.formattedStartDate = formatDate(new Date(this.result.value), "yyyy-MM-dd 00:00:00") :
 					this.formattedEndDate = formatDate(new Date(this.result.value), "yyyy-MM-dd 23:59:59");
 				this.initDate = this.dateSign ? formatDate(new Date(this.result.value), "yyyy-MM-dd") : formatDate(

@@ -128,11 +128,6 @@ var render = function() {
       $event.stopPropagation()
       return this.$util.navTo("/pages/workflow/label/label")
     }
-
-    _vm.e1 = function($event) {
-      $event.stopPropagation()
-      return this.$util.navTo("/pages/workflow/price_adjustment_add")
-    }
   }
 }
 var recyclableRender = false
@@ -484,6 +479,17 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 var _util = __webpack_require__(/*! @/js_sdk/util.js */ 30);
 
 
@@ -504,13 +510,15 @@ var _default = {
 
       unitDrawerModal: false,
 
+      clearModalDialog: false,
+
       modalName: null,
       scanResult: null,
 
       items: [],
       item: null,
       addSign: false,
-      unit: 'PCS',
+      unit: null,
       units: [],
       newRetailPrice: null,
       newMemberPrice: null,
@@ -520,13 +528,15 @@ var _default = {
       vipGrossProfitRate: '' };
 
   },
-  onLoad: function onLoad() {var _this2 = this;
+  onLoad: function onLoad(options) {var _this2 = this;
     setTimeout(function () {
       _this2.effectiveDate = (0, _util.formatDate)(new Date(), "yyyy-MM-dd 00:00:00");
     }, 300);
     this.units = _catalog_test_data.default.units;
-    var patt = new RegExp(/\/?([\u4e00-\u9fa5]{1,2}|500g|kg|pcs)?$/);
-    console.log("".replace(patt, ''));
+    var sign = options.sign || 'edit';
+    console.log(sign);
+    //console.log("00564".replace(new RegExp(/^(0+)([0-9]+(\.[0-9]{0,})?$)/).$1, ""));
+    //console.log(new RegExp(/^(0+)([0-9]+(\.[0-9]{0,})?$)/).exec("00562"));
   },
   watch: {
     item: function item() {
@@ -589,39 +599,64 @@ var _default = {
     },
     selectUnit: function selectUnit(v) {
       this.unitDrawerModal = false;
+      if (this.item)
       this.unit = v;
     },
 
     showModal: function showModal(event) {
       this.addSign = true;
       this.modalName = event.currentTarget.dataset.target;
-      if (this.item) {
-        var pattern = new RegExp(/\/?([\u4e00-\u9fa5]{1,2}|500g|kg|pcs)?$/);
-        var cost = this.item.storage.lastPurchasePrice.replace(pattern, '');
-        if (this.item.retailPrice.new)
-        this.retailGrossProfitRate = this.computedGrossProfitRate(cost, this.item.retailPrice.new.replace(
-        pattern, ''));
-        if (this.item.memberPrice.new)
-        this.memberGrossProfitRate = this.computedGrossProfitRate(cost, this.item.memberPrice.new.replace(
-        pattern, ''));
-        if (this.item.vipPrice.new)
-        this.vipGrossProfitRate = this.computedGrossProfitRate(cost, this.item.vipPrice.new.replace(
-        pattern, ''));
-      }
     },
     hideModal: function hideModal(v) {
       this.modalName = null;
     },
     editItem: function editItem(key) {
-      this.addSign = false;
-      this.modalName = 'DialogModalAdd';
-      console.log(key);var _iterator = _createForOfIteratorHelper(
-      this.items),_step;try {for (_iterator.s(); !(_step = _iterator.n()).done;) {var i = _step.value;
-          if (i.id == key || i.plu == key) {
-            this.item = i;
+      var that = this;
+      that.addSign = false;
+      that.modalName = 'DialogModalAdd';
+      var pattern = new RegExp(/\/?([\u4e00-\u9fa5]{1,2}|500g|kg|pcs)?$/);var _iterator = _createForOfIteratorHelper(
+      that.items),_step;try {for (_iterator.s(); !(_step = _iterator.n()).done;) {var i = _step.value;
+          if (i.id === key || i.plu === key) {
+            that.item = i;
+            var cost = that.item.storage.lastPurchasePrice.replace(pattern, '');
+            if (that.item.newRetailPrice) {
+              that.retailGrossProfitRate = that.computedGrossProfitRate(cost, that.item.newRetailPrice.
+              replace(
+              pattern, ''));
+            } else {
+              that.retailGrossProfitRate = that.computedGrossProfitRate(cost, that.item.retailPrice.replace(
+              pattern, ''));
+            }
+            if (that.item.newMemberPrice) {
+              that.memberGrossProfitRate = that.computedGrossProfitRate(cost, that.item.newMemberPrice.
+              replace(
+              pattern, ''));
+            } else {
+              that.memberGrossProfitRate = that.computedGrossProfitRate(cost, that.item.memberPrice.replace(
+              pattern, ''));
+            }
+            if (that.item.newVipPrice) {
+              that.vipGrossProfitRate = that.computedGrossProfitRate(cost, that.item.newVipPrice.
+              replace(
+              pattern, ''));
+            } else {
+              that.vipGrossProfitRate = that.computedGrossProfitRate(cost, that.item.vipPrice.replace(
+              pattern, ''));
+            }
             break;
           }
         }} catch (err) {_iterator.e(err);} finally {_iterator.f();}
+    },
+    deleteItem: function deleteItem(key) {
+      var that = this;
+      var index = 0;var _iterator2 = _createForOfIteratorHelper(
+      that.items),_step2;try {for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {var item = _step2.value;
+          if (item.id === key || item.plu === key) {
+            that.items.splice(index, 1);
+            break;
+          }
+          index += 1;
+        }} catch (err) {_iterator2.e(err);} finally {_iterator2.f();}
     },
     scan: function scan() {
       var that = this;
@@ -636,10 +671,10 @@ var _default = {
         } });
 
     },
-    queryCancel: function queryCancel() {
+    scanResultCancel: function scanResultCancel() {
       this.scanResult = null;
     },
-    showVip: function showVip() {
+    toastVip: function toastVip() {
       this.$util.toast("普通用户定位到省，vip用户定位到周边3-5KM");
     },
     blur: function blur(sign) {
@@ -689,8 +724,8 @@ var _default = {
     },
     serchConfirm: function serchConfirm() {
       var that = this;
-      var patt = new RegExp(/\/?([\u4e00-\u9fa5]{1,2}|500g|kg|pcs)?$/);var _iterator2 = _createForOfIteratorHelper(
-      _catalog_test_data.default.catalog),_step2;try {for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {var i = _step2.value;
+      var patt = new RegExp(/\/?([\u4e00-\u9fa5]{1,2}|500g|kg|pcs)?$/);var _iterator3 = _createForOfIteratorHelper(
+      _catalog_test_data.default.catalog),_step3;try {for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {var i = _step3.value;
           if (i.barcode == that.scanResult || i.plu == that.scanResult) {
             that.unit = patt.exec(i.retailPrice)[1];
             that.item = {
@@ -729,20 +764,20 @@ var _default = {
             that.vipGrossProfitRate = that.computedGrossProfitRate(cost, i.vipPrice.replace(patt, ''));
             break;
           }
-        }} catch (err) {_iterator2.e(err);} finally {_iterator2.f();}
+        }} catch (err) {_iterator3.e(err);} finally {_iterator3.f();}
     },
     addItem: function addItem() {
       var that = this;
       if (!that.item || !that.newRetailPrice && !that.newMemberPrice && !that.newVipPrice) {
         that.$util.toast("没有数据被改变，商品未被加入调价单！");
         return;
-      }var _iterator3 = _createForOfIteratorHelper(
-      that.items),_step3;try {for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {var i = _step3.value;
+      }var _iterator4 = _createForOfIteratorHelper(
+      that.items),_step4;try {for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {var i = _step4.value;
           if (i.id && i.id === that.item.id || i.plu && i.plu === that.item.plu) {
             that.$util.toast("编码" + (i.id || i.plu) + "的商品已存在，单据不允许重复录入！");
             return;
           }
-        }} catch (err) {_iterator3.e(err);} finally {_iterator3.f();}
+        }} catch (err) {_iterator4.e(err);} finally {_iterator4.f();}
       if (that.newRetailPrice) {
         that.item = _objectSpread({
           newRetailPrice: that.newRetailPrice },
@@ -762,12 +797,25 @@ var _default = {
 
       }
       that.items.push(that.item);
-      that.newRetailPrice = '';
-      that.newMemberPrice = '';
-      that.newVipPrice = '';
-      that.retailGrossProfitRate = '';
-      that.memberGrossProfitRate = '';
-      that.vipGrossProfitRate = '';
+      that.item = that.scanResult = that.unit = null;
+      that.newRetailPrice = that.newMemberPrice = that.newVipPrice = '';
+      that.retailGrossProfitRate = that.memberGrossProfitRate = that.vipGrossProfitRate = '';
+    },
+    saveItem: function saveItem() {
+      this.modalName = null;
+      this.addItem();
+    },
+
+    showClearModalDialog: function showClearModalDialog() {
+      if (this.items.length > 0)
+      this.clearModalDialog = true;
+    },
+    hideClearModalDialog: function hideClearModalDialog() {
+      this.clearModalDialog = false;
+    },
+    clearItems: function clearItems() {
+      this.items = [];
+      this.hideClearModalDialog();
     },
 
     computedHeight: function computedHeight() {

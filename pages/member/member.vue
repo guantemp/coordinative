@@ -1,6 +1,6 @@
 <template>
 	<view class="price_adjustment_add">
-		<navBar title="调价明细" :backgroundColor="[1, ['#AC32E4', '#7918F2', -225]]" tabPage="/pages/index/index"
+		<navBar title="新增调价单" :backgroundColor="[1, ['#AC32E4', '#7918F2', -225]]" tabPage="/pages/index/index"
 			:titleFont="['#FFF']" :surplusHeight="fold?'80':'15'" id="navBar">
 			<view slot="extendSlot">
 				<view v-show="fold">
@@ -17,7 +17,7 @@
 						<view class="grid-item-container">
 							<text class="shop1">备&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注：</text>
 							<input v-model="remarks" type="text" class="remarks shop2"
-								placeholder-style="color:#dbdbdb;" />
+								placeholder-style="color:#dbdbdb;" placeholder="备注信息" />
 						</view>
 					</view>
 				</view>
@@ -37,18 +37,18 @@
 			<block v-for="(item,index) in items" :key="index">
 				<view class="flex flex-direction radius margin-xs bg-white light ">
 					<view class='flex justify-between padding-lr-sm padding-top-sm align-center'>
-						<text class="text-bold">品名：{{items[index].name}}</text>
+						<text class="text-bold">品名：{{item.name}}</text>
 						<view>
 							<text class="cuIcon-edit text-red margin-right-xs"
-								@click='editItem(items[index].id||items[index].plu)'></text>
+								@click='editItem(item.id||item.plu)'></text>
 							<text class="cuIcon-delete text-blue"
-								@click="deleteItem(items[index].id||items[index].plu)"></text>
+								@click="deleteItem(item.id||item.plu)"></text>
 						</view>
 					</view>
 					<view class="flex justify-between padding-lr-sm margin-tb-xs dashed-bottom">
-						<text v-if="items[index].barcode">商品条码：{{items[index].barcode}}</text>
-						<text v-if="items[index].plu">plu号：{{items[index].plu}}</text>
-						<text>规格：{{items[index].specs}}</text>
+						<text v-if="item.barcode">商品条码：{{item.barcode}}</text>
+						<text v-if="item.plu">plu号：{{item.plu}}</text>
+						<text>规格：{{item.specs}}</text>
 					</view>
 					<view
 						v-if="(items[index].newRetailPrice&&items[index].newMemberPrice)||(items[index].newRetailPrice&&items[index].newVipPrice)||(items[index].newMemberPrice&&items[index].newVipPrice)"
@@ -64,7 +64,7 @@
 								class="text-lg text-cyan text-price padding-tb-xs">{{items[index].memberPrice||'--'}}</text>
 						</view>
 						<view class='cu-item padding-left flex flex-direction'>
-							<text>原VIP价</text>
+							<text>原PLUS会员价</text>
 							<text
 								class="text-lg text-cyan text-price padding-tb-xs">{{items[index].vipPrice||'--'}}</text>
 						</view>
@@ -79,7 +79,7 @@
 								class="text-lg text-red text-price padding-tb-xs">{{items[index].newMemberPrice||'--'}}</text>
 						</view>
 						<view class='cu-item padding-left flex flex-direction'>
-							<text>现VIP价</text>
+							<text>现PLUS会员价</text>
 							<text
 								class="text-lg text-red text-price padding-tb-xs">{{items[index].newVipPrice||'--'}}</text>
 						</view>
@@ -111,12 +111,12 @@
 						</view>
 						<view v-else class="grid col-2">
 							<view class='cu-item padding-left-lg flex flex-direction'>
-								<text>原Vip价</text>
+								<text>原PLUS会员价</text>
 								<text
 									class="text-lg text-cyan text-price padding-tb-xs">{{items[index].vipPrice}}</text>
 							</view>
 							<view class='cu-item padding-left-lg flex flex-direction'>
-								<text>现Vip价</text>
+								<text>现PLUS会员价</text>
 								<text
 									class="text-lg text-orange text-price padding-tb-xs">{{items[index].newVipPrice}}</text>
 							</view>
@@ -125,13 +125,12 @@
 				</view>
 			</block>
 		</scroll-view>
-
 		<!--bootom-->
-		<view class="bottom cu-bar bg-white tabbar border shop">
+		<view class="bottom cu-bar bg-white tabbar border">
 			<view class="action" @tap.stop="this.$util.navTo('/pages/workflow/label/label')">
 				<view class="icon-label-print margin-bottom-xs" style="font-size: 38rpx"></view>打印标签
 			</view>
-			<view class="action" @tap.stop="clearItems">
+			<view class="action" @tap.stop="showClearModalDialog">
 				<view class="cuIcon-delete">
 					<view v-if="items.length > 0" class="cu-tag badge">{{items.length}}</view>
 				</view>
@@ -140,8 +139,7 @@
 			<view class="bg-red light submit" @click.stop="showModal" data-target="DialogModalAdd">添加商品</view>
 			<view class="bg-mauve submit" @click="computedHeight">保存</view>
 		</view>
-
-		<!-- 日期选择 -->
+		<!-- 日期/时间选择对话框 -->
 		<view class="cu-modal bottom-modal" :class="dateModal?'show':''" @tap="hideDateModal">
 			<view class="cu-dialog" @tap.stop="">
 				<view
@@ -154,7 +152,21 @@
 				</date-picker>
 			</view>
 		</view>
-
+		<!-- 清空商品对话框 -->
+		<view class="cu-modal" :class="clearModalDialog?'show':''">
+			<view class="cu-dialog">
+				<view class="cu-bar bg-white">
+					<view class="content">删除提示</view>
+				</view>
+				<view class="padding-xl bg-white text-bold">
+					<text>此操作将清除已添加的所有商品！</text>
+				</view>
+				<view class="cu-bar bg-white">
+					<view class="action margin-0 flex-sub text-green" @tap="hideClearModalDialog">取消</view>
+					<view class="action margin-0 flex-sub solid-left" @tap="clearItems">确定</view>
+				</view>
+			</view>
+		</view>
 		<!-- 添加商品明细模态对话框 -->
 		<view class="cu-modal bottom-modal" :class="modalName=='DialogModalAdd'?'show':''">
 			<view class="cu-dialog">
@@ -165,14 +177,14 @@
 					<view v-if="addSign" class="cu-bar search">
 						<view class="search-form radius">
 							<text class="cuIcon-search"></text>
-							<input v-model="scanResult" :adjust-position="false" focus placeholder="请输入商品条码、名称、拼音"
+							<input v-model="scanResult" :adjust-position="false" placeholder="请输入商品条码、名称、拼音"
 								confirm-type="search" @confirm="serchConfirm"></input>
 							<text class="cuIcon-scan text-blue text-bold" @tap="scan"></text>
 						</view>
 						<view class="action text-white">
 							<text class="cuIcon-close "></text>
-							<text @click="modalCancel">取消</text>
-							<text class="cuIcon-filter margin-left-xs" @tap.stop="query"></text>
+							<text @click="scanResultCancel">取消</text>
+							<text class="cuIcon-goods margin-left-xs" @tap.stop="query"></text>
 						</view>
 					</view>
 					<view class="flex justify-between padding-lr-sm" :class="addSign?'':'padding-top-sm'">
@@ -186,12 +198,12 @@
 					</view>
 					<view class="grid col-3 bg-purple padding-tb-sm margin-lr-sm radius margin-bottom-xs">
 						<view class='cu-item padding-left-sm flex flex-direction'>
-							<text class="cuIcon-vip" @click="showVip">区域参考售价</text>
+							<text class="cuIcon-vip" @click="toastVip">区域参考售价</text>
 							<text
 								class="text-lg text-bold text-cyan text-price padding-tb-xs">{{item.vip.referenceSalePrice||'--'}}</text>
 						</view>
 						<view class='cu-item padding-left-sm flex flex-direction'>
-							<text class="cuIcon-vip" @click="showVip">区域参考进价</text>
+							<text class="cuIcon-vip" @click="toastVip">区域参考进价</text>
 							<text
 								class="text-lg text-bold text-cyan text-price padding-tb-xs">{{item.vip.referencePurchasePrice||'--'}}</text>
 						</view>
@@ -219,18 +231,18 @@
 							<text class="text-black">零售价</text>
 						</view>
 						<view class="flex justify-between align-center">
-							<view style="flex-basis:35%">
+							<view style="flex-basis:33%">
 								<text>原：</text>
 								<text class="text-price text-blue"
-									:style="(item.retailPrice||item.retailPrice.old)?'text-decoration:line-through':''">{{item.retailPrice||item.retailPrice.old||'--'}}</text>
+									:style="item.retailPrice?'text-decoration:line-through':''">{{item.retailPrice||'--'}}</text>
 							</view>
-							<view class="flex align-center" style="flex-basis:35%">
+							<view class="flex align-center" style="flex-basis:34%">
 								<text>现：</text>
 								<text class="text-price"></text>
-								<input :placeholder="item.retailPrice.new" type="digit" v-model="newRetailPrice"
+								<input :placeholder="item.newRetailPrice" type="digit" v-model="newRetailPrice"
 									@blur="blur('sale')" class="solid-bottom basis-xl text-red"></input>
 							</view>
-							<view class="flex align-center" style="flex-basis:30%">
+							<view class="flex align-center" style="flex-basis:33%">
 								<text>毛利率：</text>
 								<text class="text-black">{{retailGrossProfitRate}}</text>
 							</view>
@@ -242,18 +254,18 @@
 							<text class="text-black">会员价</text>
 						</view>
 						<view class="flex justify-between align-center">
-							<view style="width: 35%">
+							<view style="width: 33%">
 								<text>原：</text>
 								<text class="text-price text-blue"
-									:style="(item.memberPrice||item.memberPrice.old)?'text-decoration:line-through':''">{{item.memberPrice||item.memberPrice.old||'--'}}</text>
+									:style="item.memberPrice?'text-decoration:line-through':''">{{item.memberPrice||'--'}}</text>
 							</view>
-							<view class="flex align-center" style="flex-basis:35%">
+							<view class="flex align-center" style="flex-basis:34%">
 								<text>现：</text>
 								<text class="text-price"></text>
-								<input :placeholder="item.memberPrice.new" v-model="newMemberPrice" type="digit"
+								<input :placeholder="item.newMemberPrice" v-model="newMemberPrice" type="digit"
 									@blur="blur('member')" class="solid-bottom basis-xl text-red"></input>
 							</view>
-							<view class="flex align-center" style="flex-basis:30%">
+							<view class="flex align-center" style="flex-basis:33%">
 								<text>毛利率：</text>
 								<text class="text-black">{{memberGrossProfitRate}}</text>
 							</view>
@@ -262,21 +274,21 @@
 					<view class="flex flex-direction margin-lr-sm">
 						<view>
 							<text class="cuIcon-vip text-orange margin-right-xs"></text>
-							<text class="text-black">88VIP价</text>
+							<text class="text-black">PLUS会员价</text>
 						</view>
 						<view class="flex justify-between align-center">
-							<view style="width: 35%">
+							<view style="width: 33%">
 								<text>原：</text>
 								<text class="text-price text-blue"
-									:style="(item.vipPrice||item.vipPrice.old)?'text-decoration:line-through':''">{{item.vipPrice||item.vipPrice.old||'--'}}</text>
+									:style="item.vipPrice?'text-decoration:line-through':''">{{item.vipPrice||'--'}}</text>
 							</view>
-							<view class="flex align-center" style="flex-basis:35%">
+							<view class="flex align-center" style="flex-basis:34%">
 								<text>现：</text>
 								<text class="text-price"></text>
-								<input :placeholder="item.vipPrice.new" v-model="newVipPrice" type="digit"
+								<input :placeholder="item.newVipPrice" v-model="newVipPrice" type="digit"
 									@blur="blur('vip')" class="solid-bottom basis-xl text-red"></input>
 							</view>
-							<view class="flex align-center" style="flex-basis:30%">
+							<view class="flex align-center" style="flex-basis:33%">
 								<text>毛利率：</text>
 								<text class="text-black">{{vipGrossProfitRate}}</text>
 							</view>
@@ -287,14 +299,13 @@
 							@tap.stop="addItem">
 							<text class="cuIcon-add margin-right-sm"></text>增加</button>
 						<button class="cu-btn block radius shadow confirmBtn bg-gradual-purple margin-left-xs"
-							:class="addSign?'basis-sm':'basis-lg'"
-							@tap.stop="this.$util.navTo('/pages/workflow/price_adjustment_add')">
+							:class="addSign?'basis-sm':'basis-lg'" @tap.stop="saveItem">
 							保存</button>
 					</view>
 				</view>
 			</view>
 		</view>
-		<!-- 单位选择抽屉 -->
+		<!-- 单位选择抽屉框 -->
 		<view class="cu-modal drawer-modal justify-end" :class="unitDrawerModal?'show':''" @tap="hideUnitDrawerModal">
 			<view class="cu-dialog basis-lg bg-white" @tap.stop=""
 				:style="[{top:140+'px',height:'calc(100vh - ' + 140 + 'px)'}]">
@@ -335,13 +346,15 @@
 
 				unitDrawerModal: false,
 
+				clearModalDialog: false,
+
 				modalName: null,
 				scanResult: null,
 
 				items: [],
 				item: null,
 				addSign: false,
-				unit: 'PCS',
+				unit: null,
 				units: [],
 				newRetailPrice: null,
 				newMemberPrice: null,
@@ -351,13 +364,15 @@
 				vipGrossProfitRate: '',
 			}
 		},
-		onLoad: function() {
+		onLoad(options) {
 			setTimeout(() => {
 				this.effectiveDate = formatDate(new Date(), "yyyy-MM-dd 00:00:00");
 			}, 300);
 			this.units = catalog.units;
-			let patt = new RegExp(/\/?([\u4e00-\u9fa5]{1,2}|500g|kg|pcs)?$/);
-			console.log("".replace(patt, ''));
+			let sign=options.sign||'edit';
+			console.log(sign);
+			//console.log("00564".replace(new RegExp(/^(0+)([0-9]+(\.[0-9]{0,})?$)/).$1, ""));
+			//console.log(new RegExp(/^(0+)([0-9]+(\.[0-9]{0,})?$)/).exec("00562"));
 		},
 		watch: {
 			item() {
@@ -420,38 +435,63 @@
 			},
 			selectUnit(v) {
 				this.unitDrawerModal = false;
-				this.unit = v;
+				if (this.item)
+					this.unit = v;
 			},
 
 			showModal(event) {
 				this.addSign = true;
 				this.modalName = event.currentTarget.dataset.target;
-				if (this.item) {
-					let pattern = new RegExp(/\/?([\u4e00-\u9fa5]{1,2}|500g|kg|pcs)?$/);
-					let cost = this.item.storage.lastPurchasePrice.replace(pattern, '');
-					if (this.item.retailPrice.new)
-						this.retailGrossProfitRate = this.computedGrossProfitRate(cost, this.item.retailPrice.new.replace(
-							pattern, ''));
-					if (this.item.memberPrice.new)
-						this.memberGrossProfitRate = this.computedGrossProfitRate(cost, this.item.memberPrice.new.replace(
-							pattern, ''));
-					if (this.item.vipPrice.new)
-						this.vipGrossProfitRate = this.computedGrossProfitRate(cost, this.item.vipPrice.new.replace(
-							pattern, ''));
-				}
 			},
 			hideModal(v) {
 				this.modalName = null;
 			},
 			editItem(key) {
-				this.addSign = false;
-				this.modalName = 'DialogModalAdd';
-				console.log(key);
-				for (const i of this.items) {
-					if (i.id == key || i.plu == key) {
-						this.item = i;
+				let that = this;
+				that.addSign = false;
+				that.modalName = 'DialogModalAdd';
+				let pattern = new RegExp(/\/?([\u4e00-\u9fa5]{1,2}|500g|kg|pcs)?$/);
+				for (const i of that.items) {
+					if (i.id === key || i.plu === key) {
+						that.item = i;
+						let cost = that.item.storage.lastPurchasePrice.replace(pattern, '');
+						if (that.item.newRetailPrice) {
+							that.retailGrossProfitRate = that.computedGrossProfitRate(cost, that.item.newRetailPrice
+								.replace(
+									pattern, ''));
+						} else {
+							that.retailGrossProfitRate = that.computedGrossProfitRate(cost, that.item.retailPrice.replace(
+								pattern, ''));
+						}
+						if (that.item.newMemberPrice) {
+							that.memberGrossProfitRate = that.computedGrossProfitRate(cost, that.item.newMemberPrice
+								.replace(
+									pattern, ''));
+						} else {
+							that.memberGrossProfitRate = that.computedGrossProfitRate(cost, that.item.memberPrice.replace(
+								pattern, ''));
+						}
+						if (that.item.newVipPrice) {
+							that.vipGrossProfitRate = that.computedGrossProfitRate(cost, that.item.newVipPrice
+								.replace(
+									pattern, ''));
+						} else {
+							that.vipGrossProfitRate = that.computedGrossProfitRate(cost, that.item.vipPrice.replace(
+								pattern, ''));
+						}
 						break;
 					}
+				}
+			},
+			deleteItem(key) {
+				var that = this;
+				let index = 0;
+				for (const item of that.items) {
+					if (item.id === key || item.plu === key) {
+						that.items.splice(index, 1);
+						break;
+					}
+					index += 1;
 				}
 			},
 			scan() {
@@ -467,10 +507,10 @@
 					},
 				});
 			},
-			queryCancel() {
+			scanResultCancel() {
 				this.scanResult = null;
 			},
-			showVip() {
+			toastVip() {
 				this.$util.toast("普通用户定位到省，vip用户定位到周边3-5KM");
 			},
 			blur(sign) {
@@ -593,12 +633,25 @@
 					};
 				}
 				that.items.push(that.item);
-				that.newRetailPrice = '';
-				that.newMemberPrice = '';
-				that.newVipPrice = '';
-				that.retailGrossProfitRate = '';
-				that.memberGrossProfitRate = '';
-				that.vipGrossProfitRate = '';
+				that.item = that.scanResult = that.unit = null;
+				that.newRetailPrice = that.newMemberPrice = that.newVipPrice = '';
+				that.retailGrossProfitRate = that.memberGrossProfitRate = that.vipGrossProfitRate = '';
+			},
+			saveItem() {
+				this.modalName = null;
+				this.addItem();
+			},
+
+			showClearModalDialog() {
+				if (this.items.length > 0)
+					this.clearModalDialog = true;
+			},
+			hideClearModalDialog() {
+				this.clearModalDialog = false;
+			},
+			clearItems() {
+				this.items = [];
+				this.hideClearModalDialog();
 			},
 
 			computedHeight() {
