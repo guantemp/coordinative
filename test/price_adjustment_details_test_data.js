@@ -1,6 +1,6 @@
 export default {
 	price_adjustment: [{
-		sheetNumber: 99752545328877,
+		sheetNumber: '99752545328877',
 		items: [{
 			id: "201451060435585024",
 			name: '彩虹柠檬香电热灭蚊香液',

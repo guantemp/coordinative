@@ -59,6 +59,7 @@ export const hasLogin = (options = {}) => {
 }
 
 export const navTo = (url) => {
+	console.log(url);
 	uni.navigateTo({
 		url
 	})

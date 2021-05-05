@@ -42,7 +42,7 @@
 						</view>
 					</listCell>
 					<view class="sheetDetailed margin-top-xs padding-lr-xs"
-						@tap.stop="this.$util.navTo('/pages/workflow/price_adjustment_details?sheetNumber='+sheet.sheetNumber)">
+						@tap.stop="$util.navTo('/pages/workflow/price_adjustment_details?sheetNumber='+sheet.store)">
 						<text class="iconfont icon-price-adjustment left" :style="[{color:selectColor(sheet)}]"></text>
 						<view class="flex flex-direction midlle text-cut">
 							<text>申请日期：{{sheet.applyDate}}</text>
@@ -69,11 +69,11 @@
 				</view>
 				<view class="padding-xl bg-white text-bold">
 					<text>删除调价单据：</text>
-					<text class="text-blue">{{currentSheetNumber}}</text>
+					<text class="text-blue">{{selectedSheetNumber}}</text>
 				</view>
 				<view class="cu-bar bg-white">
 					<view class="action margin-0 flex-sub text-green" @tap="hideModal">取消</view>
-					<view class="action margin-0 flex-sub solid-left" @tap="deleteSheet(currentSheetNumber)">确定</view>
+					<view class="action margin-0 flex-sub solid-left" @tap="deleteSheet(selectedSheetNumber)">确定</view>
 				</view>
 			</view>
 		</view>
@@ -103,7 +103,7 @@
 			return {
 				scanResult: '',
 				modalName: null,
-				currentSheetNumber: null,
+				selectedSheetNumber: null,
 
 				dateShow: false,
 				tabCur: 0,
@@ -173,11 +173,12 @@
 			},
 			showModal(sheetNumber, event) {
 				this.modalName = event.currentTarget.dataset.target;
-				this.currentSheetNumber = sheetNumber;
+				this.selectedSheetNumber = sheetNumber;
 			},
 			hideModal() {
 				this.modalName = null;
 			},
+			
 			deleteSheet(sheetNumber) {
 				this.hideModal();
 				this.priceAdjustmentSheet.forEach(function(item, index, arr) {

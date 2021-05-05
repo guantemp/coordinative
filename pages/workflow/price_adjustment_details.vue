@@ -65,19 +65,27 @@
 						</view>
 						<view class='cu-item padding-left flex flex-direction'>
 							<text>现PLUS会员价</text>
-							<text class="text-lg text-red text-price padding-tb-xs">{{item.newVipPrice||'--'}}</text>
+							<badge count="12.54%">
+								<text
+									class="text-lg text-red text-price padding-tb-xs">{{item.newVipPrice||'--'}}</text>
+							</badge>
+
 						</view>
 					</view>
 					<block v-else>
 						<view v-if="item.newRetailPrice" class="grid col-2">
 							<view class='cu-item padding-left-lg flex flex-direction'>
 								<text>原零售价</text>
-								<text class="text-lg text-cyan text-price padding-tb-xs">{{item.retailPrice}}</text>
+								<badge count="15.54%" class="padding-tb-xs">
+									<text class="text-lg text-cyan text-price">{{item.retailPrice}}</text>
+								</badge>
 							</view>
 							<view class='cu-item padding-left-lg flex flex-direction'>
 								<text>现零售价</text>
-								<text
-									class="text-lg text-orange text-price padding-tb-xs">{{item.newRetailPrice}}</text>
+								<badge count="12.54%" class="padding-tb-xs">
+									<text
+										class="text-lg text-orange text-price">{{item.newRetailPrice}}</text>
+								</badge>
 							</view>
 						</view>
 						<view v-else-if="item.newMemberPrice" class="grid col-2">

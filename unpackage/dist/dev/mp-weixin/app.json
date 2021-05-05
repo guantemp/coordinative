@@ -67,6 +67,5 @@
       "desc": "你的位置信息将用于定位你所处的门店"
     }
   },
-  "usingComponents": {},
-  "sitemapLocation": "sitemap.json"
+  "usingComponents": {}
 }

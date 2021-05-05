@@ -11179,6 +11179,7 @@ var hasLogin = function hasLogin() {var options = arguments.length > 0 && argume
 };exports.hasLogin = hasLogin;
 
 var navTo = function navTo(url) {
+  console.log(url);
   uni.navigateTo({
     url: url });
 
@@ -11364,7 +11365,7 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _default = {
   price_adjustment: [{
-    sheetNumber: 99752545328877,
+    sheetNumber: '99752545328877',
     items: [{
       id: "201451060435585024",
       name: '彩虹柠檬香电热灭蚊香液',
