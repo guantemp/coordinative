@@ -23,7 +23,7 @@
 		</view>
 		<scroll-view scroll-y :scroll-with-animation="true" :enable-back-to-top="true"
 			:style="{height:dateShow?'calc(98vh - 186px - 10rpx)':'calc(98vh - 148px - 10rpx)'}">
-			<view scroll-x class="bg-white nav margin-top-xs">
+			<view class="bg-white nav margin-top-xs">
 				<view class="flex text-center">
 					<view class="cu-item flex-sub" :class="index===tabCur?'text-orange cur':''"
 						v-for="(item,index) in tabList" :key="index" @tap="tabSelect" :data-id="index">

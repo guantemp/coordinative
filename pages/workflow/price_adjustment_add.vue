@@ -178,7 +178,7 @@
 					<view v-if="addSign" class="cu-bar search">
 						<view class="search-form radius">
 							<text class="cuIcon-search"></text>
-							<input v-model="scanResult" :adjust-position="false" focus placeholder="请输入商品条码、名称、拼音"
+							<input v-model="scanResult" :adjust-position="false" placeholder="请输入商品条码、名称、拼音"
 								confirm-type="search" @confirm="serchConfirm"></input>
 							<text class="cuIcon-scan text-blue text-bold" @tap="scan"></text>
 						</view>
