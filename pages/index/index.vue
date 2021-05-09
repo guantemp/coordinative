@@ -8,11 +8,12 @@
 				<view class="bg-cyan light content">
 					<view class="cu-capsule radius">
 						<view class="cu-tag bg-cyan">version 0.0.4</view>
-						<view class="cu-tag line-cyan">2021-04-19</view>
+						<view class="cu-tag line-cyan">2021-05-10</view>
 					</view>
 					<view class="margin-top flex flex-direction">
-						<text>1、调价单据的优化及实现 </text>
-						<text>2、优化navbar组件，增加额外部分高度可变 </text>
+						<text>1、调价单据的优化及本地js实现</text>
+						<text>2、优化navbar组件,增加额外部分高度可变</text>
+						<text>3、打印标签的部分实现</text>
 					</view>
 				</view>
 			</view>

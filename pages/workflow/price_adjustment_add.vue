@@ -37,18 +37,17 @@
 			<block v-for="(item,index) in items" :key="index">
 				<view class="flex flex-direction radius margin-xs bg-white light ">
 					<view class='flex justify-between padding-lr-sm padding-top-sm align-center'>
-						<text class="text-bold">品名：{{items[index].name}}</text>
+						<text class="text-bold">品名：{{item.name}}</text>
 						<view>
 							<text class="cuIcon-edit text-red margin-right-xs"
-								@click='editItem(items[index].id||items[index].plu)'></text>
-							<text class="cuIcon-delete text-blue"
-								@click="deleteItem(items[index].id||items[index].plu)"></text>
+								@click='editItem(item.id||item.plu)'></text>
+							<text class="cuIcon-delete text-blue" @click="deleteItem(item.id||item.plu)"></text>
 						</view>
 					</view>
 					<view class="flex justify-between padding-lr-sm margin-tb-xs dashed-bottom">
-						<text v-if="items[index].barcode">商品条码：{{items[index].barcode}}</text>
-						<text v-if="items[index].plu">plu号：{{items[index].plu}}</text>
-						<text>规格：{{items[index].specs}}</text>
+						<text v-if="item.barcode">商品条码：{{item.barcode}}</text>
+						<text v-if="item.plu">plu号：{{item.plu}}</text>
+						<text>规格：{{item.specs}}</text>
 					</view>
 					<view
 						v-if="(items[index].newRetailPrice&&items[index].newMemberPrice)||(items[index].newRetailPrice&&items[index].newVipPrice)||(items[index].newMemberPrice&&items[index].newVipPrice)"
@@ -125,7 +124,6 @@
 				</view>
 			</block>
 		</scroll-view>
-
 		<!--bootom-->
 		<view class="bottom cu-bar bg-white tabbar border">
 			<view class="action" @tap.stop="this.$util.navTo('/pages/workflow/label/label')">
@@ -197,14 +195,15 @@
 						<text v-else>商品条码：{{item.barcode||'--'}}</text>
 						<text>规格：{{item.specs||'--'}}</text>
 					</view>
-					<view class="grid col-3 bg-purple padding-tb-sm margin-lr-sm radius margin-bottom-xs">
+					<view class="grid col-3 padding-tb-sm margin-lr-sm radius margin-bottom-xs"
+						style="background-color: #7918F2;color:#fff">
 						<view class='cu-item padding-left-sm flex flex-direction'>
-							<text class="cuIcon-vip" @click="toastVip">区域参考售价</text>
+							<text class="cuIcon-vip" @click.stop="this.$util.toast('普通用户定位到省，vip用户定位到周边3-5KM')">区域参考售价</text>
 							<text
 								class="text-lg text-bold text-cyan text-price padding-tb-xs">{{item.vip.referenceSalePrice||'--'}}</text>
 						</view>
 						<view class='cu-item padding-left-sm flex flex-direction'>
-							<text class="cuIcon-vip" @click="toastVip">区域参考进价</text>
+							<text class="cuIcon-vip" @click.stop="this.$util.toast('普通用户定位到省，vip用户定位到周边3-5KM')">区域参考进价</text>
 							<text
 								class="text-lg text-bold text-cyan text-price padding-tb-xs">{{item.vip.referencePurchasePrice||'--'}}</text>
 						</view>
@@ -231,21 +230,25 @@
 							<text class="cuIcon-sponsor margin-right-xs text-orange"></text>
 							<text class="text-black">零售价</text>
 						</view>
-						<view class="flex justify-between align-center">
-							<view style="flex-basis:33%">
+						<view class="grid col-2 align-center">
+							<view>
 								<text>原：</text>
-								<text class="text-price text-blue"
-									:style="item.retailPrice?'text-decoration:line-through':''">{{item.retailPrice||'--'}}</text>
+								<badge v-if="item.retailPrice" :count="'毛利率：'+ oldRetailGrossProfitRate">
+									<text class="text-price text-blue"
+										style="text-decoration:line-through">{{item.retailPrice}}</text>
+								</badge>
+								<text v-else class="text-price text-blue">--</text>
 							</view>
-							<view class="flex align-center" style="flex-basis:34%">
+							<view class="flex align-center">
 								<text>现：</text>
 								<text class="text-price"></text>
-								<input :placeholder="item.newRetailPrice" type="digit" v-model="newRetailPrice"
-									@blur="blur('sale')" class="solid-bottom basis-xl text-red"></input>
-							</view>
-							<view class="flex align-center" style="flex-basis:33%">
-								<text>毛利率：</text>
-								<text class="text-black">{{retailGrossProfitRate}}</text>
+								<badge v-if="retailGrossProfitRate" :count="'毛利率：'+ retailGrossProfitRate"
+									class="solid-bottom text-red basis-sm">
+									<input :placeholder="item.newRetailPrice" type="digit" v-model="newRetailPrice"
+										@blur="blur('sale')"></input>
+								</badge>
+								<input v-else :placeholder="item.newRetailPrice" type="digit" v-model="newRetailPrice"
+									@blur="blur('sale')" class="solid-bottom text-red basis-sm"></input>
 							</view>
 						</view>
 					</view>
@@ -254,21 +257,25 @@
 							<text class="cuIcon-my text-orange margin-right-xs"></text>
 							<text class="text-black">会员价</text>
 						</view>
-						<view class="flex justify-between align-center">
-							<view style="width: 33%">
+						<view class="grid col-2 align-center">
+							<view>
 								<text>原：</text>
-								<text class="text-price text-blue"
-									:style="item.memberPrice?'text-decoration:line-through':''">{{item.memberPrice||'--'}}</text>
+								<badge v-if="item.memberPrice" :count="'毛利率：'+ oldMemberGrossProfitRate">
+									<text class="text-price text-blue"
+										style="text-decoration:line-through">{{item.memberPrice}}</text>
+								</badge>
+								<text v-else class="text-price text-blue">--</text>
 							</view>
-							<view class="flex align-center" style="flex-basis:34%">
+							<view class="flex align-center">
 								<text>现：</text>
 								<text class="text-price"></text>
-								<input :placeholder="item.newMemberPrice" v-model="newMemberPrice" type="digit"
-									@blur="blur('member')" class="solid-bottom basis-xl text-red"></input>
-							</view>
-							<view class="flex align-center" style="flex-basis:33%">
-								<text>毛利率：</text>
-								<text class="text-black">{{memberGrossProfitRate}}</text>
+								<badge v-if="memberGrossProfitRate" :count="'毛利率：'+ memberGrossProfitRate"
+									class="solid-bottom text-red basis-sm">
+									<input :placeholder="item.newMemberPrice" v-model="newMemberPrice" type="digit"
+										@blur="blur('member')"></input>
+								</badge>
+								<input v-else :placeholder="item.newMemberPrice" type="digit" v-model="newMemberPrice"
+									@blur="blur('member')" class="solid-bottom text-red basis-sm"></input>
 							</view>
 						</view>
 					</view>
@@ -277,21 +284,25 @@
 							<text class="cuIcon-vip text-orange margin-right-xs"></text>
 							<text class="text-black">PLUS会员价</text>
 						</view>
-						<view class="flex justify-between align-center">
-							<view style="width: 33%">
+						<view class="grid col-2 align-center">
+							<view>
 								<text>原：</text>
-								<text class="text-price text-blue"
-									:style="item.vipPrice?'text-decoration:line-through':''">{{item.vipPrice||'--'}}</text>
+								<badge v-if="item.vipPrice" :count="'毛利率：'+ oldVipGrossProfitRate">
+									<text class="text-price text-blue"
+										:style="'text-decoration:line-through'">{{item.vipPrice}}</text>
+								</badge>
+								<text v-else class="text-price text-blue">--</text>
 							</view>
-							<view class="flex align-center" style="flex-basis:34%">
+							<view class="flex align-center">
 								<text>现：</text>
 								<text class="text-price"></text>
-								<input :placeholder="item.newVipPrice" v-model="newVipPrice" type="digit"
-									@blur="blur('vip')" class="solid-bottom basis-xl text-red"></input>
-							</view>
-							<view class="flex align-center" style="flex-basis:33%">
-								<text>毛利率：</text>
-								<text class="text-black">{{vipGrossProfitRate}}</text>
+								<badge v-if="vipGrossProfitRate" :count="'毛利率：'+ vipGrossProfitRate"
+									class="solid-bottom text-red basis-sm">
+									<input :placeholder="item.newVipPrice" v-model="newVipPrice" type="digit"
+										@blur="blur('vip')"></input>
+								</badge>
+								<input v-else :placeholder="item.newVipPrice" type="digit" v-model="newVipPrice"
+									@blur="blur('vip')" class="solid-bottom text-red basis-sm"></input>
 							</view>
 						</view>
 					</view>
@@ -360,6 +371,9 @@
 				newRetailPrice: null,
 				newMemberPrice: null,
 				newVipPrice: null,
+				oldRetailGrossProfitRate: '',
+				oldMemberGrossProfitRate: '',
+				oldVipGrossProfitRate: '',
 				retailGrossProfitRate: '',
 				memberGrossProfitRate: '',
 				vipGrossProfitRate: '',
@@ -372,6 +386,8 @@
 			this.units = catalog.units;
 			let sign = options.sign || 'edit';
 			console.log(sign);
+			//console.log("00564".replace(new RegExp(/^(0+)([0-9]+(\.[0-9]{0,})?$)/).$1, ""));
+			//console.log(new RegExp(/^(0+)([0-9]+(\.[0-9]{0,})?$)/).exec("00562"));
 		},
 		watch: {
 			item() {
@@ -414,7 +430,7 @@
 			},
 			handlerChange(res) {
 				let _this = this;
-				this.resultDate = {
+				_this.resultDate = {
 					...res
 				};
 			},
@@ -454,29 +470,23 @@
 					if (i.id === key || i.plu === key) {
 						that.item = i;
 						let cost = that.item.storage.lastPurchasePrice.replace(pattern, '');
+						that.oldRetailGrossProfitRate = that.computedGrossProfitRate(cost, that.item.retailPrice.replace(
+							pattern, '')) + '%';
 						if (that.item.newRetailPrice) {
 							that.retailGrossProfitRate = that.computedGrossProfitRate(cost, that.item.newRetailPrice
-								.replace(
-									pattern, ''));
-						} else {
-							that.retailGrossProfitRate = that.computedGrossProfitRate(cost, that.item.retailPrice.replace(
-								pattern, ''));
+								.replace(pattern, '')) + '%';
 						}
+						that.oldMemberGrossProfitRate = that.computedGrossProfitRate(cost, that.item.memberPrice.replace(
+							pattern, '')) + '%';
 						if (that.item.newMemberPrice) {
 							that.memberGrossProfitRate = that.computedGrossProfitRate(cost, that.item.newMemberPrice
-								.replace(
-									pattern, ''));
-						} else {
-							that.memberGrossProfitRate = that.computedGrossProfitRate(cost, that.item.memberPrice.replace(
-								pattern, ''));
+								.replace(pattern, '')) + '%';
 						}
+						that.oldVipGrossProfitRate = that.computedGrossProfitRate(cost, that.item.vipPrice.replace(
+							pattern, '')) + '%';
 						if (that.item.newVipPrice) {
 							that.vipGrossProfitRate = that.computedGrossProfitRate(cost, that.item.newVipPrice
-								.replace(
-									pattern, ''));
-						} else {
-							that.vipGrossProfitRate = that.computedGrossProfitRate(cost, that.item.vipPrice.replace(
-								pattern, ''));
+								.replace(pattern, '')) + '%';
 						}
 						break;
 					}
@@ -509,42 +519,35 @@
 			scanResultCancel() {
 				this.scanResult = null;
 			},
-			toastVip() {
-				this.$util.toast("普通用户定位到省，vip用户定位到周边3-5KM");
-			},
 			blur(sign) {
 				let pattern = new RegExp(/\/?([\u4e00-\u9fa5]{1,}|500g|kg|pcs)?$/);
-				let cost = this.item ? this.item.storage.lastPurchasePrice.replace(pattern, '') :
-					0;
+				let cost = this.item ? this.item.storage.lastPurchasePrice.replace(pattern, '') : 0;
 				switch (sign) {
 					case 'sale':
 						if (this.newRetailPrice) {
 							let temp = this.newRetailPrice.replace(pattern, '');
-							this.retailGrossProfitRate = this.computedGrossProfitRate(cost, temp);
+							this.retailGrossProfitRate = this.computedGrossProfitRate(cost, temp) + '%';
 							this.newRetailPrice = formatMoney(temp) + "/" + this.unit;
 						} else {
-							this.retailGrossProfitRate = this.computedGrossProfitRate(cost, this.item.retailPrice.replace(
-								pattern, ''));
+							this.retailGrossProfitRate = '';
 						}
 						break;
 					case 'member':
 						if (this.newMemberPrice) {
 							let temp = this.newMemberPrice.replace(pattern, '');
-							this.memberGrossProfitRate = this.computedGrossProfitRate(cost, temp);
+							this.memberGrossProfitRate = this.computedGrossProfitRate(cost, temp) + '%';
 							this.newMemberPrice = formatMoney(temp) + "/" + this.unit;
 						} else {
-							this.memberGrossProfitRate = this.computedGrossProfitRate(cost, this.item.memberPrice.replace(
-								pattern, ""));
+							this.memberGrossProfitRate = '';
 						}
 						break;
 					case 'vip':
 						if (this.newVipPrice) {
 							let temp = this.newVipPrice.replace(pattern, '');
-							this.vipGrossProfitRate = this.computedGrossProfitRate(cost, temp);
+							this.vipGrossProfitRate = this.computedGrossProfitRate(cost, temp) + '%';
 							this.newVipPrice = formatMoney(temp) + "/" + this.unit;
 						} else {
-							this.vipGrossProfitRate = this.computedGrossProfitRate(cost, this.item.vipPrice.replace(
-								pattern, ''));
+							this.vipGrossProfitRate = '';
 						}
 						break;
 				}
@@ -555,7 +558,7 @@
 				if (price === 0 || price === '0' || price === '0.00' || price === '0.0')
 					return '0%';
 				let difference = price - cost;
-				return (difference / price * 100).toFixed(2) + '%';
+				return (difference / price * 100).toFixed(2);
 			},
 			serchConfirm() {
 				var that = this;
@@ -594,9 +597,12 @@
 							};
 						}
 						let cost = i.storage.lastPurchasePrice.replace(patt, '');
-						that.retailGrossProfitRate = that.computedGrossProfitRate(cost, i.retailPrice.replace(patt, ''));
-						that.memberGrossProfitRate = that.computedGrossProfitRate(cost, i.memberPrice.replace(patt, ''));
-						that.vipGrossProfitRate = that.computedGrossProfitRate(cost, i.vipPrice.replace(patt, ''));
+						that.oldRetailGrossProfitRate = that.computedGrossProfitRate(cost, i.retailPrice.replace(patt,
+							'')) + '%';
+						that.oldMemberGrossProfitRate = that.computedGrossProfitRate(cost, i.memberPrice.replace(patt,
+							'')) + '%';
+						that.oldVipGrossProfitRate = that.computedGrossProfitRate(cost, i.vipPrice.replace(patt, '')) +
+							'%';
 						break;
 					}
 				}
@@ -604,7 +610,7 @@
 			addItem() {
 				var that = this;
 				if (!that.item || (!that.newRetailPrice && !that.newMemberPrice && !that.newVipPrice)) {
-					that.$util.toast("没有数据被改变，商品未被加入调价单！");
+					that.$util.toast("数据未被改变，没有商品被加入调价单！");
 					return;
 				}
 				for (const i of that.items) {
@@ -635,6 +641,7 @@
 				that.item = that.scanResult = that.unit = null;
 				that.newRetailPrice = that.newMemberPrice = that.newVipPrice = '';
 				that.retailGrossProfitRate = that.memberGrossProfitRate = that.vipGrossProfitRate = '';
+				that.oldRetailGrossProfitRate = that.oldMemberGrossProfitRate = that.oldVipGrossProfitRate = '';
 			},
 			saveItem() {
 				this.modalName = null;
@@ -651,18 +658,20 @@
 			clearItems() {
 				this.items = [];
 				this.hideClearModalDialog();
+				this
 			},
 
 			computedHeight() {
-				let that = this;
-				const query = uni.createSelectorQuery();
-				query.select('#navBar').boundingClientRect(rect => {
-					that.occupiedHeight = rect.height;
-				}).exec();
-				query.select('.bottom').boundingClientRect(rect => {
-					that.occupiedHeight = that.occupiedHeight + rect.height;
-				}).exec();
-				this.$util.toast("height:" + this.occupiedHeight);
+				let query = uni.createSelectorQuery().in(this);
+				query.select('#navBar').boundingClientRect().exec(rect => {
+					console.log(rect);
+					this.occupiedHeight = rect[0].height;
+				});
+				query = uni.createSelectorQuery().in(this);
+				query.select('.bottom').boundingClientRect().exec(rect => {
+					this.occupiedHeight = this.occupiedHeight + rect[0].height;
+					this.$util.toast("height:" + this.occupiedHeight);
+				});
 			},
 		}
 	}

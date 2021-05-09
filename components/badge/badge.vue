@@ -16,6 +16,10 @@
 			dot: {
 				type: Boolean,
 				default: false
+			},
+			bgColor:{
+				type: String,
+				default: ''
 			}
 		},
 		computed: {

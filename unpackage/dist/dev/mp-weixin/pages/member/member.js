@@ -733,15 +733,16 @@ var _default = {
     },
     computedGrossProfitRate: function computedGrossProfitRate(cost, price) {
       if (cost === 0 || cost === '0')
-      return '100%';
+      return '100';
       if (price === 0 || price === '0' || price === '0.00' || price === '0.0')
-      return '0%';
+      return '0';
       var difference = price - cost;
       return (difference / price * 100).toFixed(2);
     },
     serchConfirm: function serchConfirm() {
       var that = this;
-      var patt = new RegExp(/\/?([\u4e00-\u9fa5]{1,2}|500g|kg|pcs)?$/);var _iterator3 = _createForOfIteratorHelper(
+      var patt = new RegExp(/\/?([\u4e00-\u9fa5]{1,2}|500g|kg|pcs)?$/);
+      that.clearItem();var _iterator3 = _createForOfIteratorHelper(
       _catalog_test_data.default.catalog),_step3;try {for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {var i = _step3.value;
           if (i.barcode == that.scanResult || i.plu == that.scanResult) {
             that.unit = patt.exec(i.retailPrice)[1];
@@ -817,10 +818,8 @@ var _default = {
 
       }
       that.items.push(that.item);
-      that.item = that.scanResult = that.unit = null;
-      that.newRetailPrice = that.newMemberPrice = that.newVipPrice = '';
-      that.retailGrossProfitRate = that.memberGrossProfitRate = that.vipGrossProfitRate = '';
-      that.oldRetailGrossProfitRate = that.oldMemberGrossProfitRate = that.oldVipGrossProfitRate = '';
+      that.clearItem();
+      that.scanResult = null;
     },
     saveItem: function saveItem() {
       this.modalName = null;
@@ -833,6 +832,13 @@ var _default = {
     },
     hideClearModalDialog: function hideClearModalDialog() {
       this.clearModalDialog = false;
+    },
+    clearItem: function clearItem() {
+      var that = this;
+      that.item = that.unit = null;
+      that.newRetailPrice = that.newMemberPrice = that.newVipPrice = '';
+      that.retailGrossProfitRate = that.memberGrossProfitRate = that.vipGrossProfitRate = '';
+      that.oldRetailGrossProfitRate = that.oldMemberGrossProfitRate = that.oldVipGrossProfitRate = '';
     },
     clearItems: function clearItems() {
       this.items = [];

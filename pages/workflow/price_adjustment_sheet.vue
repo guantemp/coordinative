@@ -130,7 +130,7 @@
 			setTimeout(() => {
 				this.priceAdjustmentSheet = priceAdjustmentSheetTestData;
 			}, 300);
-			var currentDate = new Date();
+			let currentDate = new Date();
 			this.formattedStartDate = formatDate(currentDate, "yyyy-MM-dd 00:00:00");
 			this.formattedEndDate = formatDate(currentDate, "yyyy-MM-dd 23:59:59");
 			currentDate.setDate(currentDate.getDate() - 31);
