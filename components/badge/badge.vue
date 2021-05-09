@@ -1,8 +1,8 @@
 <template>
 	<view class="badge">
 		<slot></slot>
-		<view class="badge-dot" v-if="dot"></view>
-		<view class="badge-count bg-grey" v-else-if="count" @click="onClick()">{{count}}</view>
+		<view class="badge-dot" v-if="dot&&count!==0"></view>
+		<view class="badge-count" v-else-if="count" @click="onClick()">{{count}}</view>
 	</view>
 </template>
 
@@ -36,39 +36,44 @@
 	.badge {
 		position: relative;
 		display: inline-block;
-		line-height: 1;
-		vertical-align: middle;
 	}
 
 	.badge-count {
 		position: absolute;
-		transform: translateX(72%);
-		top: -10upx;
-		right: -25rpx;
-		border-radius: 6rpx;
-		min-width: 30rpx;
+		transform: translateX(95%);
+		top: -8rpx;
+		right: 0rpx;
+		min-width: 32rpx;
+		min-height: 28rpx;
+		line-height: 28rpx;
+		border-radius: 200rpx;
 
-
-		line-height: 30rpx;
 		text-align: center;
-		padding: 0 8rpx;
+		padding: 0 10rpx;
 		font-size: 18rpx;
+		color: #ffffff;
+
 		white-space: nowrap;
 		z-index: 10;
-		box-shadow: 0 0 0 1px #fff;
-		box-sizing: border-box;
+	}
+
+	.badge-count:not([class*="bg-"]) {
+		background-color: #dd514c;
 	}
 
 	.badge-dot {
 		position: absolute;
-		transform: translateX(-50%);
+		transform: translateX(95%);
 		top: -8rpx;
-		right: -16rpx;
-		height: 16rpx;
-		width: 16rpx;
+		right: 0rpx;
+		min-height: 16rpx;
+		min-width: 16rpx;
 		border-radius: 100%;
-		background: #dd524d;
+
 		z-index: 10;
 		box-shadow: 0 0 0 1rpx #fff;
+	}
+	.badge-dot:not([class*="bg-"]) {
+		background-color: #dd514c;
 	}
 </style>

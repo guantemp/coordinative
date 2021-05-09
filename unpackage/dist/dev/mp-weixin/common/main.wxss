@@ -3289,7 +3289,7 @@ scroll-view.cu-steps .cu-item {
 }
 .bg-yellow.light {
 	color: #fbbd08;
-	background-color: #fef2ce;
+	background-color: #fef2ced2;
 }
 .bg-olive.light {
 	color: #8dc63f;
@@ -3297,7 +3297,7 @@ scroll-view.cu-steps .cu-item {
 }
 .bg-green.light {
 	color: #39b54a;
-	background-color: #d7f0db;
+	background-color: #d7f0dbff;
 }
 .bg-cyan.light {
 	color: #1cbbb4;

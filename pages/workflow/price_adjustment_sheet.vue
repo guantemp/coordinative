@@ -41,8 +41,7 @@
 								data-target="DialogModalDelete"></text>
 						</view>
 					</listCell>
-					<view class="sheetDetailed margin-top-xs padding-lr-xs"
-						@tap.stop="$util.navTo('/pages/workflow/price_adjustment_details?sheetNumber='+sheet.store)">
+					<view class="sheetDetailed margin-top-xs padding-lr-xs" @tap.stop="navToSheet(sheet.sheetNumber)">
 						<text class="iconfont icon-price-adjustment left" :style="[{color:selectColor(sheet)}]"></text>
 						<view class="flex flex-direction midlle text-cut">
 							<text>申请日期：{{sheet.applyDate}}</text>
@@ -106,6 +105,7 @@
 				selectedSheetNumber: null,
 
 				dateShow: false,
+				occupiedHeight: null,
 				tabCur: 0,
 				tabList: [
 					'今日',
@@ -149,8 +149,16 @@
 					},
 				});
 			},
+			setOccupiedHeight(height) {
+				this.occupiedHeight = height;
+				console.log(this.occupiedHeight);
+			},
 			query() {
 				this.dateShow = !this.dateShow;
+				setTimeout(() => {
+					if (this.dateShow)
+						this.computedScrollViewHeight()
+				}, 200);
 			},
 
 			tabSelect(e) {
@@ -178,7 +186,10 @@
 			hideModal() {
 				this.modalName = null;
 			},
-			
+
+			navToSheet(sheetNumber) {
+				this.$util.navTo('/pages/workflow/price_adjustment_details?sheetNumber=' + sheetNumber);
+			},
 			deleteSheet(sheetNumber) {
 				this.hideModal();
 				this.priceAdjustmentSheet.forEach(function(item, index, arr) {
@@ -228,11 +239,10 @@
 			},
 
 			computedScrollViewHeight() {
-				let query = wx.createSelectorQuery();
-				query.select('.flex.justify-around.align-center.bg-white').boundingClientRect(rect => {
-					let clientHeight = rect.height;
-					console.log(clientHeight);
-				}).exec();
+				let query = uni.createSelectorQuery().in(this);
+				query.select('.flex.justify-around.align-center.bg-white').boundingClientRect().exec(res => {
+					this.setOccupiedHeight(res[0].height);
+				});
 				this.scanResult = null;
 			},
 		}

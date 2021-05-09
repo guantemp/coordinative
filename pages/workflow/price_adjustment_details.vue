@@ -29,51 +29,54 @@
 				<view class="flex flex-direction radius margin-xs bg-white">
 					<view class='flex justify-between padding-lr-sm padding-top-sm align-center'>
 						<text class="text-bold text-cut">品名：{{item.name}}</text>
-						<view>
-							<text class="cuIcon-edit text-red margin-right-xs"
-								@click='editItem(item.id||item.plu)'></text>
-							<text class="cuIcon-delete text-blue" @click="deleteItem(item.id||item.plu)"></text>
-						</view>
+						<text class="cuIcon-delete text-blue" @click="deleteItem(item.id||item.plu)"></text>
 					</view>
-					<view class="flex justify-between margin-lr-sm padding-tb-xs dashed-bottom">
+					<view class="flex justify-between margin-lr-sm padding-tb-xs dashed-bottom"
+						@click='editItem(item.id||item.plu)'>
 						<text v-if="item.barcode">商品条码：{{item.barcode}}</text>
 						<text v-if="item.plu">plu号：{{item.plu}}</text>
 						<text>规格：{{item.specs}}</text>
 					</view>
-					<view
-						v-if="(item.newRetailPrice&&item.newMemberPrice)||(item.newRetailPrice&&item.newVipPrice)||(item.newMemberPrice&&item.newVipPrice)"
-						class='grid col-3'>
-						<view class='cu-item padding-left flex flex-direction'>
-							<text>原零售价</text>
-							<text class="text-lg text-cyan text-price  padding-tb-xs">{{item.retailPrice||'--'}}</text>
-						</view>
-						<view class='cu-item padding-left flex flex-direction'>
-							<text>原会员价</text>
-							<text class="text-lg text-cyan text-price padding-tb-xs">{{item.memberPrice||'--'}}</text>
-						</view>
-						<view class='cu-item padding-left flex flex-direction'>
-							<text>原PLUS会员价</text>
-							<text class="text-lg text-cyan text-price padding-tb-xs">{{item.vipPrice||'--'}}</text>
-						</view>
-						<view class='cu-item padding-left flex flex-direction'>
-							<text>现零售价</text>
-							<text class="text-lg text-red text-price padding-tb-xs">{{item.newRetailPrice||'--'}}</text>
-						</view>
-						<view class='cu-item padding-left  flex flex-direction'>
-							<text>现会员价</text>
-							<text class="text-lg text-red text-price padding-tb-xs">{{item.newMemberPrice||'--'}}</text>
-						</view>
-						<view class='cu-item padding-left flex flex-direction'>
-							<text>现PLUS会员价</text>
-							<badge count="12.54%">
+					<block
+						v-if="(item.newRetailPrice&&item.newMemberPrice)||(item.newRetailPrice&&item.newVipPrice)||(item.newMemberPrice&&item.newVipPrice)">
+						<view class='grid col-3' @click='editItem(item.id||item.plu)'>
+							<view class='cu-item padding-left flex flex-direction'>
+								<text>原零售价</text>
 								<text
-									class="text-lg text-red text-price padding-tb-xs">{{item.newVipPrice||'--'}}</text>
-							</badge>
+									class="text-lg text-cyan text-price  padding-tb-xs">{{item.retailPrice||'--'}}</text>
+							</view>
+							<view class='cu-item padding-left flex flex-direction'>
+								<text>原会员价</text>
+								<text
+									class="text-lg text-cyan text-price padding-tb-xs">{{item.memberPrice||'--'}}</text>
+							</view>
+							<view class='cu-item padding-left flex flex-direction'>
+								<text>原PLUS会员价</text>
+								<text class="text-lg text-cyan text-price padding-tb-xs">{{item.vipPrice||'--'}}</text>
+							</view>
+							<view class='cu-item padding-left flex flex-direction'>
+								<text>现零售价</text>
+								<text
+									class="text-lg text-red text-price padding-tb-xs">{{item.newRetailPrice||'--'}}</text>
+							</view>
+							<view class='cu-item padding-left  flex flex-direction'>
+								<text>现会员价</text>
+								<badge dot class="padding-tb-xs">
+									<text
+										class="text-lg text-red text-price padding-tb-xs">{{item.newMemberPrice||'--'}}</text>
+								</badge>
 
+							</view>
+							<view class='cu-item padding-left flex flex-direction'>
+								<text>现PLUS会员价</text>
+								<badge count="9" class="padding-tb-xs">
+									<text class="text-lg text-red text-price">{{item.newVipPrice||'--'}}</text>
+								</badge>
+							</view>
 						</view>
-					</view>
+					</block>
 					<block v-else>
-						<view v-if="item.newRetailPrice" class="grid col-2">
+						<view v-if="item.newRetailPrice" class="grid col-2" @click='editItem(item.id||item.plu)'>
 							<view class='cu-item padding-left-lg flex flex-direction'>
 								<text>原零售价</text>
 								<badge count="15.54%" class="padding-tb-xs">
@@ -83,12 +86,11 @@
 							<view class='cu-item padding-left-lg flex flex-direction'>
 								<text>现零售价</text>
 								<badge count="12.54%" class="padding-tb-xs">
-									<text
-										class="text-lg text-orange text-price">{{item.newRetailPrice}}</text>
+									<text class="text-lg text-orange text-price">{{item.newRetailPrice}}</text>
 								</badge>
 							</view>
 						</view>
-						<view v-else-if="item.newMemberPrice" class="grid col-2">
+						<view v-else-if="item.newMemberPrice" class="grid col-2" @click='editItem(item.id||item.plu)'>
 							<view class='cu-item padding-left-lg flex flex-direction'>
 								<text>原会员价</text>
 								<text class="text-lg text-cyan text-price padding-tb-xs">{{item.memberPrice}}</text>
@@ -99,7 +101,7 @@
 									class="text-lg text-orange text-price padding-tb-xs">{{item.newMemberPrice}}</text>
 							</view>
 						</view>
-						<view v-else class="grid col-2">
+						<view v-else class="grid col-2" @click='editItem(item.id||item.plu)'>
 							<view class='cu-item padding-left-lg flex flex-direction'>
 								<text>原PLUS会员价</text>
 								<text class="text-lg text-cyan text-price padding-tb-xs">{{item.vipPrice}}</text>
@@ -163,9 +165,9 @@
 			deleteItem(key) {
 				var that = this;
 				let index = 0;
-				for (const item of that.items) {
+				for (const item of that.price_adjustment[0].items) {
 					if (item.id === key || item.plu === key) {
-						that.items.splice(index, 1);
+						that.price_adjustment[0].items.splice(index, 1);
 						break;
 					}
 					index += 1;

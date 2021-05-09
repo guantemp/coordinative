@@ -17,7 +17,7 @@
 					<text>商品档案</text>
 				</view>
 				<view class="cu-item" @tap.stop="this.$util.navTo('/pages/workflow/price_adjustment_sheet')">
-					<view class="text-red">
+					<view>
 						<image class="item_img" src="/static/workflow/readjust.png" />
 						<view class="cu-tag badge">
 							<block>2</block>

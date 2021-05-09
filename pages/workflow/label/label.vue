@@ -84,14 +84,17 @@
 							<text>{{item.promotion.explain}}</text>
 						</view>
 					</view>
-					<swiper class="card-swiper margin-lr-sm" :class="dotStyle?'square-dot':'round-dot'"
-						:indicator-dots="true" :circular="true" @change="cardSwiper" indicator-color="#8799a3"
-						indicator-active-color="#0081ff">
-						<swiper-item v-for="(item,index) in swiperList" :key="index" :class="cardCur==index?'cur':''">
-							<view class="swiper-item">
-								<image :src="item.url" mode="aspectFill" v-if="item.type=='image'"></image>
-								<video :src="item.url" autoplay loop muted :show-play-btn="false" :controls="false"
-									objectFit="cover" v-if="item.type=='video'"></video>
+					<view class="flex padding-lr-sm align-center">
+						<text class="cuIcon-titles text-yellow"></text>
+						<text>请选择适用标签</text>
+					</view>
+					<swiper class="labelSwiper margin-tb-xs square-dot" :current="swiperIndex"
+						previous-margin="70rpx" next-margin="70rpx" indicator-dots="true" indicator-color="#8799a3"
+						indicator-active-color="#0081ff" circular="true" @change="labelSwiper">
+						<swiper-item v-for="(item,index) in labelList" :key="index"
+							:class="swiperIndex==index?'cur':''">
+							<view class="swiperItem">
+								<image :src="item.url" mode="scaleToFill"></image>
 							</view>
 						</swiper-item>
 					</swiper>
@@ -118,6 +121,7 @@
 </template>
 
 <script>
+	import label from '@/test/label_test_data.js'; //用例数据库
 	export default {
 		data() {
 			return {
@@ -139,40 +143,18 @@
 						price: '1450.00/公斤',
 						startDate: "2021-05-06 00:00:00",
 						endDate: "2021-05-07 23:59:59",
-						explain:'厂家回馈用户，只限于本店PLUS会员用户'
+						explain: '厂家回馈用户，只限于本店PLUS会员用户'
 					},
 				},
 				switchD: true,
-				swiperList: [{
-					id: 0,
-					type: 'image',
-					url: 'https://ossweb-img.qq.com/images/lol/web201310/skin/big84000.jpg'
-				}, {
-					id: 1,
-					type: 'image',
-					url: 'https://ossweb-img.qq.com/images/lol/web201310/skin/big37006.jpg',
-				}, {
-					id: 2,
-					type: 'image',
-					url: 'https://ossweb-img.qq.com/images/lol/web201310/skin/big39000.jpg'
-				}, {
-					id: 3,
-					type: 'image',
-					url: 'https://ossweb-img.qq.com/images/lol/web201310/skin/big10001.jpg'
-				}, {
-					id: 4,
-					type: 'image',
-					url: 'https://ossweb-img.qq.com/images/lol/web201310/skin/big25011.jpg'
-				}, {
-					id: 5,
-					type: 'image',
-					url: 'https://ossweb-img.qq.com/images/lol/web201310/skin/big21016.jpg'
-				}, {
-					id: 6,
-					type: 'image',
-					url: 'https://ossweb-img.qq.com/images/lol/web201310/skin/big99008.jpg'
-				}],
+				labelList: [],
+				swiperIndex: 2,
 			}
+		},
+		onLoad(options) {
+			setTimeout(() => {
+				this.labelList = label.labelList;
+			}, 300);
 		},
 		methods: {
 			//add item opertion
@@ -197,6 +179,11 @@
 			SwitchD() {
 				this.switchD = !this.switchD;
 			},
+			labelSwiper(e) {
+				const that = this;
+				that.cardCur = e.detail.current;
+				that.swiperIndex = e.detail.current;
+			},
 			addItem() {
 
 			},
@@ -205,6 +192,37 @@
 </script>
 
 <style lang='scss'>
+	.labelSwiper {
+		width: 100%;
+		height: 220rpx;
+	}
+
+	.labelSwiper swiper-item {
+		position: relative;
+		box-sizing: border-box;
+	}
+
+	.labelSwiper swiper-item.cur .swiperItem {
+		position: relative;
+		transform: none;
+		transition: all 0.2s ease-in 0s;
+	}
+
+	.labelSwiper swiper-item .swiperItem {
+		display: flex;
+		flex-direction: column;
+		height: 100%;
+		transform: scale(0.88);
+		transition: all 0.2s ease-in 0s;
+		overflow: hidden;
+	}
+
+	.labelSwiper swiper-item image {
+		height: 220rpx;
+		border-radius: 12rpx;
+	}
+
+
 	.bottom {
 		position: fixed;
 		bottom: 0;
