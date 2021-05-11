@@ -3,7 +3,12 @@
 		<navBar title="标签打印" :backgroundColor="[1, ['#72EDF2', '#5151E5', 135]]" tabPage="/pages/index/index"
 			:titleFont="['#FFF']" id="navBar">
 		</navBar>
-
+		<!--items show-->
+		<view v-if="items.length === 0" class="flex justify-center flex-direction align-center padding-bottom-lg"
+			:style="{height:'calc(100vh - 190px)'}">
+			<text class="icon-happy text-red margin-bottom-lg tips"></text>
+			<text>没有任务、好开心...</text>
+		</view>
 		<!--bootom-->
 		<view class="bottom cu-bar bg-white tabbar border shop">
 			<view class="action">
@@ -15,14 +20,13 @@
 			<view class="action">
 				<view class="cuIcon-form"></view>引入单据
 			</view>
-			<view class="bg-cyan submit" @click.stop="showAddItemModal" data-target="DialogModalAdd">增加商品</view>
-			<view class="bg-blue submit" @click="computedHeight">打印</view>
+			<view class="bg-cyan submit" @click.stop="showAddItemModalDialog" data-target="DialogModalAdd">增加商品</view>
+			<view class="bg-blue submit" @click="showPrintRadioModalDialog">打印</view>
 		</view>
-
 		<!-- 添加商品模态对话框 -->
-		<view class="cu-modal" :class="isAddItemModal?'show':''">
+		<view class="cu-modal" :class="isAddItemModalDialog?'show':''">
 			<view class="cu-dialog">
-				<view @tap="hideAddItemModal" class="bg-white text-right padding-tb-sm padding-lr-lg">
+				<view @tap="hideAddItemModalDialog" class="bg-white text-right padding-tb-sm padding-lr-lg">
 					<text class="cuIcon-close text-red text-bold text-xl"></text>
 				</view>
 				<view class="bg-cyan light text-left">
@@ -88,8 +92,8 @@
 						<text class="cuIcon-titles text-yellow"></text>
 						<text>请选择适用标签</text>
 					</view>
-					<swiper class="labelSwiper margin-tb-xs square-dot" :current="swiperIndex"
-						previous-margin="70rpx" next-margin="70rpx" indicator-dots="true" indicator-color="#8799a3"
+					<swiper class="labelSwiper margin-tb-xs square-dot" :current="swiperIndex" previous-margin="70rpx"
+						next-margin="70rpx" indicator-dots="true" indicator-color="#8799a3"
 						indicator-active-color="#0081ff" circular="true" @change="labelSwiper">
 						<swiper-item v-for="(item,index) in labelList" :key="index"
 							:class="swiperIndex==index?'cur':''">
@@ -98,14 +102,13 @@
 							</view>
 						</swiper-item>
 					</swiper>
-					<view class="flex align-start padding-lr-sm padding-bottom-xs">
+					<view class="flex align-center padding-lr-sm padding-bottom-xs">
 						<text>打印数量：</text>
-						<text class="text-price"></text>
+						<text class="icon-minus"></text>
 						<input placeholder="1" type="number" v-model="printQuantity"
-							class="solid-bottom basis-xs text-center"></input>
+							class="basis-xs text-center"></input>
 						<text class="cuIcon-roundadd"></text>
 					</view>
-
 					<view class="flex justify-end margin-right-sm padding-tb-sm">
 						<button class="cu-btn block radius shadow confirmBtn bg-gradual-blue basis-sm"
 							@tap.stop="addItem">
@@ -117,52 +120,126 @@
 				</view>
 			</view>
 		</view>
+		<!--打印选项对话框-->
+		<view class="cu-modal" :class="printRadioModalDialog?'show':''" @tap="hidePrintRadioModalDialog">
+			<view class="cu-dialog" @tap.stop="">
+				<radio-group class="block" @change="RadioChange">
+					<view class="cu-list menu text-left">
+						<view class="cu-item">
+							<label class="flex justify-between align-center flex-sub">
+								<view class="flex-sub">系统绑定设置</view>
+								<radio class="round" :class="radio=='radio' + index?'checked':''"
+									checked="true" value="system"></radio>
+							</label>
+						</view>
+						<view class="cu-item">
+							<label class="flex justify-between align-center flex-sub">
+								<view class="flex-sub">博思得Q8（正价签）</view>
+								<radio class="round" :class="radio=='radio' + index?'checked':''"
+									:checked="radio=='radio' + index?true:false" :value="'radio' + index"></radio>
+							</label>
+						</view>
+						<view class="cu-item">
+							<label class="flex justify-between align-center flex-sub">
+								<view class="flex-sub">博思得Q8（特价签）</view>
+								<radio class="round" :class="radio=='radio' + index?'checked':''"
+									:checked="radio=='radio' + index?true:false" :value="'radio' + index"></radio>
+							</label>
+						</view>
+						<view class="cu-item">
+							<label class="flex justify-between align-center flex-sub">
+								<view class="flex-sub">新北洋BTP-P33蓝牙便携（001581B6AE86）</view>
+								<radio class="round" :class="radio=='radio' + index?'checked':''"
+									:checked="radio=='radio' + index?true:false" :value="'radio' + index"></radio>
+							</label>
+						</view>
+						<view class="cu-item">
+							<label class="flex justify-between align-center flex-sub">
+								<view class="flex-sub">汉印HM-A300S蓝牙便携</view>
+								<radio class="round" :class="radio=='radio' + index?'checked':''"
+									:checked="radio=='radio' + index?true:false" :value="'radio' + index"></radio>
+							</label>
+						</view>
+					</view>
+				</radio-group>
+				<view class="cu-bar bg-white">
+					<view class="action margin-0 flex-sub text-green" @tap="hidePrintRadioModalDialog">跳转打印设置
+					</view>
+					<view class="action margin-0 flex-sub  solid-left" @tap="hidePrintRadioModalDialog">开始打印</view>
+				</view>
+			</view>
+		</view>
+		<!--单据引入对话框-->
+		<view class="cu-modal" :class="importDocumentModalDialog?'show':''" @tap="hidePrintRadioModalDialog">
+			<view class="cu-dialog" @tap.stop="">
+				<radio-group class="block" @change="RadioChange">
+					<view class="cu-list menu text-left">
+						<view class="cu-item">
+							<label class="flex justify-between align-center flex-sub">
+								<view class="flex-sub">系统绑定设置</view>
+								<radio class="round" :class="radio=='radio' + index?'checked':''"
+									checked="true" value="system"></radio>
+							</label>
+						</view>
+						<view class="cu-item">
+							<label class="flex justify-between align-center flex-sub">
+								<view class="flex-sub">博思得Q8（正价签）</view>
+								<radio class="round" :class="radio=='radio' + index?'checked':''"
+									:checked="radio=='radio' + index?true:false" :value="'radio' + index"></radio>
+							</label>
+						</view>
+						<view class="cu-item">
+							<label class="flex justify-between align-center flex-sub">
+								<view class="flex-sub">博思得Q8（特价签）</view>
+								<radio class="round" :class="radio=='radio' + index?'checked':''"
+									:checked="radio=='radio' + index?true:false" :value="'radio' + index"></radio>
+							</label>
+						</view>
+						
+					</view>
+				</radio-group>
+				<view class="cu-bar bg-white">
+					<view class="action margin-0 flex-sub text-green" @tap="hidePrintRadioModalDialog">跳转打印设置
+					</view>
+					<view class="action margin-0 flex-sub  solid-left" @tap="hidePrintRadioModalDialog">开始打印</view>
+				</view>
+			</view>
+		</view>
 	</view>
 </template>
 
 <script>
 	import label from '@/test/label_test_data.js'; //用例数据库
+	import catalog from '@/test/catalog_test_data.js'; //用例数据库
 	export default {
 		data() {
 			return {
-				//add item data
-				isAddItemModal: false,
+				//add Item Modal Dialog
+				isAddItemModalDialog: false,
 				scanResult: null,
-				items: {},
-				item: {
-					name: '彩虹柠檬香电热灭蚊香液',
-					barcode: 6907861191394,
-					placeOfOrigin: '四川.泸州',
-					specs: '150ml',
-					grade: '合格',
-					retailPrice: '19.59/盒',
-					memberPrice: '18.00/盒',
-					vipPrice: '0.00/盒',
-					promotion: {
-						title: '',
-						price: '1450.00/公斤',
-						startDate: "2021-05-06 00:00:00",
-						endDate: "2021-05-07 23:59:59",
-						explain: '厂家回馈用户，只限于本店PLUS会员用户'
-					},
-				},
+				items: [],
+				item: {},
 				switchD: true,
 				labelList: [],
 				swiperIndex: 2,
+				printQuantity: '',
+
+				printRadioModalDialog: false,
 			}
 		},
 		onLoad(options) {
 			setTimeout(() => {
 				this.labelList = label.labelList;
+				this.item = catalog.catalog[0];
 			}, 300);
 		},
 		methods: {
 			//add item opertion
-			showAddItemModal() {
-				this.isAddItemModal = true;
+			showAddItemModalDialog() {
+				this.isAddItemModalDialog = true;
 			},
-			hideAddItemModal() {
-				this.isAddItemModal = false;
+			hideAddItemModalDialog() {
+				this.isAddItemModalDialog = false;
 			},
 			scan() {
 				var that = this;
@@ -186,6 +263,25 @@
 			},
 			addItem() {
 
+			},
+
+			showPrintRadioModalDialog() {
+				this.printRadioModalDialog = true;
+			},
+			hidePrintRadioModalDialog() {
+				this.printRadioModalDialog = false;
+			},
+			computedHeight() {
+				let query = uni.createSelectorQuery().in(this);
+				query.select('#navBar').boundingClientRect().exec(rect => {
+					console.log(rect);
+					this.occupiedHeight = rect[0].height;
+				});
+				query = uni.createSelectorQuery().in(this);
+				query.select('.bottom').boundingClientRect().exec(rect => {
+					this.occupiedHeight = this.occupiedHeight + rect[0].height;
+					this.$util.toast("height:" + this.occupiedHeight);
+				});
 			},
 		}
 	}
@@ -222,6 +318,10 @@
 		border-radius: 12rpx;
 	}
 
+	.tips {
+		font-size: 164rpx;
+		transform: rotate(7deg);
+	}
 
 	.bottom {
 		position: fixed;

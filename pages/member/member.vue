@@ -25,7 +25,6 @@
 					@click="foldClick"></text>
 			</view>
 		</navBar>
-
 		<!--items show-->
 		<view v-if="items.length === 0" class="flex justify-center flex-direction align-center padding-bottom-lg"
 			:style="{height: fold?'calc(100vh - 190px)':'calc(100vh - 125px)'}">

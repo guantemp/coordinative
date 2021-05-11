@@ -28,6 +28,8 @@ export default {
 		name: '彩虹柠檬香电热灭蚊香液',
 		barcode: 6907861191394,
 		specs: '150ml',
+		placeOfOrigin: '四川.成都',
+		grade: '合格品',
 		retailPrice: '19.59/盒',
 		memberPrice: '18.00/盒',
 		vipPrice: '0.00/盒',
@@ -40,6 +42,13 @@ export default {
 			amount: 226,
 			number: 12,
 			stockTurn: 1.33
+		},
+		promotion: {
+			title: '5.1节会员促销',
+			price: '1450.00/公斤',
+			startDate: "2021-05-06 00:00:00",
+			endDate: "2021-05-07 23:59:59",
+			explain: '厂家回馈用户，只限于本店PLUS会员用户'
 		},
 	}, {
 		plu: 133,

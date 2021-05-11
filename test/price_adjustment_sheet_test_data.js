@@ -63,14 +63,14 @@ export default [{
 		applyDate: '2021-04-31 09:07:02',
 		store: '旺客隆超市关口店',
 		effectDate: '2021-04-03 00:00:00',
-		proposer: "旺客隆超市关口店-小灰灰",
+		proposer: "旺客隆超市关口店-保慕中杨",
 		approval: 'normal'
 	}, {
 		sheetNumber: '3315890622498',
 		applyDate: '2021-04-01 09:07:02',
 		store: '旺客隆超市关口店',
 		effectDate: '2021-04-03 00:00:00',
-		proposer: "旺客隆超市关口店-小灰灰",
+		proposer: "旺客隆超市关口店-狗头师爷",
 		approval: 'denied'
 	}, {
 		sheetNumber: '3315568684564',
