@@ -236,7 +236,7 @@
 								<text>原：</text>
 								<badge v-if="item.retailPrice" :count="'毛利率：'+ oldRetailGrossProfitRate">
 									<text class="text-price text-blue"
-										style="text-decoration:line-through">{{item.retailPrice}}</text>
+										:style="newRetailPrice||item.newRetailPrice?'text-decoration:line-through':''">{{item.retailPrice}}</text>
 								</badge>
 								<text v-else class="text-price text-blue">--</text>
 							</view>
@@ -249,7 +249,7 @@
 										@blur="blur('sale')"></input>
 								</badge>
 								<input v-else :placeholder="item.newRetailPrice" type="digit" v-model="newRetailPrice"
-									@blur="blur('sale')" class="solid-bottom text-red basis-sm"></input>
+									@blur="blur('sale')" class="solid-bottom text-red basis-xl"></input>
 							</view>
 						</view>
 					</view>
@@ -263,7 +263,7 @@
 								<text>原：</text>
 								<badge v-if="item.memberPrice" :count="'毛利率：'+ oldMemberGrossProfitRate">
 									<text class="text-price text-blue"
-										style="text-decoration:line-through">{{item.memberPrice}}</text>
+										:style="newMemberPrice||item.newMemberPrice?'text-decoration:line-through':''">{{item.memberPrice}}</text>
 								</badge>
 								<text v-else class="text-price text-blue">--</text>
 							</view>
@@ -276,7 +276,7 @@
 										@blur="blur('member')"></input>
 								</badge>
 								<input v-else :placeholder="item.newMemberPrice" type="digit" v-model="newMemberPrice"
-									@blur="blur('member')" class="solid-bottom text-red basis-sm"></input>
+									@blur="blur('member')" class="solid-bottom text-red basis-xl"></input>
 							</view>
 						</view>
 					</view>
@@ -290,7 +290,7 @@
 								<text>原：</text>
 								<badge v-if="item.vipPrice" :count="'毛利率：'+ oldVipGrossProfitRate">
 									<text class="text-price text-blue"
-										:style="'text-decoration:line-through'">{{item.vipPrice}}</text>
+										:style="newVipPrice||item.newVipPrice?'text-decoration:line-through':''">{{item.vipPrice}}</text>
 								</badge>
 								<text v-else class="text-price text-blue">--</text>
 							</view>
@@ -303,7 +303,7 @@
 										@blur="blur('vip')"></input>
 								</badge>
 								<input v-else :placeholder="item.newVipPrice" type="digit" v-model="newVipPrice"
-									@blur="blur('vip')" class="solid-bottom text-red basis-sm"></input>
+									@blur="blur('vip')" class="solid-bottom text-red basis-xl"></input>
 							</view>
 						</view>
 					</view>

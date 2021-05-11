@@ -822,7 +822,7 @@ function initData(vueOptions, context) {
     try {
       data = data.call(context); // 支持 Vue.prototype 上挂的数据
     } catch (e) {
-      if (Object({"NODE_ENV":"development","VUE_APP_NAME":"HOPRXI协着工具","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG) {
+      if (Object({"VUE_APP_NAME":"HOPRXI协着工具","VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG) {
         console.warn('根据 Vue 的 data 函数初始化小程序 data 失败，请尽量确保 data 函数中不访问 vm 对象，否则可能影响首次数据渲染速度。', data);
       }
     }
@@ -9925,7 +9925,7 @@ function type(obj) {
 
 function flushCallbacks$1(vm) {
     if (vm.__next_tick_callbacks && vm.__next_tick_callbacks.length) {
-        if (Object({"NODE_ENV":"development","VUE_APP_NAME":"HOPRXI协着工具","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG) {
+        if (Object({"VUE_APP_NAME":"HOPRXI协着工具","VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG) {
             var mpInstance = vm.$scope;
             console.log('[' + (+new Date) + '][' + (mpInstance.is || mpInstance.route) + '][' + vm._uid +
                 ']:flushCallbacks[' + vm.__next_tick_callbacks.length + ']');
@@ -9946,14 +9946,14 @@ function nextTick$1(vm, cb) {
     //1.nextTick 之前 已 setData 且 setData 还未回调完成
     //2.nextTick 之前存在 render watcher
     if (!vm.__next_tick_pending && !hasRenderWatcher(vm)) {
-        if(Object({"NODE_ENV":"development","VUE_APP_NAME":"HOPRXI协着工具","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG){
+        if(Object({"VUE_APP_NAME":"HOPRXI协着工具","VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG){
             var mpInstance = vm.$scope;
             console.log('[' + (+new Date) + '][' + (mpInstance.is || mpInstance.route) + '][' + vm._uid +
                 ']:nextVueTick');
         }
         return nextTick(cb, vm)
     }else{
-        if(Object({"NODE_ENV":"development","VUE_APP_NAME":"HOPRXI协着工具","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG){
+        if(Object({"VUE_APP_NAME":"HOPRXI协着工具","VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG){
             var mpInstance$1 = vm.$scope;
             console.log('[' + (+new Date) + '][' + (mpInstance$1.is || mpInstance$1.route) + '][' + vm._uid +
                 ']:nextMPTick');
@@ -10039,7 +10039,7 @@ var patch = function(oldVnode, vnode) {
     });
     var diffData = this.$shouldDiffData === false ? data : diff(data, mpData);
     if (Object.keys(diffData).length) {
-      if (Object({"NODE_ENV":"development","VUE_APP_NAME":"HOPRXI协着工具","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG) {
+      if (Object({"VUE_APP_NAME":"HOPRXI协着工具","VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG) {
         console.log('[' + (+new Date) + '][' + (mpInstance.is || mpInstance.route) + '][' + this._uid +
           ']差量更新',
           JSON.stringify(diffData));
@@ -11602,25 +11602,43 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _default = {
   labelList: [{
-    id: 0,
+    id: 45,
     url: '/static/workflow/c.png',
-    labelName: '条码标签',
-    labelSpecs: '32mm*19mm*3列' },
+    name: '条码标签',
+    specs: '32mm(宽)*19mm(高)*3列' },
   {
-    id: 1,
+    id: 34,
     url: '/static/workflow/a.png',
-    labelName: '特价标签',
-    labelSpecs: '78mm*38mm*1列' },
+    name: '特价标签',
+    specs: '78mm(宽)*38mm(高)*1列' },
   {
-    id: 2,
+    id: 78,
     url: '/static/workflow/a.png',
-    labelName: '正价标签',
-    labelSpecs: '78mm*38mm*1列' },
+    name: '正价标签',
+    specs: '78mm(宽)*38mm(高)*1列' },
   {
-    id: 3,
+    id: 334,
     url: '/static/workflow/b.png',
-    labelName: '正价标签',
-    labelSpecs: '90mm*38mm*1列' }] };exports.default = _default;
+    name: '正价标签',
+    specs: '90mm(宽)*38mm(高)*1列' }],
+
+  prints: [{
+    id: 'system',
+    name: '系统设置' },
+  {
+    id: 'Q8_one',
+    name: '博思得Q8（正价签）' },
+
+  {
+    id: 'Q8_two',
+    name: '博思得Q8（特价签）' },
+  {
+    id: 'SNBC-001581B6AE86',
+    name: '新北洋BTP-P33蓝牙便携（001581B6AE86）' },
+
+  {
+    id: 'HRRT-001581B6AE86',
+    name: '汉印HM-A300S蓝牙便携' }] };exports.default = _default;
 
 /***/ })
 

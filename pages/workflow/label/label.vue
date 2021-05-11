@@ -17,14 +17,14 @@
 				</view>
 				清空
 			</view>
-			<view class="action">
+			<view class="action" @tap.stop="showImportDocumentModalDialog">
 				<view class="cuIcon-form"></view>引入单据
 			</view>
 			<view class="bg-cyan submit" @click.stop="showAddItemModalDialog" data-target="DialogModalAdd">增加商品</view>
 			<view class="bg-blue submit" @click="showPrintRadioModalDialog">打印</view>
 		</view>
 		<!-- 添加商品模态对话框 -->
-		<view class="cu-modal" :class="isAddItemModalDialog?'show':''">
+		<view class="cu-modal" :class="addItemModalDialog?'show':''">
 			<view class="cu-dialog">
 				<view @tap="hideAddItemModalDialog" class="bg-white text-right padding-tb-sm padding-lr-lg">
 					<text class="cuIcon-close text-red text-bold text-xl"></text>
@@ -94,9 +94,9 @@
 					</view>
 					<swiper class="labelSwiper margin-tb-xs square-dot" :current="swiperIndex" previous-margin="70rpx"
 						next-margin="70rpx" indicator-dots="true" indicator-color="#8799a3"
-						indicator-active-color="#0081ff" circular="true" @change="labelSwiper">
+						indicator-active-color="#0081ff" circular="true" @change="labelSwiperChange">
 						<swiper-item v-for="(item,index) in labelList" :key="index"
-							:class="swiperIndex==index?'cur':''">
+							:class="swiperIndex === index?'cur':''" @tap.stop="showLabelTipsModalDialog">
 							<view class="swiperItem">
 								<image :src="item.url" mode="scaleToFill"></image>
 							</view>
@@ -120,44 +120,25 @@
 				</view>
 			</view>
 		</view>
+		<!-- 标签提示展示框 -->
+		<view class="cu-modal" :class="labelTipsModalDialog?'show':''" @tap="hideLabelTipsModalDialog">
+			<view class="cu-dialog" @tap.stop="" style="width:550rpx">
+				<view class="flex flex-direction padding text-left">
+					<text>标签名称：{{seclectedLabel.name}}</text>
+					<text>标签规格：{{seclectedLabel.specs}}</text>
+				</view>
+			</view>
+		</view>
 		<!--打印选项对话框-->
 		<view class="cu-modal" :class="printRadioModalDialog?'show':''" @tap="hidePrintRadioModalDialog">
 			<view class="cu-dialog" @tap.stop="">
-				<radio-group class="block" @change="RadioChange">
+				<radio-group class="block" @change="printRadioChange">
 					<view class="cu-list menu text-left">
-						<view class="cu-item">
+						<view class="cu-item" v-for="(print,index) in prints" :key="index">
 							<label class="flex justify-between align-center flex-sub">
-								<view class="flex-sub">系统绑定设置</view>
-								<radio class="round" :class="radio=='radio' + index?'checked':''"
-									checked="true" value="system"></radio>
-							</label>
-						</view>
-						<view class="cu-item">
-							<label class="flex justify-between align-center flex-sub">
-								<view class="flex-sub">博思得Q8（正价签）</view>
-								<radio class="round" :class="radio=='radio' + index?'checked':''"
-									:checked="radio=='radio' + index?true:false" :value="'radio' + index"></radio>
-							</label>
-						</view>
-						<view class="cu-item">
-							<label class="flex justify-between align-center flex-sub">
-								<view class="flex-sub">博思得Q8（特价签）</view>
-								<radio class="round" :class="radio=='radio' + index?'checked':''"
-									:checked="radio=='radio' + index?true:false" :value="'radio' + index"></radio>
-							</label>
-						</view>
-						<view class="cu-item">
-							<label class="flex justify-between align-center flex-sub">
-								<view class="flex-sub">新北洋BTP-P33蓝牙便携（001581B6AE86）</view>
-								<radio class="round" :class="radio=='radio' + index?'checked':''"
-									:checked="radio=='radio' + index?true:false" :value="'radio' + index"></radio>
-							</label>
-						</view>
-						<view class="cu-item">
-							<label class="flex justify-between align-center flex-sub">
-								<view class="flex-sub">汉印HM-A300S蓝牙便携</view>
-								<radio class="round" :class="radio=='radio' + index?'checked':''"
-									:checked="radio=='radio' + index?true:false" :value="'radio' + index"></radio>
+								<view class="flex-sub">{{print.name}}</view>
+								<radio class="round" :class="printRadio === print.id?'checked':''"
+									:checked="printRadio === print.id?true:false" :value="print.id"></radio>
 							</label>
 						</view>
 					</view>
@@ -170,38 +151,42 @@
 			</view>
 		</view>
 		<!--单据引入对话框-->
-		<view class="cu-modal" :class="importDocumentModalDialog?'show':''" @tap="hidePrintRadioModalDialog">
+		<view class="cu-modal" :class="importDocumentModalDialog?'show':''" @tap="hideImportDocumentModalDialog">
 			<view class="cu-dialog" @tap.stop="">
-				<radio-group class="block" @change="RadioChange">
+				<radio-group class="block" @change="importDocumentRadioChange">
 					<view class="cu-list menu text-left">
 						<view class="cu-item">
 							<label class="flex justify-between align-center flex-sub">
-								<view class="flex-sub">系统绑定设置</view>
-								<radio class="round" :class="radio=='radio' + index?'checked':''"
-									checked="true" value="system"></radio>
+								<view class="flex-sub">引入-调价单</view>
+								<radio class="round" :class="radio=='radio' + index?'checked':''" checked="true"
+									value="priceAdjustment"></radio>
 							</label>
 						</view>
 						<view class="cu-item">
 							<label class="flex justify-between align-center flex-sub">
-								<view class="flex-sub">博思得Q8（正价签）</view>
+								<view class="flex-sub">引入-价格促销单</view>
 								<radio class="round" :class="radio=='radio' + index?'checked':''"
-									:checked="radio=='radio' + index?true:false" :value="'radio' + index"></radio>
+									:checked="radio=='radio' + index?true:false" value="pricePromotion"></radio>
 							</label>
 						</view>
 						<view class="cu-item">
 							<label class="flex justify-between align-center flex-sub">
-								<view class="flex-sub">博思得Q8（特价签）</view>
+								<view class="flex-sub">引入-采购入库单</view>
 								<radio class="round" :class="radio=='radio' + index?'checked':''"
-									:checked="radio=='radio' + index?true:false" :value="'radio' + index"></radio>
+									:checked="radio=='radio' + index?true:false" :value="purchaseReceipt"></radio>
 							</label>
 						</view>
-						
+						<view class="cu-item">
+							<label class="flex justify-between align-center flex-sub">
+								<view class="flex-sub">引入-excel文件</view>
+								<radio class="round" :class="radio=='radio' + index?'checked':''"
+									:checked="radio=='radio' + index?true:false" value="excel"></radio>
+							</label>
+						</view>
 					</view>
 				</radio-group>
 				<view class="cu-bar bg-white">
-					<view class="action margin-0 flex-sub text-green" @tap="hidePrintRadioModalDialog">跳转打印设置
-					</view>
-					<view class="action margin-0 flex-sub  solid-left" @tap="hidePrintRadioModalDialog">开始打印</view>
+					<view class="action margin-0 flex-sub  solid-left" @tap="importDocumentModalDialog">下一步</view>
 				</view>
 			</view>
 		</view>
@@ -214,32 +199,45 @@
 	export default {
 		data() {
 			return {
-				//add Item Modal Dialog
-				isAddItemModalDialog: false,
+				addItemModalDialog: false,
 				scanResult: null,
 				items: [],
 				item: {},
 				switchD: true,
 				labelList: [],
-				swiperIndex: 2,
+				swiperIndex: 3,
 				printQuantity: '',
+				labelTipsModalDialog: false,
+				seclectedLabel: {},
 
+				prints: [],
 				printRadioModalDialog: false,
+				printRadio: 'system',
+
+				importDocumentModalDialog: false,
+			}
+		},
+		watch: {
+			swiperIndex() {
+				this.seclectLabel();
 			}
 		},
 		onLoad(options) {
 			setTimeout(() => {
 				this.labelList = label.labelList;
+				this.prints = label.prints;
 				this.item = catalog.catalog[0];
-			}, 300);
+				this.seclectLabel();
+			}, 500);
+
 		},
 		methods: {
 			//add item opertion
 			showAddItemModalDialog() {
-				this.isAddItemModalDialog = true;
+				this.addItemModalDialog = true;
 			},
 			hideAddItemModalDialog() {
-				this.isAddItemModalDialog = false;
+				this.addItemModalDialog = false;
 			},
 			scan() {
 				var that = this;
@@ -256,10 +254,25 @@
 			SwitchD() {
 				this.switchD = !this.switchD;
 			},
-			labelSwiper(e) {
-				const that = this;
-				that.cardCur = e.detail.current;
-				that.swiperIndex = e.detail.current;
+			labelSwiperChange(event) {
+				this.swiperIndex = event.detail.current;
+			},
+			seclectLabel() {
+				let that = this;
+				let index = 0;
+				for (const label of that.labelList) {
+					if (that.swiperIndex === index) {
+						that.seclectedLabel = label;
+						break;
+					}
+					index += 1;
+				}
+			},
+			showLabelTipsModalDialog() {
+				this.labelTipsModalDialog = true;
+			},
+			hideLabelTipsModalDialog() {
+				this.labelTipsModalDialog = false;
 			},
 			addItem() {
 
@@ -271,6 +284,18 @@
 			hidePrintRadioModalDialog() {
 				this.printRadioModalDialog = false;
 			},
+			printRadioChange(event) {
+				this.printRadio = event.detail.value;
+				//console.log(this.printRadio);
+			},
+
+			showImportDocumentModalDialog() {
+				this.importDocumentModalDialog = true;
+			},
+			hideImportDocumentModalDialog() {
+				this.importDocumentModalDialog = false;
+			},
+
 			computedHeight() {
 				let query = uni.createSelectorQuery().in(this);
 				query.select('#navBar').boundingClientRect().exec(rect => {
