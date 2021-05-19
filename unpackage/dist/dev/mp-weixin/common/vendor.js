@@ -822,7 +822,7 @@ function initData(vueOptions, context) {
     try {
       data = data.call(context); // 支持 Vue.prototype 上挂的数据
     } catch (e) {
-      if (Object({"VUE_APP_NAME":"HOPRXI协着工具","VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG) {
+      if (Object({"NODE_ENV":"development","VUE_APP_NAME":"HOPRXI协着工具","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG) {
         console.warn('根据 Vue 的 data 函数初始化小程序 data 失败，请尽量确保 data 函数中不访问 vm 对象，否则可能影响首次数据渲染速度。', data);
       }
     }
@@ -2070,122 +2070,6 @@ module.exports = __webpack_require__(/*! regenerator-runtime */ 13);
 
 /***/ }),
 
-/***/ 121:
-/*!******************************************************!*\
-  !*** E:/mini/coordinative/js_sdk/auth/wechatAuth.js ***!
-  \******************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _regenerator = _interopRequireDefault(__webpack_require__(/*! ./node_modules/@babel/runtime/regenerator */ 12));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {try {var info = gen[key](arg);var value = info.value;} catch (error) {reject(error);return;}if (info.done) {resolve(value);} else {Promise.resolve(value).then(_next, _throw);}}function _asyncToGenerator(fn) {return function () {var self = this,args = arguments;return new Promise(function (resolve, reject) {var gen = fn.apply(self, args);function _next(value) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);}function _throw(err) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);}_next(undefined);});};}var _default = {
-
-  data: function data() {
-    return {
-      mpCodeTimer: 0,
-      wxCode: '' };
-
-  },
-  computed: {
-    //timerIdent() {
-    //	return this.$store.state.timerIdent;
-    //}
-  },
-  watch: {
-    //timerIdent() {
-    //	this.mpCodeTimer++;
-    //	if (this.mpCodeTimer % 30 === 0) {
-    //		this.getWxCode();
-    //	}
-    //}
-  },
-  onShow: function onShow() {
-    this.getWxCode();
-  },
-  methods: {
-    //微信小程序登录
-    getUserInfo: function getUserInfo(userInfoData) {var _this = this;
-      if (!userInfoData.detail.userInfo) {
-        return;
-      }
-      this.getWxCode();
-      if (!this.agreement) {
-        this.$util.toast('请阅读并同意用户服务协议及隐私权协议');
-        return;
-      }
-      this.$util.throttle( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2() {return _regenerator.default.wrap(function _callee2$(_context2) {while (1) {switch (_context2.prev = _context2.next) {case 0:
-                uni.getUserInfo({
-                  provider: 'weixin',
-                  success: function () {var _success = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(res) {return _regenerator.default.wrap(function _callee$(_context) {while (1) {switch (_context.prev = _context.next) {case 0:_context.next = 2;return (
-                                _this.$http.post('/auth/v1/wxAuth', {
-                                  params: {
-                                    js_code: _this.wxCode,
-                                    //encryptedData: res.encryptedData,
-                                    //iv: res.iv,
-                                    //signature: res.signature,
-                                    userInfo: JSON.parse(res.rawData) },
-
-                                  custom: { loading: false } }).
-                                then(function (res) {
-                                  if (res.data.code == 300) {
-                                    uni.showModal({
-                                      content: '账号尚未绑定',
-                                      confirmText: '去绑定',
-                                      cancelText: '还是算了',
-                                      success: function success(r) {
-                                        if (r.confirm) {
-                                          uni.navigateTo({
-                                            url: '/pages/user/bindMobile?data=' + JSON.stringify(res.data.rawData) });
-
-                                        } else if (r.cancel) {
-                                          uni.navigateBack();
-                                        }
-                                      } });
-
-                                  } else {
-                                    _this.$store.commit('login', res.data);
-                                    setTimeout(function () {
-                                      uni.navigateBack();
-                                    }, 1500);
-                                  }
-                                }).catch(function (err) {
-                                  console.log(err);
-                                  _this.$util.toast("\u670D\u52A1\u5668\u79BB\u7EBF\uFF0C\u8BF7\u7A0D\u540E\u518D\u8BD5\uFF01");
-                                }));case 2:case "end":return _context.stop();}}}, _callee);}));function success(_x) {return _success.apply(this, arguments);}return success;}(),
-
-
-
-
-
-                  fail: function fail(err) {
-                    _this.$store.commit('logout');
-                  } });case 1:case "end":return _context2.stop();}}}, _callee2);})));
-
-
-    },
-
-    //获取code
-    getWxCode: function getWxCode() {var _this2 = this;
-      uni.getProvider({
-        service: 'oauth',
-        success: function success(res) {
-          //console.log(res.provider)
-          if (~res.provider.indexOf('weixin')) {
-            uni.login({
-              provider: 'weixin',
-              success: function success(res) {
-                //console.log(JSON.stringify(res));
-                _this2.wxCode = res.code;
-              } });
-
-          }
-        } });
-
-    } } };exports.default = _default;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
-
-/***/ }),
-
 /***/ 13:
 /*!************************************************************!*\
   !*** ./node_modules/regenerator-runtime/runtime-module.js ***!
@@ -2963,6 +2847,150 @@ if (hadRuntime) {
   })() || Function("return this")()
 );
 
+
+/***/ }),
+
+/***/ 141:
+/*!*********************************************************************!*\
+  !*** E:/mini/coordinative/test/price_adjustment_sheet_test_data.js ***!
+  \*********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _default = [{
+  sheetNumber: '99752545328877',
+  applyDate: '2021-03-30 20:35:11',
+  store: '嘉诚超市、美佳乐大山坪店',
+  effectDate: '2021-03-30 17:37:12',
+  proposer: "泸州共创商贸有限公司-图特哈蒙",
+  approval: 'pass',
+  items: [{
+    id: "201451060435585024",
+    name: '彩虹柠檬香电热灭蚊香液',
+    barcode: 6907861191394,
+    specs: '150ml',
+    retailPrice: '19.59/盒',
+    memberPrice: '18.00/盒',
+    vipPrice: '0.00/盒',
+    newRetailPrice: '19.59/盒',
+    newMemberPrice: '18.00/盒' },
+  {
+    plu: 133,
+    name: '精品沃柑',
+    specs: '500g',
+    retailPrice: '8.00/kg',
+    memberPrice: '4.00/500g',
+    vipPrice: '2.50/500g',
+    newRetailPrice: '4.59/500g',
+    newMmemberPrice: '4.00/500g',
+    newVipPrice: '4.98/500g' },
+  {
+    id: '201452393217567744',
+    name: '哇哈哈营养快线水果牛奶饮品（菠萝味）',
+    barcode: 6902083898625,
+    specs: '550ml',
+    retailPrice: '11.98/瓶',
+    memberPrice: '10.98/瓶',
+    vipPrice: '4.98/瓶',
+    newRetailPrice: '6.98/瓶',
+    newMemberPrice: '5.98/瓶',
+    newVipPrice: '5.19/瓶' },
+
+  {
+    id: '201452853459475457',
+    name: '川骄无芯卷纸（白四层）',
+    barcode: 6970981171003,
+    specs: '1800g',
+    retailPrice: '11.98/提',
+    memberPrice: '0.00/提',
+    vipPrice: '0.00/提',
+    newRetailPrice: '6.98/提' },
+  {
+    id: '201452966564125697',
+    name: '云南三七牙膏（清新留兰）',
+    barcode: 6953067200880,
+    specs: '220g',
+    retailPrice: '34.88/支',
+    memberPrice: '32.88/支',
+    vipPrice: '0.00/支',
+    newRetailPrice: '28.58/支',
+    newMemberPrice: '27.58/支' }] },
+
+{
+  sheetNumber: '99752545229978',
+  applyDate: '2021-03-31 17:37:12',
+  store: '泸县盛源超市',
+  effectDate: '2021-04-07 21:37:12',
+  proposer: "泸县盛源超市-狄仁杰",
+  approval: 'denied' },
+{
+  sheetNumber: '99752545298972',
+  applyDate: '2021-03-31 15:22:33',
+  store: '旺客隆国美绿洲店、嘉诚超市、泸县盛源超市、纳溪店',
+  effectDate: '2021-04-12 09:35:12',
+  proposer: "泸州建国调味品经营部-黎宇宇",
+  approval: 'normal' },
+
+{
+  sheetNumber: '99752545222156',
+  applyDate: '2021-03-31 10:42:56',
+  store: '旺客隆国美绿洲店',
+  effectDate: '2021-04-02 23:59:59',
+  proposer: "旺客隆国美绿洲店-李憨憨",
+  approval: 'pass' },
+
+{
+  sheetNumber: '33325945697823',
+  applyDate: '2021-03-31 10:07:02',
+  store: '旺客隆国美绿洲店、嘉诚超市、旺客隆纳溪店',
+  effectDate: '2021-04-13 00:00:00',
+  proposer: "成都本和商贸有限公司-云中三月",
+  approval: 'denied' },
+
+{
+  sheetNumber: '975254545697',
+  applyDate: '2021-03-31 09:08:02',
+  store: '旺客隆国美绿洲店、嘉诚超市',
+  effectDate: '2021-04-03 00:00:00',
+  proposer: "成都本和商贸有限公司-松本特磕埕",
+  approval: 'denied' },
+
+{
+  sheetNumber: '331556868441',
+  applyDate: '2021-03-31 09:07:02',
+  store: '旺客隆超市关口店',
+  effectDate: '2021-04-03 00:00:00',
+  proposer: "旺客隆超市关口店-小灰灰",
+  approval: 'pass' },
+{
+  sheetNumber: '331547686845',
+  applyDate: '2021-03-31 09:07:02',
+  store: '旺客隆超市关口店',
+  effectDate: '2021-04-03 00:00:00',
+  proposer: "旺客隆超市关口店-小灰灰",
+  approval: 'normal' },
+{
+  sheetNumber: '658155686849',
+  applyDate: '2021-04-31 09:07:02',
+  store: '旺客隆超市关口店',
+  effectDate: '2021-04-03 00:00:00',
+  proposer: "旺客隆超市关口店-保慕中杨",
+  approval: 'normal' },
+{
+  sheetNumber: '3315890622498',
+  applyDate: '2021-04-01 09:07:02',
+  store: '旺客隆超市关口店',
+  effectDate: '2021-04-03 00:00:00',
+  proposer: "旺客隆超市关口店-狗头师爷",
+  approval: 'denied' },
+{
+  sheetNumber: '3315568684564',
+  applyDate: '2021-03-31 09:07:02',
+  store: '旺客隆超市关口店',
+  effectDate: '2021-04-03 00:00:00',
+  proposer: "旺客隆超市关口店-小灰灰",
+  approval: 'denied' }];exports.default = _default;
 
 /***/ }),
 
@@ -4079,6 +4107,159 @@ var index = {
 
 /***/ }),
 
+/***/ 150:
+/*!***********************************************************************!*\
+  !*** E:/mini/coordinative/test/price_adjustment_details_test_data.js ***!
+  \***********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _default = {
+  price_adjustment: [{
+    sheetNumber: '99752545328877',
+    applyDate: '2021-03-30 20:35:11',
+    store: '嘉诚超市、美佳乐大山坪店',
+    effectDate: '2021-03-30 17:37:12',
+    proposer: "泸州共创商贸有限公司-图特哈蒙",
+    remark: '',
+    approval: 'pass',
+    items: [{
+      id: "201451060435585024",
+      name: '彩虹柠檬香电热灭蚊香液',
+      barcode: 6907861191394,
+      specs: '150ml',
+      retailPrice: '19.59/盒',
+      memberPrice: '18.00/盒',
+      vipPrice: '0.00/盒',
+      newRetailPrice: '19.59/盒',
+      newMemberPrice: '18.00/盒',
+      vip: {
+        referenceSalePrice: '19.00/瓶',
+        referencePurchasePrice: '12.60/瓶' },
+
+      storage: {
+        lastPurchasePrice: '13.00/瓶',
+        amount: 226,
+        number: 12,
+        stockTurn: 1.33 } },
+
+    {
+      plu: 133,
+      name: '精品沃柑',
+      specs: '500g',
+      retailPrice: '8.00/kg',
+      memberPrice: '4.00/500g',
+      vipPrice: '2.50/500g',
+      newRetailPrice: '4.59/500g',
+      newMmemberPrice: '4.00/500g',
+      newVipPrice: '4.98/500g',
+      vip: {
+        referenceSalePrice: '3.99/500g',
+        referencePurchasePrice: '1.99/500g' },
+
+      storage: {
+        lastPurchasePrice: '1.786/500g',
+        amount: 22.36,
+        number: 10.58,
+        stockTurn: 22.756 } },
+
+    {
+      id: '201452393217567744',
+      name: '哇哈哈营养快线水果牛奶饮品（菠萝味）',
+      barcode: 6902083898625,
+      specs: '550ml',
+      retailPrice: '11.98/瓶',
+      memberPrice: '10.98/瓶',
+      vipPrice: '4.98/瓶',
+      newRetailPrice: '6.98/瓶',
+      newMemberPrice: '5.98/瓶',
+      newVipPrice: '5.19/瓶',
+      vip: {
+        referenceSalePrice: '12.00/瓶',
+        referencePurchasePrice: '6.98/瓶' },
+
+      storage: {
+        lastPurchasePrice: '5.98/瓶',
+        amount: 420,
+        number: 70,
+        stockTurn: 10.25 } },
+
+    {
+      id: '201452853459475457',
+      name: '川骄无芯卷纸（白四层）',
+      barcode: 6970981171003,
+      specs: '1800g',
+      retailPrice: '11.98/提',
+      memberPrice: '0.00/提',
+      vipPrice: '0.00/提',
+      newRetailPrice: '6.98/提' },
+    {
+      id: '201452966564158972',
+      name: '菊品郁金银屑片',
+      barcode: '6926094418474',
+      specs: '100片',
+      placeOfOrigin: '陕西.商洛市',
+      grade: '合格品',
+      vip: {
+        referenceSalePrice: '45.25/瓶',
+        referencePurchasePrice: '23.33/瓶' },
+
+      storage: {
+        lastPurchasePrice: '22.47/瓶',
+        amount: 240.23,
+        number: 12,
+        stockTurn: 7.33 },
+
+      retailPrice: '39.98/瓶',
+      memberPrice: '28.88/瓶',
+      vipPrice: '25.88/瓶',
+      newRetailPrice: '29.98/瓶' },
+    {
+      id: '201452966564158973',
+      name: '阿维A胶囊',
+      barcode: '6920327600247',
+      specs: '10粒/板*3板',
+      placeOfOrigin: '重庆市',
+      grade: '合格品',
+      vip: {
+        referenceSalePrice: '20.30/盒',
+        referencePurchasePrice: '12.45/盒' },
+
+      storage: {
+        lastPurchasePrice: '11.11/盒',
+        amount: 14.43,
+        number: 1,
+        stockTurn: 0.33 },
+
+      retailPrice: '19.80/盒',
+      memberPrice: '18.80/盒',
+      vipPrice: '0.00/盒',
+      newVipPrice: '12.98/盒' },
+    {
+      id: '201452966564158974',
+      name: '阿莫西林胶囊',
+      barcode: '6931435340314',
+      specs: '0.25g*50粒',
+      placeOfOrigin: '黑龙江.哈尔滨市',
+      grade: '合格品',
+      vip: {
+        referenceSalePrice: '20.30/盒',
+        referencePurchasePrice: '12.45/盒' },
+
+      storage: {
+        lastPurchasePrice: '11.11/盒',
+        amount: 14.43,
+        number: 1,
+        stockTurn: 0.33 },
+
+      retailPrice: '9.80/盒',
+      memberPrice: '8.80/盒',
+      vipPrice: '0.00/盒',
+      newMemberPrice: '8.88/盒' }] }] };exports.default = _default;
+
+/***/ }),
+
 /***/ 16:
 /*!*****************************************************************************!*\
   !*** E:/mini/coordinative/js_sdk/luch-request/luch-request/luch-request.js ***!
@@ -4156,6 +4337,56 @@ function (response) {// 请求错误做点什么。可以使用async await 做�
 
 http;exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
+
+/***/ }),
+
+/***/ 167:
+/*!****************************************************!*\
+  !*** E:/mini/coordinative/test/label_test_data.js ***!
+  \****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _default = {
+  labelList: [{
+    id: 45,
+    url: '/static/workflow/c.png',
+    name: '条码标签',
+    specs: '32mm(宽)*19mm(高)*3列' },
+  {
+    id: 34,
+    url: '/static/workflow/a.png',
+    name: '特价标签',
+    specs: '78mm(宽)*38mm(高)*1列' },
+  {
+    id: 78,
+    url: '/static/workflow/a.png',
+    name: '正价标签',
+    specs: '78mm(宽)*38mm(高)*1列' },
+  {
+    id: 334,
+    url: '/static/workflow/b.png',
+    name: '正价标签',
+    specs: '90mm(宽)*38mm(高)*1列' }],
+
+  prints: [{
+    id: 'system',
+    name: '系统设置' },
+  {
+    id: 'Q8_one',
+    name: '博思得Q8（正价签）' },
+
+  {
+    id: 'Q8_two',
+    name: '博思得Q8（特价签）' },
+  {
+    id: 'SNBC-001581B6AE86',
+    name: '新北洋BTP-P33蓝牙便携（001581B6AE86）' },
+
+  {
+    id: 'HRRT-001581B6AE86',
+    name: '汉印HM-A300S蓝牙便携' }] };exports.default = _default;
 
 /***/ }),
 
@@ -9925,7 +10156,7 @@ function type(obj) {
 
 function flushCallbacks$1(vm) {
     if (vm.__next_tick_callbacks && vm.__next_tick_callbacks.length) {
-        if (Object({"VUE_APP_NAME":"HOPRXI协着工具","VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG) {
+        if (Object({"NODE_ENV":"development","VUE_APP_NAME":"HOPRXI协着工具","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG) {
             var mpInstance = vm.$scope;
             console.log('[' + (+new Date) + '][' + (mpInstance.is || mpInstance.route) + '][' + vm._uid +
                 ']:flushCallbacks[' + vm.__next_tick_callbacks.length + ']');
@@ -9946,14 +10177,14 @@ function nextTick$1(vm, cb) {
     //1.nextTick 之前 已 setData 且 setData 还未回调完成
     //2.nextTick 之前存在 render watcher
     if (!vm.__next_tick_pending && !hasRenderWatcher(vm)) {
-        if(Object({"VUE_APP_NAME":"HOPRXI协着工具","VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG){
+        if(Object({"NODE_ENV":"development","VUE_APP_NAME":"HOPRXI协着工具","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG){
             var mpInstance = vm.$scope;
             console.log('[' + (+new Date) + '][' + (mpInstance.is || mpInstance.route) + '][' + vm._uid +
                 ']:nextVueTick');
         }
         return nextTick(cb, vm)
     }else{
-        if(Object({"VUE_APP_NAME":"HOPRXI协着工具","VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG){
+        if(Object({"NODE_ENV":"development","VUE_APP_NAME":"HOPRXI协着工具","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG){
             var mpInstance$1 = vm.$scope;
             console.log('[' + (+new Date) + '][' + (mpInstance$1.is || mpInstance$1.route) + '][' + vm._uid +
                 ']:nextMPTick');
@@ -10039,7 +10270,7 @@ var patch = function(oldVnode, vnode) {
     });
     var diffData = this.$shouldDiffData === false ? data : diff(data, mpData);
     if (Object.keys(diffData).length) {
-      if (Object({"VUE_APP_NAME":"HOPRXI协着工具","VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG) {
+      if (Object({"NODE_ENV":"development","VUE_APP_NAME":"HOPRXI协着工具","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG) {
         console.log('[' + (+new Date) + '][' + (mpInstance.is || mpInstance.route) + '][' + this._uid +
           ']差量更新',
           JSON.stringify(diffData));
@@ -11263,164 +11494,7 @@ function formatMoney(money) {
 
 /***/ }),
 
-/***/ 61:
-/*!*********************************************************************!*\
-  !*** E:/mini/coordinative/test/price_adjustment_sheet_test_data.js ***!
-  \*********************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _default = [{
-  sheetNumber: '99752545328877',
-  applyDate: '2021-03-30 20:35:11',
-  store: '嘉诚超市、美佳乐大山坪店',
-  effectDate: '2021-03-30 17:37:12',
-  proposer: "泸州共创商贸有限公司-图特哈蒙",
-  approval: 'pass' },
-{
-  sheetNumber: '99752545229978',
-  applyDate: '2021-03-31 17:37:12',
-  store: '泸县盛源超市',
-  effectDate: '2021-04-07 21:37:12',
-  proposer: "泸县盛源超市-狄仁杰",
-  approval: 'denied' },
-{
-  sheetNumber: '99752545298972',
-  applyDate: '2021-03-31 15:22:33',
-  store: '旺客隆国美绿洲店、嘉诚超市、泸县盛源超市、纳溪店',
-  effectDate: '2021-04-12 09:35:12',
-  proposer: "泸州建国调味品经营部-黎宇宇",
-  approval: 'normal' },
-
-{
-  sheetNumber: '99752545222156',
-  applyDate: '2021-03-31 10:42:56',
-  store: '旺客隆国美绿洲店',
-  effectDate: '2021-04-02 23:59:59',
-  proposer: "旺客隆国美绿洲店-李憨憨",
-  approval: 'pass' },
-
-{
-  sheetNumber: '33325945697823',
-  applyDate: '2021-03-31 10:07:02',
-  store: '旺客隆国美绿洲店、嘉诚超市、旺客隆纳溪店',
-  effectDate: '2021-04-13 00:00:00',
-  proposer: "成都本和商贸有限公司-云中三月",
-  approval: 'denied' },
-
-{
-  sheetNumber: '975254545697',
-  applyDate: '2021-03-31 09:08:02',
-  store: '旺客隆国美绿洲店、嘉诚超市',
-  effectDate: '2021-04-03 00:00:00',
-  proposer: "成都本和商贸有限公司-松本特磕埕",
-  approval: 'denied' },
-
-{
-  sheetNumber: '331556868441',
-  applyDate: '2021-03-31 09:07:02',
-  store: '旺客隆超市关口店',
-  effectDate: '2021-04-03 00:00:00',
-  proposer: "旺客隆超市关口店-小灰灰",
-  approval: 'pass' },
-{
-  sheetNumber: '331547686845',
-  applyDate: '2021-03-31 09:07:02',
-  store: '旺客隆超市关口店',
-  effectDate: '2021-04-03 00:00:00',
-  proposer: "旺客隆超市关口店-小灰灰",
-  approval: 'normal' },
-{
-  sheetNumber: '658155686849',
-  applyDate: '2021-04-31 09:07:02',
-  store: '旺客隆超市关口店',
-  effectDate: '2021-04-03 00:00:00',
-  proposer: "旺客隆超市关口店-保慕中杨",
-  approval: 'normal' },
-{
-  sheetNumber: '3315890622498',
-  applyDate: '2021-04-01 09:07:02',
-  store: '旺客隆超市关口店',
-  effectDate: '2021-04-03 00:00:00',
-  proposer: "旺客隆超市关口店-狗头师爷",
-  approval: 'denied' },
-{
-  sheetNumber: '3315568684564',
-  applyDate: '2021-03-31 09:07:02',
-  store: '旺客隆超市关口店',
-  effectDate: '2021-04-03 00:00:00',
-  proposer: "旺客隆超市关口店-小灰灰",
-  approval: 'denied' }];exports.default = _default;
-
-/***/ }),
-
-/***/ 70:
-/*!***********************************************************************!*\
-  !*** E:/mini/coordinative/test/price_adjustment_details_test_data.js ***!
-  \***********************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _default = {
-  price_adjustment: [{
-    sheetNumber: '99752545328877',
-    items: [{
-      id: "201451060435585024",
-      name: '彩虹柠檬香电热灭蚊香液',
-      barcode: 6907861191394,
-      specs: '150ml',
-      retailPrice: '19.59/盒',
-      memberPrice: '18.00/盒',
-      vipPrice: '0.00/盒',
-      newRetailPrice: '19.59/盒',
-      newMemberPrice: '18.00/盒' },
-    {
-      plu: 133,
-      name: '精品沃柑',
-      specs: '500g',
-      retailPrice: '8.00/kg',
-      memberPrice: '4.00/500g',
-      vipPrice: '2.50/500g',
-      newRetailPrice: '4.59/500g',
-      newMmemberPrice: '4.00/500g',
-      newVipPrice: '4.98/500g' },
-    {
-      id: '201452393217567744',
-      name: '哇哈哈营养快线水果牛奶饮品（菠萝味）',
-      barcode: 6902083898625,
-      specs: '550ml',
-      retailPrice: '11.98/瓶',
-      memberPrice: '10.98/瓶',
-      vipPrice: '4.98/瓶',
-      newRetailPrice: '6.98/瓶',
-      newMemberPrice: '5.98/瓶',
-      newVipPrice: '5.19/瓶' },
-
-    {
-      id: '201452853459475457',
-      name: '川骄无芯卷纸（白四层）',
-      barcode: 6970981171003,
-      specs: '1800g',
-      retailPrice: '11.98/提',
-      memberPrice: '0.00/提',
-      vipPrice: '0.00/提',
-      newRetailPrice: '6.98/提' },
-    {
-      id: '201452966564125697',
-      name: '云南三七牙膏（清新留兰）',
-      barcode: 6953067200880,
-      specs: '220g',
-      retailPrice: '34.88/支',
-      memberPrice: '32.88/支',
-      vipPrice: '0.00/支',
-      newRetailPrice: '28.58/支',
-      newMemberPrice: '27.58/支' }] }] };exports.default = _default;
-
-/***/ }),
-
-/***/ 79:
+/***/ 53:
 /*!******************************************************!*\
   !*** E:/mini/coordinative/test/catalog_test_data.js ***!
   \******************************************************/
@@ -11451,7 +11525,8 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
   "打",
   "公斤",
   "箱",
-  "卷"],
+  "卷",
+  "挂"],
 
   catalog: [{
     id: "201451060435585024",
@@ -11484,6 +11559,8 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
     plu: 133,
     name: '精品沃柑',
     specs: '500g',
+    placeOfOrigin: '广西.桂林',
+    grade: '合格品',
     retailPrice: '4.59/500g',
     memberPrice: '4.00/500g',
     vipPrice: '2.50/500g',
@@ -11502,6 +11579,8 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
     name: '哇哈哈营养快线水果牛奶饮品（菠萝味）',
     barcode: 6902083898625,
     specs: '550ml',
+    placeOfOrigin: '浙江.杭州',
+    grade: '合格品',
     retailPrice: '11.98/瓶',
     memberPrice: '10.98/瓶',
     vipPrice: '4.98/瓶',
@@ -11520,6 +11599,8 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
     name: '川骄无芯卷纸（白四层）',
     barcode: 6970981171003,
     specs: '1800g',
+    placeOfOrigin: '四川.彭州',
+    grade: '合格品',
     retailPrice: '11.98/提',
     memberPrice: '0.00/提',
     vipPrice: '0.00/提' },
@@ -11528,6 +11609,8 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
     name: '云南三七牙膏（清新留兰）',
     barcode: 6953067200880,
     specs: '220g',
+    placeOfOrigin: '云南.昆明',
+    grade: '合格品',
     retailPrice: '34.88/支',
     memberPrice: '32.88/支',
     vipPrice: '0.00/支',
@@ -11540,6 +11623,8 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
     name: '菊品郁金银屑片',
     barcode: '6926094418474',
     specs: '100片',
+    placeOfOrigin: '陕西.商洛市',
+    grade: '合格品',
     vip: {
       referenceSalePrice: '45.25/瓶',
       referencePurchasePrice: '23.33/瓶' },
@@ -11558,6 +11643,8 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
     name: '阿维A胶囊',
     barcode: '6920327600247',
     specs: '10粒/板*3板',
+    placeOfOrigin: '重庆市',
+    grade: '合格品',
     vip: {
       referenceSalePrice: '20.30/盒',
       referencePurchasePrice: '12.45/盒' },
@@ -11576,6 +11663,8 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
     name: '阿莫西林胶囊',
     barcode: '6931435340314',
     specs: '0.25g*50粒',
+    placeOfOrigin: '黑龙江.哈尔滨市',
+    grade: '合格品',
     vip: {
       referenceSalePrice: '20.30/盒',
       referencePurchasePrice: '12.45/盒' },
@@ -11592,53 +11681,119 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
 /***/ }),
 
-/***/ 88:
-/*!****************************************************!*\
-  !*** E:/mini/coordinative/test/label_test_data.js ***!
-  \****************************************************/
+/***/ 86:
+/*!******************************************************!*\
+  !*** E:/mini/coordinative/js_sdk/auth/wechatAuth.js ***!
+  \******************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _default = {
-  labelList: [{
-    id: 45,
-    url: '/static/workflow/c.png',
-    name: '条码标签',
-    specs: '32mm(宽)*19mm(高)*3列' },
-  {
-    id: 34,
-    url: '/static/workflow/a.png',
-    name: '特价标签',
-    specs: '78mm(宽)*38mm(高)*1列' },
-  {
-    id: 78,
-    url: '/static/workflow/a.png',
-    name: '正价标签',
-    specs: '78mm(宽)*38mm(高)*1列' },
-  {
-    id: 334,
-    url: '/static/workflow/b.png',
-    name: '正价标签',
-    specs: '90mm(宽)*38mm(高)*1列' }],
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _regenerator = _interopRequireDefault(__webpack_require__(/*! ./node_modules/@babel/runtime/regenerator */ 12));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {try {var info = gen[key](arg);var value = info.value;} catch (error) {reject(error);return;}if (info.done) {resolve(value);} else {Promise.resolve(value).then(_next, _throw);}}function _asyncToGenerator(fn) {return function () {var self = this,args = arguments;return new Promise(function (resolve, reject) {var gen = fn.apply(self, args);function _next(value) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);}function _throw(err) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);}_next(undefined);});};}var _default = {
 
-  prints: [{
-    id: 'system',
-    name: '系统设置' },
-  {
-    id: 'Q8_one',
-    name: '博思得Q8（正价签）' },
+  data: function data() {
+    return {
+      mpCodeTimer: 0,
+      wxCode: '' };
 
-  {
-    id: 'Q8_two',
-    name: '博思得Q8（特价签）' },
-  {
-    id: 'SNBC-001581B6AE86',
-    name: '新北洋BTP-P33蓝牙便携（001581B6AE86）' },
+  },
+  computed: {
+    //timerIdent() {
+    //	return this.$store.state.timerIdent;
+    //}
+  },
+  watch: {
+    //timerIdent() {
+    //	this.mpCodeTimer++;
+    //	if (this.mpCodeTimer % 30 === 0) {
+    //		this.getWxCode();
+    //	}
+    //}
+  },
+  onShow: function onShow() {
+    this.getWxCode();
+  },
+  methods: {
+    //微信小程序登录
+    getUserInfo: function getUserInfo(userInfoData) {var _this = this;
+      if (!userInfoData.detail.userInfo) {
+        return;
+      }
+      this.getWxCode();
+      if (!this.agreement) {
+        this.$util.toast('请阅读并同意用户服务协议及隐私权协议');
+        return;
+      }
+      this.$util.throttle( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2() {return _regenerator.default.wrap(function _callee2$(_context2) {while (1) {switch (_context2.prev = _context2.next) {case 0:
+                uni.getUserInfo({
+                  provider: 'weixin',
+                  success: function () {var _success = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(res) {return _regenerator.default.wrap(function _callee$(_context) {while (1) {switch (_context.prev = _context.next) {case 0:_context.next = 2;return (
+                                _this.$http.post('/auth/v1/wxAuth', {
+                                  params: {
+                                    js_code: _this.wxCode,
+                                    //encryptedData: res.encryptedData,
+                                    //iv: res.iv,
+                                    //signature: res.signature,
+                                    userInfo: JSON.parse(res.rawData) },
 
-  {
-    id: 'HRRT-001581B6AE86',
-    name: '汉印HM-A300S蓝牙便携' }] };exports.default = _default;
+                                  custom: { loading: false } }).
+                                then(function (res) {
+                                  if (res.data.code == 300) {
+                                    uni.showModal({
+                                      content: '账号尚未绑定',
+                                      confirmText: '去绑定',
+                                      cancelText: '还是算了',
+                                      success: function success(r) {
+                                        if (r.confirm) {
+                                          uni.navigateTo({
+                                            url: '/pages/user/bindMobile?data=' + JSON.stringify(res.data.rawData) });
+
+                                        } else if (r.cancel) {
+                                          uni.navigateBack();
+                                        }
+                                      } });
+
+                                  } else {
+                                    _this.$store.commit('login', res.data);
+                                    setTimeout(function () {
+                                      uni.navigateBack();
+                                    }, 1500);
+                                  }
+                                }).catch(function (err) {
+                                  console.log(err);
+                                  _this.$util.toast("\u670D\u52A1\u5668\u79BB\u7EBF\uFF0C\u8BF7\u7A0D\u540E\u518D\u8BD5\uFF01");
+                                }));case 2:case "end":return _context.stop();}}}, _callee);}));function success(_x) {return _success.apply(this, arguments);}return success;}(),
+
+
+
+
+
+                  fail: function fail(err) {
+                    _this.$store.commit('logout');
+                  } });case 1:case "end":return _context2.stop();}}}, _callee2);})));
+
+
+    },
+
+    //获取code
+    getWxCode: function getWxCode() {var _this2 = this;
+      uni.getProvider({
+        service: 'oauth',
+        success: function success(res) {
+          //console.log(res.provider)
+          if (~res.provider.indexOf('weixin')) {
+            uni.login({
+              provider: 'weixin',
+              success: function success(res) {
+                //console.log(JSON.stringify(res));
+                _this2.wxCode = res.code;
+              } });
+
+          }
+        } });
+
+    } } };exports.default = _default;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 
 /***/ })
 

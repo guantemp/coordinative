@@ -22,6 +22,7 @@ export default {
 		"公斤",
 		"箱",
 		"卷",
+		"挂"
 	],
 	catalog: [{
 		id: "201451060435585024",
@@ -54,6 +55,8 @@ export default {
 		plu: 133,
 		name: '精品沃柑',
 		specs: '500g',
+		placeOfOrigin: '广西.桂林',
+		grade: '合格品',
 		retailPrice: '4.59/500g',
 		memberPrice: '4.00/500g',
 		vipPrice: '2.50/500g',
@@ -72,6 +75,8 @@ export default {
 		name: '哇哈哈营养快线水果牛奶饮品（菠萝味）',
 		barcode: 6902083898625,
 		specs: '550ml',
+		placeOfOrigin: '浙江.杭州',
+		grade: '合格品',
 		retailPrice: '11.98/瓶',
 		memberPrice: '10.98/瓶',
 		vipPrice: '4.98/瓶',
@@ -90,6 +95,8 @@ export default {
 		name: '川骄无芯卷纸（白四层）',
 		barcode: 6970981171003,
 		specs: '1800g',
+		placeOfOrigin: '四川.彭州',
+		grade: '合格品',
 		retailPrice: '11.98/提',
 		memberPrice: '0.00/提',
 		vipPrice: '0.00/提',
@@ -98,6 +105,8 @@ export default {
 		name: '云南三七牙膏（清新留兰）',
 		barcode: 6953067200880,
 		specs: '220g',
+		placeOfOrigin: '云南.昆明',
+		grade: '合格品',
 		retailPrice: '34.88/支',
 		memberPrice: '32.88/支',
 		vipPrice: '0.00/支',
@@ -110,6 +119,8 @@ export default {
 		name: '菊品郁金银屑片',
 		barcode: '6926094418474',
 		specs: '100片',
+		placeOfOrigin: '陕西.商洛市',
+		grade: '合格品',
 		vip: {
 			referenceSalePrice: '45.25/瓶',
 			referencePurchasePrice: '23.33/瓶'
@@ -128,6 +139,8 @@ export default {
 		name: '阿维A胶囊',
 		barcode: '6920327600247',
 		specs: '10粒/板*3板',
+		placeOfOrigin: '重庆市',
+		grade: '合格品',
 		vip: {
 			referenceSalePrice: '20.30/盒',
 			referencePurchasePrice: '12.45/盒'
@@ -146,6 +159,8 @@ export default {
 		name: '阿莫西林胶囊',
 		barcode: '6931435340314',
 		specs: '0.25g*50粒',
+		placeOfOrigin: '黑龙江.哈尔滨市',
+		grade: '合格品',
 		vip: {
 			referenceSalePrice: '20.30/盒',
 			referencePurchasePrice: '12.45/盒'

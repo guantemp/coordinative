@@ -31,63 +31,57 @@
 			<text class="cuIcon-like text-red margin-bottom tips"></text>
 			<text>空空如也...</text>
 		</view>
-		<scroll-view scroll-y :scroll-with-animation="true" :enable-back-to-top="true"
+		<scroll-view v-else scroll-y :scroll-with-animation="true" :enable-back-to-top="true"
 			:style="{height: fold?'calc(100vh - 190px)':'calc(100vh - 125px)'}">
 			<block v-for="(item,index) in items" :key="index">
 				<view class="flex flex-direction radius margin-xs bg-white light ">
 					<view class='flex justify-between padding-lr-sm padding-top-sm align-center'>
 						<text class="text-bold">品名：{{item.name}}</text>
-						<view>
-							<text class="cuIcon-edit text-red margin-right-xs"
-								@click='editItem(item.id||item.plu)'></text>
-							<text class="cuIcon-delete text-blue" @click="deleteItem(item.id||item.plu)"></text>
-						</view>
+						<text class="cuIcon-delete text-blue" @click="deleteItem(item.id||item.plu)"></text>
 					</view>
-					<view class="flex justify-between padding-lr-sm margin-tb-xs dashed-bottom">
+					<view class="flex justify-between padding-lr-sm margin-tb-xs dashed-bottom"
+						@click='editItem(item.id||item.plu)'>
 						<text v-if="item.barcode">商品条码：{{item.barcode}}</text>
 						<text v-if="item.plu">plu号：{{item.plu}}</text>
 						<text>规格：{{item.specs}}</text>
 					</view>
 					<view
 						v-if="(item.newRetailPrice&&item.newMemberPrice)||(item.newRetailPrice&&item.newVipPrice)||(item.newMemberPrice&&items[index].newVipPrice)"
-						class='grid col-3'>
+						class='grid col-3' @click='editItem(item.id||item.plu)'>
 						<view class='cu-item padding-left flex flex-direction'>
 							<text>原零售价</text>
-							<text
-								class="text-lg text-cyan text-price  padding-tb-xs">{{item.retailPrice||'--'}}</text>
+							<text class="text-lg text-cyan text-price  padding-tb-xs"
+								:style="item.retailPrice&&item.newRetailPrice?'text-decoration:line-through':''">{{item.retailPrice}}</text>
 						</view>
 						<view class='cu-item padding-left flex flex-direction'>
 							<text>原会员价</text>
-							<text
-								class="text-lg text-cyan text-price padding-tb-xs">{{item.memberPrice||'--'}}</text>
+							<text class="text-lg text-cyan text-price padding-tb-xs"
+								:style="item.memberPrice&&item.newMemberPrice?'text-decoration:line-through':''">{{item.memberPrice}}</text>
 						</view>
 						<view class='cu-item padding-left flex flex-direction'>
 							<text>原PLUS会员价</text>
-							<text
-								class="text-lg text-cyan text-price padding-tb-xs">{{item.vipPrice||'--'}}</text>
+							<text class="text-lg text-cyan text-price padding-tb-xs"
+								:style="item.vipPrice&&item.newVipPrice?'text-decoration:line-through':''">{{item.vipPrice}}</text>
 						</view>
 						<view class='cu-item padding-left flex flex-direction'>
 							<text>现零售价</text>
-							<text
-								class="text-lg text-red text-price padding-tb-xs">{{item.newRetailPrice||'--'}}</text>
+							<text class="text-lg text-red text-price padding-tb-xs">{{item.newRetailPrice||'--'}}</text>
 						</view>
 						<view class='cu-item padding-left  flex flex-direction'>
 							<text>现会员价</text>
-							<text
-								class="text-lg text-red text-price padding-tb-xs">{{item.newMemberPrice||'--'}}</text>
+							<text class="text-lg text-red text-price padding-tb-xs">{{item.newMemberPrice||'--'}}</text>
 						</view>
 						<view class='cu-item padding-left flex flex-direction'>
 							<text>现PLUS会员价</text>
-							<text
-								class="text-lg text-red text-price padding-tb-xs">{{item.newVipPrice||'--'}}</text>
+							<text class="text-lg text-red text-price padding-tb-xs">{{item.newVipPrice||'--'}}</text>
 						</view>
 					</view>
 					<block v-else>
-						<view v-if="item.newRetailPrice" class="grid col-2">
+						<view v-if="item.newRetailPrice" class="grid col-2" @click='editItem(item.id||item.plu)'>
 							<view class='cu-item padding-left-lg flex flex-direction'>
 								<text>原零售价</text>
-								<text
-									class="text-lg text-cyan text-price padding-tb-xs">{{item.retailPrice}}</text>
+								<text class="text-lg text-cyan text-price padding-tb-xs"
+									:style="item.retailPrice&&item.newRetailPrice?'text-decoration:line-through':''">{{item.retailPrice}}</text>
 							</view>
 							<view class='cu-item padding-left-lg flex flex-direction'>
 								<text>现零售价</text>
@@ -95,11 +89,11 @@
 									class="text-lg text-orange text-price padding-tb-xs">{{item.newRetailPrice}}</text>
 							</view>
 						</view>
-						<view v-else-if="item.newMemberPrice" class="grid col-2">
+						<view v-else-if="item.newMemberPrice" class="grid col-2" @click='editItem(item.id||item.plu)'>
 							<view class='cu-item padding-left-lg flex flex-direction'>
 								<text>原会员价</text>
-								<text
-									class="text-lg text-cyan text-price padding-tb-xs">{{item.memberPrice}}</text>
+								<text class="text-lg text-cyan text-price padding-tb-xs"
+									:style="item.memberPrice&&item.newMemberPrice?'text-decoration:line-through':''">{{item.memberPrice}}</text>
 							</view>
 							<view class='cu-item padding-left-lg flex flex-direction'>
 								<text>现会员价</text>
@@ -107,16 +101,15 @@
 									class="text-lg text-orange text-price padding-tb-xs">{{item.newMemberPrice}}</text>
 							</view>
 						</view>
-						<view v-else class="grid col-2">
+						<view v-else class="grid col-2" @click='editItem(item.id||item.plu)'>
 							<view class='cu-item padding-left-lg flex flex-direction'>
 								<text>原PLUS会员价</text>
-								<text
-									class="text-lg text-cyan text-price padding-tb-xs">{{item.vipPrice}}</text>
+								<text class="text-lg text-cyan text-price padding-tb-xs"
+									:style="item.vipPrice&&item.newVipPrice?'text-decoration:line-through':''">{{item.vipPrice}}</text>
 							</view>
 							<view class='cu-item padding-left-lg flex flex-direction'>
 								<text>现PLUS会员价</text>
-								<text
-									class="text-lg text-orange text-price padding-tb-xs">{{item.newVipPrice}}</text>
+								<text class="text-lg text-orange text-price padding-tb-xs">{{item.newVipPrice}}</text>
 							</view>
 						</view>
 					</block>
@@ -176,12 +169,12 @@
 						<view class="search-form radius">
 							<text class="cuIcon-search"></text>
 							<input v-model="scanResult" :adjust-position="false" placeholder="请输入商品条码、名称、拼音"
-								confirm-type="search" @confirm="serchConfirm"></input>
+								confirm-type="search" @confirm="searchConfirm"></input>
 							<text class="cuIcon-scan text-blue text-bold" @tap="scan"></text>
 						</view>
 						<view class="action text-white">
 							<text class="cuIcon-close "></text>
-							<text @click="scanResultCancel">取消</text>
+							<text @click="searchCancel">取消</text>
 							<text class="cuIcon-goods margin-left-xs" @tap.stop="query"></text>
 						</view>
 					</view>
@@ -358,6 +351,8 @@
 				resultDate: {},
 
 				unitDrawerModal: false,
+				unit: null,
+				units: [],
 
 				clearModalDialog: false,
 
@@ -367,14 +362,10 @@
 				items: [],
 				item: null,
 				addSign: false,
-				unit: null,
-				units: [],
 				newRetailPrice: null,
 				newMemberPrice: null,
 				newVipPrice: null,
-				oldRetailGrossProfitRate: '',
-				oldMemberGrossProfitRate: '',
-				oldVipGrossProfitRate: '',
+
 				retailGrossProfitRate: '',
 				memberGrossProfitRate: '',
 				vipGrossProfitRate: '',
@@ -387,15 +378,10 @@
 			this.units = catalog.units;
 			let sign = options.sign || 'edit';
 			console.log(sign);
+			//new RegExp("^([1-9][0-9]+(.[0-9]{1,4})?)/([\u4e00-\u9fa5]{1,2}|500g|kg|pcs)$", "i");
 			//console.log("00564".replace(new RegExp(/^(0+)([0-9]+(\.[0-9]{0,})?$)/).$1, ""));
-			//console.log(new RegExp(/^(0+)([0-9]+(\.[0-9]{0,})?$)/).exec("00562"));
 		},
 		watch: {
-			item() {
-				if (this.item) {
-					let patt = new RegExp("^([1-9][0-9]+(.[0-9]{1,4})?)/([\u4e00-\u9fa5]{1,2}|500g|kg|pcs)$", "i");
-				}
-			},
 			unit() {
 				let pattern = new RegExp(/\/?([\u4e00-\u9fa5]{1,2}|500g|kg|pcs)?$/);
 				if (this.newRetailPrice)
@@ -404,13 +390,53 @@
 					this.newMemberPrice = this.newMemberPrice.replace(pattern, '') + "/" + this.unit;
 				if (this.newVipPrice)
 					this.newVipPrice = this.newVipPrice.replace(pattern, '') + "/" + this.unit;
+				if (this.item) {
+					if (this.item.newRetailPrice)
+						this.item.newRetailPrice = this.item.newRetailPrice.replace(pattern, '') + "/" + this.unit;
+					if (this.item.newMemberPrice)
+						this.item.newMemberPrice = this.item.newMemberPrice.replace(pattern, '') + "/" + this.unit;
+					if (this.item.newVipPrice)
+						this.item.newVipPrice = this.item.newVipPrice.replace(pattern, '') + "/" + this.unit;
+				}
 			}
+		},
+		computed: {
+			oldRetailGrossProfitRate: {
+				get() {
+					if (this.item) {
+						let pattern = new RegExp(/\/?([\u4e00-\u9fa5]{1,2}|500g|kg|pcs)?$/);
+						let cost = this.item.storage.lastPurchasePrice.replace(pattern, '');
+						return this.computedGrossProfitRate(cost, this.item.retailPrice.replace(pattern, '')) + '%';
+					}
+				},
+				set(Value) {}
+			},
+			oldMemberGrossProfitRate: {
+				get() {
+					if (this.item) {
+						let pattern = new RegExp(/\/?([\u4e00-\u9fa5]{1,2}|500g|kg|pcs)?$/);
+						let cost = this.item.storage.lastPurchasePrice.replace(pattern, '');
+						return this.computedGrossProfitRate(cost, this.item.memberPrice.replace(pattern, '')) + '%';
+					}
+				},
+				set(Value) {}
+			},
+			oldVipGrossProfitRate: {
+				get() {
+					if (this.item) {
+						let pattern = new RegExp(/\/?([\u4e00-\u9fa5]{1,2}|500g|kg|pcs)?$/);
+						let cost = this.item.storage.lastPurchasePrice.replace(pattern, '');
+						return this.computedGrossProfitRate(cost, this.item.vipPrice.replace(pattern, '')) + '%';
+					}
+				},
+				set(Value) {}
+			},
+
 		},
 		methods: {
 			foldClick() {
 				this.fold = !this.fold;
 			},
-
 			showDateModal() {
 				this.dateModal = true;
 			},
@@ -454,12 +480,13 @@
 				if (this.item)
 					this.unit = v;
 			},
-
 			showModal(event) {
 				this.addSign = true;
 				this.modalName = event.currentTarget.dataset.target;
 			},
 			hideModal(v) {
+				if (!this.addSign)
+					this.clearItem();
 				this.modalName = null;
 			},
 			editItem(key) {
@@ -470,21 +497,16 @@
 				for (const i of that.items) {
 					if (i.id === key || i.plu === key) {
 						that.item = i;
+						that.unit = pattern.exec(i.retailPrice)[1];
 						let cost = that.item.storage.lastPurchasePrice.replace(pattern, '');
-						that.oldRetailGrossProfitRate = that.computedGrossProfitRate(cost, that.item.retailPrice.replace(
-							pattern, '')) + '%';
 						if (that.item.newRetailPrice) {
 							that.retailGrossProfitRate = that.computedGrossProfitRate(cost, that.item.newRetailPrice
 								.replace(pattern, '')) + '%';
 						}
-						that.oldMemberGrossProfitRate = that.computedGrossProfitRate(cost, that.item.memberPrice.replace(
-							pattern, '')) + '%';
 						if (that.item.newMemberPrice) {
 							that.memberGrossProfitRate = that.computedGrossProfitRate(cost, that.item.newMemberPrice
 								.replace(pattern, '')) + '%';
 						}
-						that.oldVipGrossProfitRate = that.computedGrossProfitRate(cost, that.item.vipPrice.replace(
-							pattern, '')) + '%';
 						if (that.item.newVipPrice) {
 							that.vipGrossProfitRate = that.computedGrossProfitRate(cost, that.item.newVipPrice
 								.replace(pattern, '')) + '%';
@@ -503,22 +525,6 @@
 					}
 					index += 1;
 				}
-			},
-			scan() {
-				var that = this;
-				uni.scanCode({
-					scanType: ['barCode'],
-					success: function(res) {
-						that.scanResult = res.result;
-						that.serchConfirm();
-					},
-					fail: function(res) {
-						console.log(JSON.stringify(res));
-					},
-				});
-			},
-			scanResultCancel() {
-				this.scanResult = null;
 			},
 			blur(sign) {
 				let pattern = new RegExp(/\/?([\u4e00-\u9fa5]{1,}|500g|kg|pcs)?$/);
@@ -561,7 +567,7 @@
 				let difference = price - cost;
 				return (difference / price * 100).toFixed(2);
 			},
-			serchConfirm() {
+			searchConfirm() {
 				var that = this;
 				let patt = new RegExp(/\/?([\u4e00-\u9fa5]{1,2}|500g|kg|pcs)?$/);
 				that.clearItem();
@@ -598,16 +604,25 @@
 								...that.item
 							};
 						}
-						let cost = i.storage.lastPurchasePrice.replace(patt, '');
-						that.oldRetailGrossProfitRate = that.computedGrossProfitRate(cost, i.retailPrice.replace(patt,
-							'')) + '%';
-						that.oldMemberGrossProfitRate = that.computedGrossProfitRate(cost, i.memberPrice.replace(patt,
-							'')) + '%';
-						that.oldVipGrossProfitRate = that.computedGrossProfitRate(cost, i.vipPrice.replace(patt, '')) +
-							'%';
 						break;
 					}
 				}
+			},
+			scan() {
+				var that = this;
+				uni.scanCode({
+					scanType: ['barCode'],
+					success: function(res) {
+						that.scanResult = res.result;
+						that.searchConfirm();
+					},
+					fail: function(res) {
+						console.log(JSON.stringify(res));
+					},
+				});
+			},
+			searchCancel() {
+				this.scanResult = null;
 			},
 			addItem() {
 				var that = this;
@@ -660,12 +675,10 @@
 				that.item = that.unit = null;
 				that.newRetailPrice = that.newMemberPrice = that.newVipPrice = '';
 				that.retailGrossProfitRate = that.memberGrossProfitRate = that.vipGrossProfitRate = '';
-				that.oldRetailGrossProfitRate = that.oldMemberGrossProfitRate = that.oldVipGrossProfitRate = '';
 			},
 			clearItems() {
 				this.items = [];
 				this.hideClearModalDialog();
-				this
 			},
 
 			computedHeight() {
@@ -716,6 +729,10 @@
 
 	.tips {
 		font-size: 164rpx;
+	}
+
+	.drag {
+		font-size: 48rpx;
 	}
 
 	.bottom {

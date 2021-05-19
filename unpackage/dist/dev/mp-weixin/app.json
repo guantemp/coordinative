@@ -1,23 +1,36 @@
 {
   "pages": [
     "pages/index/index",
-    "pages/workflow/workflow",
-    "pages/workflow/store_selection",
-    "pages/workflow/price_adjustment_sheet",
-    "pages/workflow/price_adjustment_details",
-    "pages/workflow/price_adjustment_add",
-    "pages/workflow/label/label",
+    "pages/index/workflow",
     "pages/member/member",
     "pages/oa/oa",
-    "pages/user/user",
-    "pages/user/login",
-    "pages/user/register",
-    "pages/user/password",
-    "pages/public/not_implemented",
-    "pages/user/userInfo",
-    "pages/user/bindMobile"
+    "pages/index/user",
+    "pages/public/not_implemented"
   ],
-  "subPackages": [],
+  "subPackages": [
+    {
+      "root": "pages/user",
+      "pages": [
+        "login",
+        "register",
+        "password",
+        "userInfo",
+        "bindMobile",
+        "setting/printSetting"
+      ]
+    },
+    {
+      "root": "pages/workflow",
+      "pages": [
+        "store_selection",
+        "price/price_adjustment_sheet",
+        "price/price_adjustment_details",
+        "price/price_adjustment_add",
+        "label/label",
+        "catalog/catalog"
+      ]
+    }
+  ],
   "window": {
     "navigationBarTextStyle": "black",
     "navigationBarTitleText": "HOPRXI协助工具",
@@ -38,7 +51,7 @@
       },
       {
         "text": "业务",
-        "pagePath": "pages/workflow/workflow",
+        "pagePath": "pages/index/workflow",
         "iconPath": "static/workflow.png",
         "selectedIconPath": "static/workflow_selected.png"
       },
@@ -56,7 +69,7 @@
       },
       {
         "text": "我的",
-        "pagePath": "pages/user/user",
+        "pagePath": "pages/index/user",
         "iconPath": "static/user.png",
         "selectedIconPath": "static/user_selected.png"
       }

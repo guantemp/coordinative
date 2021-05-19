@@ -38,7 +38,7 @@
 	import {
 		checkMobile,
 		checkSmsCode
-	} from '../../js_sdk/util.js';
+	} from '@/js_sdk/util.js';
 	export default {
 		data() {
 			return {

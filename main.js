@@ -4,13 +4,13 @@ import App from './App'
 import store from './store';
 
 //引入全局request
-import http from './js_sdk/luch-request/luch-request/luch-request.js'
+import http from '@/js_sdk/luch-request/luch-request/luch-request.js'
 import {
 	toast,
 	navTo,
 	throttle,
 	debounce
-} from './js_sdk/util.js';
+} from '@/js_sdk/util.js';
 
 //挂载全局方法
 Vue.prototype.$store = store;

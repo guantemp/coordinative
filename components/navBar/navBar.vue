@@ -40,7 +40,6 @@
 			</view>
 			<view>
 				<slot name="extendSlot">
-
 				</slot>
 			</view>
 		</view>
