@@ -246,6 +246,11 @@
 				this.prints = label.prints;
 				this.seclectLabel();
 			}, 500);
+			let sign = options.sign || '';
+			switch (sign) {
+				case 'price_adjustment':
+					let sheetNumber = options.sheetNumber || '';
+			}
 			this.items = [{
 				barcode: 6907861191394,
 				grade: "合格品",

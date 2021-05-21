@@ -822,7 +822,7 @@ function initData(vueOptions, context) {
     try {
       data = data.call(context); // 支持 Vue.prototype 上挂的数据
     } catch (e) {
-      if (Object({"NODE_ENV":"development","VUE_APP_NAME":"HOPRXI协着工具","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG) {
+      if (Object({"VUE_APP_NAME":"HOPRXI协着工具","VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG) {
         console.warn('根据 Vue 的 data 函数初始化小程序 data 失败，请尽量确保 data 函数中不访问 vm 对象，否则可能影响首次数据渲染速度。', data);
       }
     }
@@ -10156,7 +10156,7 @@ function type(obj) {
 
 function flushCallbacks$1(vm) {
     if (vm.__next_tick_callbacks && vm.__next_tick_callbacks.length) {
-        if (Object({"NODE_ENV":"development","VUE_APP_NAME":"HOPRXI协着工具","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG) {
+        if (Object({"VUE_APP_NAME":"HOPRXI协着工具","VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG) {
             var mpInstance = vm.$scope;
             console.log('[' + (+new Date) + '][' + (mpInstance.is || mpInstance.route) + '][' + vm._uid +
                 ']:flushCallbacks[' + vm.__next_tick_callbacks.length + ']');
@@ -10177,14 +10177,14 @@ function nextTick$1(vm, cb) {
     //1.nextTick 之前 已 setData 且 setData 还未回调完成
     //2.nextTick 之前存在 render watcher
     if (!vm.__next_tick_pending && !hasRenderWatcher(vm)) {
-        if(Object({"NODE_ENV":"development","VUE_APP_NAME":"HOPRXI协着工具","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG){
+        if(Object({"VUE_APP_NAME":"HOPRXI协着工具","VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG){
             var mpInstance = vm.$scope;
             console.log('[' + (+new Date) + '][' + (mpInstance.is || mpInstance.route) + '][' + vm._uid +
                 ']:nextVueTick');
         }
         return nextTick(cb, vm)
     }else{
-        if(Object({"NODE_ENV":"development","VUE_APP_NAME":"HOPRXI协着工具","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG){
+        if(Object({"VUE_APP_NAME":"HOPRXI协着工具","VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG){
             var mpInstance$1 = vm.$scope;
             console.log('[' + (+new Date) + '][' + (mpInstance$1.is || mpInstance$1.route) + '][' + vm._uid +
                 ']:nextMPTick');
@@ -10270,7 +10270,7 @@ var patch = function(oldVnode, vnode) {
     });
     var diffData = this.$shouldDiffData === false ? data : diff(data, mpData);
     if (Object.keys(diffData).length) {
-      if (Object({"NODE_ENV":"development","VUE_APP_NAME":"HOPRXI协着工具","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG) {
+      if (Object({"VUE_APP_NAME":"HOPRXI协着工具","VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG) {
         console.log('[' + (+new Date) + '][' + (mpInstance.is || mpInstance.route) + '][' + this._uid +
           ']差量更新',
           JSON.stringify(diffData));
@@ -11528,6 +11528,119 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
   "卷",
   "挂"],
 
+  category: [{
+    id: '0',
+    name: "全部" },
+
+  {
+    id: '1',
+    name: "生鲜",
+    sub: [{
+      id: "211",
+      name: "水产" },
+    {
+      id: "2134",
+      name: "鲜肉",
+      sub: [{
+        id: "754",
+        name: "猪肉及分割品" },
+      {
+        id: "234",
+        name: "禽类" }] },
+
+    {
+      id: "98874",
+      name: "水果" },
+
+    {
+      id: "9874",
+      name: "蔬菜" },
+
+    {
+      id: "987",
+      name: "熟食" }] },
+
+
+
+  {
+    id: "2",
+    name: "粮油",
+    sub: [{
+      id: "23412",
+      name: "食用油",
+      sub: [{
+        id: "4767",
+        name: "菜籽油" },
+      {
+        id: "0853",
+        name: "花生油" },
+      {
+        id: "083553",
+        name: "调和油" },
+
+      {
+        id: "0553",
+        name: "大豆油" },
+
+      {
+        id: "083553",
+        name: "玉米油" }] },
+
+
+
+    {
+      id: "212",
+      name: "粮食" },
+
+    {
+      id: "212325",
+      name: "速食" }] },
+
+
+
+  {
+    id: "3",
+    name: "文玩" },
+
+  {
+    id: "4",
+    name: "日化",
+    sub: [{
+      id: "234",
+      name: "纸品" },
+    {
+      id: "24",
+      name: "清洁用品" },
+    {
+      id: "224",
+      name: "杀虫芳香" }] },
+
+
+  {
+    id: "5",
+    name: "文玩" },
+
+  {
+    id: "6",
+    name: "烟酒" },
+
+  {
+    id: "7",
+    name: "散点" },
+
+  {
+    id: "8",
+    name: "五金家电" },
+
+  {
+    id: "9",
+    name: "针织服饰" },
+
+  {
+    id: "10",
+    name: "家居百货" }],
+
+
   catalog: [{
     id: "201451060435585024",
     name: '彩虹柠檬香电热灭蚊香液',
@@ -11535,6 +11648,7 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
     specs: '150ml',
     placeOfOrigin: '四川.成都',
     grade: '合格品',
+    category_id: "224",
     retailPrice: '19.59/盒',
     memberPrice: '18.00/盒',
     vipPrice: '0.00/盒',
@@ -11557,10 +11671,11 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
   {
     plu: 133,
-    name: '精品沃柑',
+    name: '广西沃柑',
     specs: '500g',
     placeOfOrigin: '广西.桂林',
     grade: '合格品',
+    category_id: "98874",
     retailPrice: '4.59/500g',
     memberPrice: '4.00/500g',
     vipPrice: '2.50/500g',
@@ -11617,6 +11732,28 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
     vip: {
       referenceSalePrice: '32.88/支',
       referencePurchasePrice: '29.88/支' } },
+
+
+  {
+    plu: 123,
+    name: '红苋菜',
+    specs: '500g',
+    placeOfOrigin: '江阳区',
+    grade: '合格品',
+    category_id: "98874",
+    retailPrice: '0.99/500g',
+    memberPrice: '0.95/500g',
+    vipPrice: '0.85/500g',
+    vip: {
+      referenceSalePrice: '1.59/500g',
+      referencePurchasePrice: '0.59/500g' },
+
+    storage: {
+      lastPurchasePrice: '0.652/500g',
+      amount: 3.578,
+      number: 6.587,
+      stockTurn: 12.24 } },
+
 
   {
     id: '201452966564158972',
@@ -11677,7 +11814,28 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
     retailPrice: '9.80/盒',
     memberPrice: '8.80/盒',
-    vipPrice: '0.00/盒' }] };exports.default = _default;
+    vipPrice: '0.00/盒' },
+
+  {
+    id: '201452564158974',
+    name: '伊利金典有机纯牛奶',
+    barcode: '6907992508191',
+    specs: '250ml',
+    placeOfOrigin: '内蒙古.呼和浩特市',
+    grade: '合格品',
+    vip: {
+      referenceSalePrice: '5.30/盒',
+      referencePurchasePrice: '4.852/盒' },
+
+    storage: {
+      lastPurchasePrice: '4.785/盒',
+      amount: 180,
+      number: 36,
+      stockTurn: 21.98 },
+
+    retailPrice: '5.29/盒',
+    memberPrice: '0.00/盒',
+    vipPrice: '4.98/盒' }] };exports.default = _default;
 
 /***/ }),
 

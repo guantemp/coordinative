@@ -1,26 +1,95 @@
 <template>
 	<view>
-		<navBar title="商品目录" :backgroundColor="[1, ['#6B73FF', '#000DFF', 135]]" tabPage="/pages/index/index"
-			:titleFont="['#FFF']" id="navBar">
-		</navBar>
-		<view class="VerticalBox">
-			<scroll-view class="VerticalNav nav" scroll-y scroll-with-animation :scroll-top="verticalNavTop"
-				style="height:calc(100vh - 375upx)">
-				<view class="cu-item" :class="index==tabCur?'text-green cur':''" v-for="(item,index) in list"
-					:key="index" @tap="TabSelect" :data-id="index">
-					Tab-{{item.name}}
+		<navBar title="商品目录" :backgroundColor="[1, ['#6B73FF', '#000DFF', 135]]" :titleFont="['#FFF']" id="navBar"
+			surplusHeight=43>
+			<view slot="extendSlot" class="cu-bar search">
+				<view class="search-form radius">
+					<text class="cuIcon-search"></text>
+					<input v-model="scanResult" :adjust-position="false" type="text" placeholder="请输入商品条码、名称、拼音助记码"
+						confirm-type="search"></input>
+					<text class="cuIcon-scan text-blue text-bold" @tap="scan"></text>
 				</view>
-			</scroll-view>
-		</view>
+				<view class="action text-white">
+					<text class="cuIcon-close "></text>
+					<text @click="computedScrollViewHeight">取消</text>
+				</view>
+			</view>
+		</navBar>
+		<scroll-view scroll-x class="bg-white nav" scroll-with-animation :scroll-left="scrollLeft">
+			<view class="flex text-center">
+				<view class="cu-item flex-sub" :class="index===tabCur?'text-orange cur':''"
+					v-for="(item,index) in category" :key="index" :data-id="index" @tap="tabSelect(item.id,$event)">
+					<text>{{item.name}}</text>
+					<text v-if="item.sub" class="cuIcon-triangledownfill category"
+						@click="this.$util.toast('我还有子类哦')"></text>
+				</view>
+			</view>
+		</scroll-view>
+		<scroll-view scroll-y :scroll-with-animation="true" :enable-back-to-top="true" class="solid-top"
+			:style="{height: 'calc(100vh - 150px)'}">
+			<view class="bg-white">
+				<view :id="'good'+good.id" class="flex padding-sm solid-top align-center" v-for="good in catalog"
+					:key="good.id">
+					<view class="imageWrapper">
+						<image class="good-img"
+							:src="good.goodImg||(good.barcode?'/static/workflow/archives.png':'/static/workflow/plu.png')"
+							mode="aspectFill" />
+					</view>
+					<view class="flex flex-direction flex-sub">
+						<view class="text-bold text-cut">{{good.name}}</view>
+						<view class="flex justify-between">
+							<text v-if="good.barcode">条码：{{good.barcode}}</text>
+							<text v-else>PLU号：{{good.plu}}</text>
+							<text>规格：{{good.specs}}</text>
+						</view>
+						<view>
+							产地：<text>{{good.placeOfOrigin}}</text>
+						</view>
+						<view>
+							零售价：<text class="text-price text-red">{{good.retailPrice}}</text>
+						</view>
+					</view>
+				</view>
+			</view>
+		</scroll-view>
+		<uni-fab :pattern="pattern" :content="content" horizontal="right" vertical="bottom" direction="horizontal"
+			@trigger="fabClick"></uni-fab>
 	</view>
 </template>
 
 <script>
+	import catalog from '@/test/catalog_test_data.js'; //用例数据库
 	export default {
 		data() {
 			return {
-				list: [],
-				tabCur: 0
+				catalog: [],
+				category: [],
+				tabCur: 0,
+				scrollLeft: 0,
+				pattern: {
+					color: '#7A7E83',
+					backgroundColor: '#fff',
+					selectedColor: '#007AFF',
+				},
+				content: [{
+						iconPath: '/static/workflow/new.png',
+						selectedIconPath: '/static/workflow/new.png',
+						text: '新增商品',
+						active: false
+					},
+					{
+						iconPath: '/static/workflow/new_kg.png',
+						selectedIconPath: '/static/workflow/new_kg.png',
+						text: '计重商品',
+						active: false
+					},
+					{
+						iconPath: '/static/workflow/new_kg.png',
+						selectedIconPath: '/static/workflow/new_kg.png',
+						text: '新增计数',
+						active: false
+					}
+				]
 			}
 		},
 		onLoad() {
@@ -28,36 +97,43 @@
 				title: '加载中...',
 				mask: true
 			});
-			let list = [{}];
-			for (let i = 0; i < 26; i++) {
-				list[i] = {};
-				list[i].name = String.fromCharCode(65 + i);
-				list[i].id = i;
-			}
-			this.list = list;
-			this.listCur = list[0];
+			this.category = catalog.category;
+			this.catalog = catalog.catalog;
 		},
+		onReady() {
+			uni.hideLoading()
+		},
+		methods: {
+			tabSelect(id, event) {
+				this.tabCur = event.currentTarget.dataset.id;
+				this.scrollLeft = (event.currentTarget.dataset.id - 1) * 60;
+				for (const item of this.category) {
+					if (id === item.id)
+						console.log(item);
+				}
+			},
+			fabClick() {
+
+			}
+		}
 	}
 </script>
 
-<style>
-	.VerticalNav.nav {
-		width: 200upx;
-		white-space: initial;
+<style scoped lang='scss'>
+	.category {
+		font-size: 90%;
+		vertical-align: bottom;
 	}
-	
-	.VerticalNav.nav .cu-item {
-		width: 100%;
-		text-align: center;
-		background-color: #fff;
-		margin: 0;
-		border: none;
-		height: 50px;
-		position: relative;
+
+	.imageWrapper {
+		width: 118rpx;
+		height: 118rpx;
+		display: flex;
+		align-items: center;
 	}
-	
-	.VerticalNav.nav .cu-item.cur {
-		background-color: #f1f1f1;
+
+	.good-img {
+		width: 82rpx;
+		height: 82rpx;
 	}
-	
 </style>

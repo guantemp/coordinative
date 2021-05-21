@@ -236,13 +236,13 @@
 							<view class="flex align-center">
 								<text>现：</text>
 								<text class="text-price"></text>
-								<badge v-if="retailGrossProfitRate" :count="'毛利率：'+ retailGrossProfitRate"
+								<badge v-if="item.newRetailPrice||newRetailPrice" :count="'毛利率：'+ retailGrossProfitRate"
 									class="solid-bottom text-red basis-sm">
-									<input :placeholder="item.newRetailPrice" type="digit" v-model="newRetailPrice"
-										@blur="blur('sale')"></input>
+									<input :placeholder="item.newRetailPrice" type="digit" @blur="blur('sale',$event)"
+										:value="newRetailPrice||''"></input>
 								</badge>
-								<input v-else :placeholder="item.newRetailPrice" type="digit" v-model="newRetailPrice"
-									@blur="blur('sale')" class="solid-bottom text-red basis-xl"></input>
+								<input v-else :placeholder="item.newRetailPrice" type="digit"
+									@blur="blur('sale',$event)" class="solid-bottom text-red basis-xl"></input>
 							</view>
 						</view>
 					</view>
@@ -526,15 +526,17 @@
 					index += 1;
 				}
 			},
-			blur(sign) {
+			blur(sign, event) {
 				let pattern = new RegExp(/\/?([\u4e00-\u9fa5]{1,}|500g|kg|pcs)?$/);
 				let cost = this.item ? this.item.storage.lastPurchasePrice.replace(pattern, '') : 0;
 				switch (sign) {
 					case 'sale':
+						this.newRetailPrice = event.target.value;
+						console.log(event.target.value);
 						if (this.newRetailPrice) {
 							let temp = this.newRetailPrice.replace(pattern, '');
 							this.retailGrossProfitRate = this.computedGrossProfitRate(cost, temp) + '%';
-							this.newRetailPrice = formatMoney(temp) + "/" + this.unit;
+							this.newRetailPrice = formatMoney(temp) + "/" + (this.unit||'pcs');
 						} else {
 							this.retailGrossProfitRate = '';
 						}
@@ -543,7 +545,7 @@
 						if (this.newMemberPrice) {
 							let temp = this.newMemberPrice.replace(pattern, '');
 							this.memberGrossProfitRate = this.computedGrossProfitRate(cost, temp) + '%';
-							this.newMemberPrice = formatMoney(temp) + "/" + this.unit;
+							this.newMemberPrice = formatMoney(temp) + "/" + (this.unit||'pcs');
 						} else {
 							this.memberGrossProfitRate = '';
 						}
@@ -552,7 +554,7 @@
 						if (this.newVipPrice) {
 							let temp = this.newVipPrice.replace(pattern, '');
 							this.vipGrossProfitRate = this.computedGrossProfitRate(cost, temp) + '%';
-							this.newVipPrice = formatMoney(temp) + "/" + this.unit;
+							this.newVipPrice = formatMoney(temp) + "/" + (this.unit||'pcs');
 						} else {
 							this.vipGrossProfitRate = '';
 						}

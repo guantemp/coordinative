@@ -2,7 +2,7 @@
 	<view class="store">
 		<!-- :backgroundColor="[1, ['#24bdab', '#80c54c', 45]]"  or :backgroundColor="['#80c54c']  btnType="tower" tabPage="/pages/index/index"-->
 		<navBar :backgroundColor="[1, ['#9000ff', '#5e00ff', 45]]" :titleFont="['#FFF','center']"
-			placeholder="请输入门店名称/全拼/首字母" style="">
+			placeholder="请输入门店名称/全拼/首字母">
 		</navBar>
 		<scroll-view scroll-y class="indexes" :scroll-into-view="'indexes-'+ listCurID"
 			:style="{height:'calc(100vh - '+ navBar + 'rpx - 50rpx)'}" :scroll-with-animation="true"

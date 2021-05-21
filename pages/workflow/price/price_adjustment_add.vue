@@ -351,6 +351,8 @@
 				resultDate: {},
 
 				unitDrawerModal: false,
+				unit: null,
+				units: [],
 
 				clearModalDialog: false,
 
@@ -360,14 +362,10 @@
 				items: [],
 				item: null,
 				addSign: false,
-				unit: null,
-				units: [],
 				newRetailPrice: null,
 				newMemberPrice: null,
 				newVipPrice: null,
-				oldRetailGrossProfitRate: '',
-				oldMemberGrossProfitRate: '',
-				oldVipGrossProfitRate: '',
+
 				retailGrossProfitRate: '',
 				memberGrossProfitRate: '',
 				vipGrossProfitRate: '',
@@ -380,15 +378,10 @@
 			this.units = catalog.units;
 			let sign = options.sign || 'edit';
 			console.log(sign);
+			//new RegExp("^([1-9][0-9]+(.[0-9]{1,4})?)/([\u4e00-\u9fa5]{1,2}|500g|kg|pcs)$", "i");
 			//console.log("00564".replace(new RegExp(/^(0+)([0-9]+(\.[0-9]{0,})?$)/).$1, ""));
-			//console.log(new RegExp(/^(0+)([0-9]+(\.[0-9]{0,})?$)/).exec("00562"));
 		},
 		watch: {
-			item() {
-				if (this.item) {
-					let patt = new RegExp("^([1-9][0-9]+(.[0-9]{1,4})?)/([\u4e00-\u9fa5]{1,2}|500g|kg|pcs)$", "i");
-				}
-			},
 			unit() {
 				let pattern = new RegExp(/\/?([\u4e00-\u9fa5]{1,2}|500g|kg|pcs)?$/);
 				if (this.newRetailPrice)
@@ -397,7 +390,48 @@
 					this.newMemberPrice = this.newMemberPrice.replace(pattern, '') + "/" + this.unit;
 				if (this.newVipPrice)
 					this.newVipPrice = this.newVipPrice.replace(pattern, '') + "/" + this.unit;
+				if (this.item) {
+					if (this.item.newRetailPrice)
+						this.item.newRetailPrice = this.item.newRetailPrice.replace(pattern, '') + "/" + this.unit;
+					if (this.item.newMemberPrice)
+						this.item.newMemberPrice = this.item.newMemberPrice.replace(pattern, '') + "/" + this.unit;
+					if (this.item.newVipPrice)
+						this.item.newVipPrice = this.item.newVipPrice.replace(pattern, '') + "/" + this.unit;
+				}
 			}
+		},
+		computed: {
+			oldRetailGrossProfitRate: {
+				get() {
+					if (this.item) {
+						let pattern = new RegExp(/\/?([\u4e00-\u9fa5]{1,2}|500g|kg|pcs)?$/);
+						let cost = this.item.storage.lastPurchasePrice.replace(pattern, '');
+						return this.computedGrossProfitRate(cost, this.item.retailPrice.replace(pattern, '')) + '%';
+					}
+				},
+				set(Value) {}
+			},
+			oldMemberGrossProfitRate: {
+				get() {
+					if (this.item) {
+						let pattern = new RegExp(/\/?([\u4e00-\u9fa5]{1,2}|500g|kg|pcs)?$/);
+						let cost = this.item.storage.lastPurchasePrice.replace(pattern, '');
+						return this.computedGrossProfitRate(cost, this.item.memberPrice.replace(pattern, '')) + '%';
+					}
+				},
+				set(Value) {}
+			},
+			oldVipGrossProfitRate: {
+				get() {
+					if (this.item) {
+						let pattern = new RegExp(/\/?([\u4e00-\u9fa5]{1,2}|500g|kg|pcs)?$/);
+						let cost = this.item.storage.lastPurchasePrice.replace(pattern, '');
+						return this.computedGrossProfitRate(cost, this.item.vipPrice.replace(pattern, '')) + '%';
+					}
+				},
+				set(Value) {}
+			},
+
 		},
 		methods: {
 			foldClick() {
@@ -446,12 +480,13 @@
 				if (this.item)
 					this.unit = v;
 			},
-
 			showModal(event) {
 				this.addSign = true;
 				this.modalName = event.currentTarget.dataset.target;
 			},
 			hideModal(v) {
+				if (!this.addSign)
+					this.clearItem();
 				this.modalName = null;
 			},
 			editItem(key) {
@@ -462,21 +497,16 @@
 				for (const i of that.items) {
 					if (i.id === key || i.plu === key) {
 						that.item = i;
+						that.unit = pattern.exec(i.retailPrice)[1];
 						let cost = that.item.storage.lastPurchasePrice.replace(pattern, '');
-						that.oldRetailGrossProfitRate = that.computedGrossProfitRate(cost, that.item.retailPrice.replace(
-							pattern, '')) + '%';
 						if (that.item.newRetailPrice) {
 							that.retailGrossProfitRate = that.computedGrossProfitRate(cost, that.item.newRetailPrice
 								.replace(pattern, '')) + '%';
 						}
-						that.oldMemberGrossProfitRate = that.computedGrossProfitRate(cost, that.item.memberPrice.replace(
-							pattern, '')) + '%';
 						if (that.item.newMemberPrice) {
 							that.memberGrossProfitRate = that.computedGrossProfitRate(cost, that.item.newMemberPrice
 								.replace(pattern, '')) + '%';
 						}
-						that.oldVipGrossProfitRate = that.computedGrossProfitRate(cost, that.item.vipPrice.replace(
-							pattern, '')) + '%';
 						if (that.item.newVipPrice) {
 							that.vipGrossProfitRate = that.computedGrossProfitRate(cost, that.item.newVipPrice
 								.replace(pattern, '')) + '%';
@@ -574,13 +604,6 @@
 								...that.item
 							};
 						}
-						let cost = i.storage.lastPurchasePrice.replace(patt, '');
-						that.oldRetailGrossProfitRate = that.computedGrossProfitRate(cost, i.retailPrice.replace(patt,
-							'')) + '%';
-						that.oldMemberGrossProfitRate = that.computedGrossProfitRate(cost, i.memberPrice.replace(patt,
-							'')) + '%';
-						that.oldVipGrossProfitRate = that.computedGrossProfitRate(cost, i.vipPrice.replace(patt, '')) +
-							'%';
 						break;
 					}
 				}
@@ -652,7 +675,6 @@
 				that.item = that.unit = null;
 				that.newRetailPrice = that.newMemberPrice = that.newVipPrice = '';
 				that.retailGrossProfitRate = that.memberGrossProfitRate = that.vipGrossProfitRate = '';
-				that.oldRetailGrossProfitRate = that.oldMemberGrossProfitRate = that.oldVipGrossProfitRate = '';
 			},
 			clearItems() {
 				this.items = [];
@@ -707,6 +729,10 @@
 
 	.tips {
 		font-size: 164rpx;
+	}
+
+	.drag {
+		font-size: 48rpx;
 	}
 
 	.bottom {

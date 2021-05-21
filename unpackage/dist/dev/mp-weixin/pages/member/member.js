@@ -96,13 +96,13 @@ var components
 try {
   components = {
     navBar: function() {
-      return __webpack_require__.e(/*! import() | components/navBar/navBar */ "components/navBar/navBar").then(__webpack_require__.bind(null, /*! @/components/navBar/navBar.vue */ 176))
+      return __webpack_require__.e(/*! import() | components/navBar/navBar */ "components/navBar/navBar").then(__webpack_require__.bind(null, /*! @/components/navBar/navBar.vue */ 178))
     },
     datePicker: function() {
-      return __webpack_require__.e(/*! import() | components/date-picker/date-picker */ "components/date-picker/date-picker").then(__webpack_require__.bind(null, /*! @/components/date-picker/date-picker.vue */ 190))
+      return __webpack_require__.e(/*! import() | components/date-picker/date-picker */ "components/date-picker/date-picker").then(__webpack_require__.bind(null, /*! @/components/date-picker/date-picker.vue */ 192))
     },
     badge: function() {
-      return __webpack_require__.e(/*! import() | components/badge/badge */ "components/badge/badge").then(__webpack_require__.bind(null, /*! @/components/badge/badge.vue */ 197))
+      return __webpack_require__.e(/*! import() | components/badge/badge */ "components/badge/badge").then(__webpack_require__.bind(null, /*! @/components/badge/badge.vue */ 199))
     }
   }
 } catch (e) {
@@ -703,15 +703,17 @@ var _default = {
           index += 1;
         }} catch (err) {_iterator2.e(err);} finally {_iterator2.f();}
     },
-    blur: function blur(sign) {
+    blur: function blur(sign, event) {
       var pattern = new RegExp(/\/?([\u4e00-\u9fa5]{1,}|500g|kg|pcs)?$/);
       var cost = this.item ? this.item.storage.lastPurchasePrice.replace(pattern, '') : 0;
       switch (sign) {
         case 'sale':
+          this.newRetailPrice = event.target.value;
+          console.log(event.target.value);
           if (this.newRetailPrice) {
             var temp = this.newRetailPrice.replace(pattern, '');
             this.retailGrossProfitRate = this.computedGrossProfitRate(cost, temp) + '%';
-            this.newRetailPrice = (0, _util.formatMoney)(temp) + "/" + this.unit;
+            this.newRetailPrice = (0, _util.formatMoney)(temp) + "/" + (this.unit || 'pcs');
           } else {
             this.retailGrossProfitRate = '';
           }
@@ -720,7 +722,7 @@ var _default = {
           if (this.newMemberPrice) {
             var _temp = this.newMemberPrice.replace(pattern, '');
             this.memberGrossProfitRate = this.computedGrossProfitRate(cost, _temp) + '%';
-            this.newMemberPrice = (0, _util.formatMoney)(_temp) + "/" + this.unit;
+            this.newMemberPrice = (0, _util.formatMoney)(_temp) + "/" + (this.unit || 'pcs');
           } else {
             this.memberGrossProfitRate = '';
           }
@@ -729,7 +731,7 @@ var _default = {
           if (this.newVipPrice) {
             var _temp2 = this.newVipPrice.replace(pattern, '');
             this.vipGrossProfitRate = this.computedGrossProfitRate(cost, _temp2) + '%';
-            this.newVipPrice = (0, _util.formatMoney)(_temp2) + "/" + this.unit;
+            this.newVipPrice = (0, _util.formatMoney)(_temp2) + "/" + (this.unit || 'pcs');
           } else {
             this.vipGrossProfitRate = '';
           }
