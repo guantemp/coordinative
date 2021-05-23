@@ -56,6 +56,7 @@
 				</view>
 			</block>
 		</scroll-view>
+		<!-- bootom -->
 		<view class="add">
 			<button class="cu-btn lg radius shadow bg-gradual-orange basis-xl"
 				@tap.stop="this.$util.navTo('/pages/workflow/price/price_adjustment_add?sign=add')">

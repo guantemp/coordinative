@@ -105,11 +105,11 @@
 /******/
 /******/
 /******/ 		// mini-css-extract-plugin CSS loading
-/******/ 		var cssChunks = {"components/listCell/listCell":1,"components/navBar/navBar":1,"components/badge/badge":1,"components/date-picker/date-picker":1,"components/hoprxi-drag/hoprxi-drag":1,"uni_modules/uni-fab/components/uni-fab/uni-fab":1};
+/******/ 		var cssChunks = {"components/listCell/listCell":1,"components/navBar/navBar":1,"components/badge/badge":1,"components/date-picker/date-picker":1,"components/hoprxi-drag/hoprxi-drag":1,"uni_modules/uni-fab/components/uni-fab/uni-fab":1,"components/region-picker/region-picker":1};
 /******/ 		if(installedCssChunks[chunkId]) promises.push(installedCssChunks[chunkId]);
 /******/ 		else if(installedCssChunks[chunkId] !== 0 && cssChunks[chunkId]) {
 /******/ 			promises.push(installedCssChunks[chunkId] = new Promise(function(resolve, reject) {
-/******/ 				var href = "" + ({"components/listCell/listCell":"components/listCell/listCell","components/navBar/navBar":"components/navBar/navBar","components/badge/badge":"components/badge/badge","components/date-picker/date-picker":"components/date-picker/date-picker","components/hoprxi-drag/hoprxi-drag":"components/hoprxi-drag/hoprxi-drag","uni_modules/uni-fab/components/uni-fab/uni-fab":"uni_modules/uni-fab/components/uni-fab/uni-fab"}[chunkId]||chunkId) + ".wxss";
+/******/ 				var href = "" + ({"components/listCell/listCell":"components/listCell/listCell","components/navBar/navBar":"components/navBar/navBar","components/badge/badge":"components/badge/badge","components/date-picker/date-picker":"components/date-picker/date-picker","components/hoprxi-drag/hoprxi-drag":"components/hoprxi-drag/hoprxi-drag","uni_modules/uni-fab/components/uni-fab/uni-fab":"uni_modules/uni-fab/components/uni-fab/uni-fab","components/region-picker/region-picker":"components/region-picker/region-picker"}[chunkId]||chunkId) + ".wxss";
 /******/ 				var fullhref = __webpack_require__.p + href;
 /******/ 				var existingLinkTags = document.getElementsByTagName("link");
 /******/ 				for(var i = 0; i < existingLinkTags.length; i++) {

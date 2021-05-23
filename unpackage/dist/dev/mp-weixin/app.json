@@ -27,7 +27,8 @@
         "price/price_adjustment_details",
         "price/price_adjustment_add",
         "label/label",
-        "catalog/catalog"
+        "catalog/catalog",
+        "catalog/good"
       ]
     }
   ],

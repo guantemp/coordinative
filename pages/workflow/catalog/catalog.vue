@@ -28,8 +28,8 @@
 		<scroll-view scroll-y :scroll-with-animation="true" :enable-back-to-top="true" class="solid-top"
 			:style="{height: 'calc(100vh - 150px)'}">
 			<view class="bg-white">
-				<view :id="'good'+good.id" class="flex padding-sm solid-top align-center" v-for="good in catalog"
-					:key="good.id">
+				<view :id="'good'+good.id" class="flex padding-lr-sm padding-tb-xs solid-top align-center"
+					v-for="good in catalog" :key="good.id" @tap="good.id?navTo(good.id):navToScale(good.plu)">
 					<view class="imageWrapper">
 						<image class="good-img"
 							:src="good.goodImg||(good.barcode?'/static/workflow/archives.png':'/static/workflow/plu.png')"
@@ -80,12 +80,12 @@
 					{
 						iconPath: '/static/workflow/new_kg.png',
 						selectedIconPath: '/static/workflow/new_kg.png',
-						text: '计重商品',
+						text: '新增计重',
 						active: false
 					},
 					{
-						iconPath: '/static/workflow/new_kg.png',
-						selectedIconPath: '/static/workflow/new_kg.png',
+						iconPath: '/static/workflow/count.png',
+						selectedIconPath: '/static/workflow/count.png',
 						text: '新增计数',
 						active: false
 					}
@@ -114,6 +114,12 @@
 			},
 			fabClick() {
 
+			},
+			navTo(id) {
+				this.$util.navTo('/pages/workflow/catalog/good?id=' + id);
+			},
+			navToScale(plu) {
+				this.$util.navTo('/pages/workflow/catalog/good?plu=' + plu);
 			}
 		}
 	}
@@ -126,14 +132,14 @@
 	}
 
 	.imageWrapper {
-		width: 118rpx;
-		height: 118rpx;
+		width: 128rpx;
+		height: 108rpx;
 		display: flex;
 		align-items: center;
 	}
 
 	.good-img {
-		width: 82rpx;
-		height: 82rpx;
+		width: 98rpx;
+		height: 98rpx;
 	}
 </style>
