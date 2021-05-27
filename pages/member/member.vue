@@ -170,7 +170,7 @@
 							<text class="cuIcon-search"></text>
 							<input v-model="scanResult" :adjust-position="false" placeholder="请输入商品条码、名称、拼音"
 								confirm-type="search" @confirm="searchConfirm"></input>
-							<text class="cuIcon-scan text-blue text-bold" @tap="scan"></text>
+							<text class="cuIcon-scan text-blue text-bold" @tap.stop="scan"></text>
 						</view>
 						<view class="action text-white">
 							<text class="cuIcon-close "></text>

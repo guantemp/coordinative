@@ -36,7 +36,7 @@
 							mode="aspectFill" />
 					</view>
 					<view class="flex flex-direction flex-sub">
-						<view class="text-bold text-cut">{{good.name}}</view>
+						<view class="text-cut">{{good.name}}</view>
 						<view class="flex justify-between">
 							<text v-if="good.barcode">条码：{{good.barcode}}</text>
 							<text v-else>PLU号：{{good.plu}}</text>
@@ -53,7 +53,7 @@
 			</view>
 		</scroll-view>
 		<uni-fab :pattern="pattern" :content="content" horizontal="right" vertical="bottom" direction="horizontal"
-			@trigger="fabClick"></uni-fab>
+			@trigger="trigger"></uni-fab>
 	</view>
 </template>
 
@@ -112,8 +112,12 @@
 						console.log(item);
 				}
 			},
-			fabClick() {
-
+			trigger(e) {
+				console.log(e);
+				//this.content[e.index].active = !e.item.active
+				if (e.index === 0) {
+					this.$util.navTo('/pages/workflow/catalog/good');
+				}
 			},
 			navTo(id) {
 				this.$util.navTo('/pages/workflow/catalog/good?id=' + id);

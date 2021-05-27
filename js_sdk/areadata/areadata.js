@@ -1162,7 +1162,7 @@ const cityData = [{
 	}]
 }, {
 	value: '150000',
-	label: '内蒙古',
+	label: '内蒙古自治区',
 	children: [{
 		value: "150100",
 		label: "呼和浩特市",
@@ -6004,7 +6004,7 @@ const cityData = [{
 		}]
 	}, {
 		value: "429000",
-		label: "省直辖县级行政区划",
+		label: "直辖县",
 		children: [{
 			value: "429004",
 			label: "仙桃市"
@@ -7043,7 +7043,7 @@ const cityData = [{
 	}]
 }, {
 	value: '450000',
-	label: '广西壮族',
+	label: '广西壮族自治区',
 	children: [{
 		value: "450100",
 		label: "南宁市",
@@ -7535,7 +7535,7 @@ const cityData = [{
 		label: "儋州市"
 	}, {
 		value: "469000",
-		label: "省直辖县级行政区划",
+		label: "直辖县",
 		children: [{
 			value: "469001",
 			label: "五指山市"
@@ -7585,10 +7585,10 @@ const cityData = [{
 	}]
 }, {
 	value: '500000',
-	label: '重庆',
+	label: '重庆市',
 	children: [{
 		value: "500100",
-		label: "市辖区",
+		label: "重庆市",
 		children: [{
 			value: "500101",
 			label: "万州区"
@@ -7670,7 +7670,7 @@ const cityData = [{
 		}]
 	}, {
 		value: "500200",
-		label: "县",
+		label: "直辖县",
 		children: [{
 			value: "500229",
 			label: "城口县"
@@ -9209,7 +9209,7 @@ const cityData = [{
 	}]
 }, {
 	value: '540000',
-	label: '西藏',
+	label: '西藏自治区',
 	children: [{
 		value: "540100",
 		label: "拉萨市",
@@ -10413,7 +10413,7 @@ const cityData = [{
 	}]
 }, {
 	value: '640000',
-	label: '宁夏',
+	label: '宁夏回族自治区',
 	children: [{
 		value: "640100",
 		label: "银川市",
@@ -10518,7 +10518,7 @@ const cityData = [{
 	}]
 }, {
 	value: '650000',
-	label: '新疆',
+	label: '新疆维吾尔自治区',
 	children: [{
 		value: "650100",
 		label: "乌鲁木齐市",
@@ -10880,23 +10880,43 @@ const cityData = [{
 		}]
 	}, {
 		value: "659000",
-		label: "自治区直辖县级行政区划",
+		label: "直辖县",
 		children: [{
-			value: "659001",
-			label: "石河子市"
-		}, {
-			value: "659002",
-			label: "阿拉尔市"
-		}, {
-			value: "659003",
-			label: "图木舒克市"
-		}, {
-			value: "659004",
-			label: "五家渠市"
-		}, {
-			value: "659006",
-			label: "铁门关市"
-		}]
+				value: "659001",
+				label: "石河子市"
+			}, {
+				value: "659002",
+				label: "阿拉尔市"
+			}, {
+				value: "659003",
+				label: "图木舒克市"
+			}, {
+				value: "659004",
+				label: "五家渠市"
+			}, {
+				value: "659005",
+				label: "北屯市"
+			},
+			{
+				value: "659006",
+				label: "铁门关市"
+			}, {
+				value: "659007",
+				label: "双河市"
+			},
+			{
+				value: "659008",
+				label: "可克达拉市"
+			},
+			{
+				value: "659009",
+				label: "昆玉市"
+			},
+			{
+				value: "659010",
+				label: "胡杨河市"
+			}
+		]
 	}]
 }, {
 	value: '660000',

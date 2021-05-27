@@ -1,41 +1,16 @@
 export default {
 	units: [
-		"双",
-		"只",
-		"个",
-		"提",
-		"盒",
-		"本",
-		"支",
-		"瓶",
-		"包",
-		"袋",
-		"套",
-		"对",
-		"件",
-		"把",
-		"500g",
-		"条",
-		"台",
-		"罐",
-		"打",
-		"公斤",
-		"箱",
-		"卷",
-		"挂",
-		"束",
-		"串",
-		"册",
-		"组",
-		"节",
-		"桶",
-		"碗",
-		"棵",
-		"份"
+		"双", "只", "个", "提", "盒", "本", "支", "瓶", "包", "袋", "套", "对", "件", "把", "500g", "条", "台", "罐", "打", "公斤",
+		"箱", "卷", "挂", "束", "串", "册", "组", "节", "桶", "碗", "棵", "份"
 	],
+	grades: ['合格品', '不合格品', '优等品', '一级品', '二级品', '三级品'],
 	category: [{
 			id: '0',
 			name: "全部",
+		},
+		{
+			id: '-99',
+			name: "未定义",
 		},
 		{
 			id: '1',
@@ -115,11 +90,27 @@ export default {
 				name: "纸品"
 			}, {
 				id: "24",
-				name: "清洁用品"
+				name: "清洁用品",
+				sub: [{
+					id: "24325",
+					name: "牙膏牙刷"
+				}]
 			}, {
 				id: "224",
 				name: "杀虫芳香"
 			}]
+		},
+		{
+			id: "8",
+			name: "五金家电"
+		},
+		{
+			id: "9",
+			name: "针织服饰"
+		},
+		{
+			id: "10",
+			name: "家居百货"
 		},
 		{
 			id: "5",
@@ -134,26 +125,22 @@ export default {
 			name: "散点"
 		},
 		{
-			id: "8",
-			name: "五金家电"
-		},
-		{
-			id: "9",
-			name: "针织服饰"
-		},
-		{
-			id: "10",
-			name: "家居百货"
-		},
+			id: "A1323",
+			name: "药品"
+		}
 	],
 	catalog: [{
 			id: "201451060435585024",
 			name: '彩虹柠檬香电热灭蚊香液',
 			barcode: 6907861191394,
 			specs: '150ml',
-			placeOfOrigin: '四川.成都',
+			placeOfOrigin: '四川省.成都市',
 			grade: '合格品',
-			category_id: "224",
+			shelfLife:"180天",
+			category: {
+				id: "224",
+				name: "杀虫芳香"
+			},
 			retailPrice: '19.59/盒',
 			memberPrice: '18.00/盒',
 			vipPrice: '0.00/盒',
@@ -178,9 +165,13 @@ export default {
 			plu: 133,
 			name: '广西沃柑',
 			specs: '500g',
-			placeOfOrigin: '广西.桂林',
+			placeOfOrigin: '广西壮族自治区.桂林市',
 			grade: '合格品',
-			category_id: "98874",
+			category: {
+				id: "98874",
+				name: "水果"
+			},
+			shelfLife:"3天",
 			retailPrice: '4.59/500g',
 			memberPrice: '4.00/500g',
 			vipPrice: '2.50/500g',
@@ -199,8 +190,12 @@ export default {
 			name: '哇哈哈营养快线水果牛奶饮品（菠萝味）',
 			barcode: 6902083898625,
 			specs: '550ml',
-			placeOfOrigin: '浙江.杭州',
+			placeOfOrigin: '浙江省.杭州市',
 			grade: '合格品',
+			category: {
+				id: '-99',
+				name: "未定义",
+			},
 			retailPrice: '11.98/瓶',
 			memberPrice: '10.98/瓶',
 			vipPrice: '4.98/瓶',
@@ -219,7 +214,11 @@ export default {
 			name: '川骄无芯卷纸（白四层）',
 			barcode: 6970981171003,
 			specs: '1800g',
-			placeOfOrigin: '四川.彭州',
+			category: {
+				id: "234",
+				name: "纸品"
+			},
+			placeOfOrigin: '四川省.成都市',
 			grade: '合格品',
 			retailPrice: '11.98/提',
 			memberPrice: '0.00/提',
@@ -229,7 +228,11 @@ export default {
 			name: '云南三七牙膏（清新留兰）',
 			barcode: 6953067200880,
 			specs: '220g',
-			placeOfOrigin: '云南.昆明',
+			category: {
+				id: "24325",
+				name: "牙膏牙刷",
+			},
+			placeOfOrigin: '云南省.昆明市',
 			grade: '合格品',
 			retailPrice: '34.88/支',
 			memberPrice: '32.88/支',
@@ -246,6 +249,7 @@ export default {
 			placeOfOrigin: '江阳区',
 			grade: '合格品',
 			category_id: "98874",
+			shelfLife:"0天",
 			retailPrice: '0.99/500g',
 			memberPrice: '0.95/500g',
 			vipPrice: '0.85/500g',
@@ -265,6 +269,10 @@ export default {
 			name: '菊品郁金银屑片',
 			barcode: '6926094418474',
 			specs: '100片',
+			category: {
+				id: "A1323",
+				name: "药品"
+			},
 			placeOfOrigin: '陕西.商洛市',
 			grade: '合格品',
 			vip: {
@@ -287,6 +295,10 @@ export default {
 			specs: '10粒/板*3板',
 			placeOfOrigin: '重庆市',
 			grade: '合格品',
+			category: {
+				id: '-99',
+				name: "未定义",
+			},
 			vip: {
 				referenceSalePrice: '20.30/盒',
 				referencePurchasePrice: '12.45/盒'
@@ -307,6 +319,10 @@ export default {
 			specs: '0.25g*50粒',
 			placeOfOrigin: '黑龙江.哈尔滨市',
 			grade: '合格品',
+			category: {
+				id: '-99',
+				name: "未定义",
+			},
 			vip: {
 				referenceSalePrice: '20.30/盒',
 				referencePurchasePrice: '12.45/盒'
@@ -328,6 +344,10 @@ export default {
 			specs: '250ml',
 			placeOfOrigin: '内蒙古.呼和浩特市',
 			grade: '合格品',
+			category: {
+				id: '-99',
+				name: "未定义",
+			},
 			vip: {
 				referenceSalePrice: '5.30/盒',
 				referencePurchasePrice: '4.852/盒'
