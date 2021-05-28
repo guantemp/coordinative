@@ -123,7 +123,7 @@
 			</view>
 			<view class="action" @tap.stop="showClearModalDialog">
 				<view class="cuIcon-delete">
-					<view v-if="items.length > 0" class="cu-tag badge">{{items.length}}</view>
+					<view v-if="items.length > 0" class="cu-tag badge">水调歌头粉色{{items.length}}</view>
 				</view>
 				清空
 			</view>

@@ -3,7 +3,7 @@
 		<navBar :title="(plu||id)?'商品编辑':'商品新增'" :backgroundColor="[1, ['#6B73FF', '#000DFF', 135]]"
 			:titleFont="['#FFF']" id="navBar">
 		</navBar>
-		<view class="cu-form-group padding-lr-sm">
+		<view class="cu-form-group">
 			<view class="title">
 				<text v-if='good.plu'>PLU码</text>
 				<text v-else>商品条码</text>
@@ -45,18 +45,28 @@
 		</view>
 		<view class="cu-form-group">
 			<view class="title">参考进价</view>
-			<input :placeholder="'¥0.00/PCS'" name="purchasePrice" type="digit"></input>
+			<text class="text-price"></text>
+			<view class="flex flex-sub justify-start">
+				<input :placeholder="good.storage.lastPurchasePrice||'0.00/PCS'" :value="purchasePrice" type="digit"
+					@blur="purchasePriceBlur"></input>
+					<text class="badge1">毛利率：{{retailGrossProfitRate}}</text>
+			</view>
 			<text class="icon-unit text-blue" @tap.stop="showUnitDrawerModal"></text>
 		</view>
 		<view class="cu-form-group">
 			<view class="title">零&nbsp;&nbsp;售&nbsp;&nbsp;价</view>
-			<input :placeholder="good.retailPrice?'¥'+ good.retailPrice:'¥0.00/PCS'" v-model="retailPrice"
-				type="digit"></input>
+			<text class="text-price"></text>
+			<view class="flex flex-sub">
+				<badge :count="'毛利率：'+ retailGrossProfitRate" class="basis-df">
+					<input :placeholder="good.retailPrice||'0.00/PCS'" :value="retailPrice" type="digit"
+						@blur="retailPriceBlur"></input>
+				</badge>
+			</view>
 			<text class="icon-unit text-blue" @tap.stop="showUnitDrawerModal"></text>
 		</view>
-		<view class="cu-form-group">
+		<view class="cu-form-group solid-bottom">
 			<view class="title">保&nbsp;&nbsp;质&nbsp;&nbsp;期</view>
-			<input :placeholder="good.shelfLife||'0天'" v-model="shelfLife" type="number" @blur="shelfLifeBlur"></input>
+			<input :placeholder="good.shelfLife||'0天'" :value="shelfLife" type="number" @blur="shelfLifeBlur"></input>
 		</view>
 		<view class="cu-bar bg-white">
 			<view class="action title">商品图片</view>
@@ -120,7 +130,7 @@
 					class="flex align-center justify-between padding-lr-lg padding-tb-sm bg-white solid-bottom text-lg">
 					<text @tap.stop.prevent="hideOriginDialog">取消</text>
 					<text class="text-orange" @tap.stop.prevent="originDialogConfirm">确定</text>
-				</view>i
+				</view>
 				<region-picker @change="handlerChange" :value="initPlaceOfOrigin"></region-picker>
 			</view>
 		</view>
@@ -145,11 +155,14 @@
 </template>
 
 <script>
+	import {
+		formatMoney
+	} from '@/js_sdk/util.js';
 	import catalog from '@/test/catalog_test_data.js'; //用例数据库
 	export default {
 		data() {
 			return {
-				good: {},
+				good: null,
 				id: '',
 				plu: '',
 				barcode: '',
@@ -161,6 +174,7 @@
 				regionResult: null,
 				placeOfOrigin: '',
 				category: null,
+				purchasePrice: '',
 				retailPrice: '',
 				imgList: [],
 
@@ -176,8 +190,8 @@
 				unitDrawerModal: false,
 				unit: null,
 				units: [],
-				
-				shelfLife:'',
+
+				shelfLife: '',
 			}
 		},
 		onLoad(options) {
@@ -191,16 +205,16 @@
 					}
 				}
 			}
-			if (this.good !== {}) {
+			if (this.good) {
 				let pattern = new RegExp(/\/?([\u4e00-\u9fa5]{1,2}|500g|kg|pcs)?$/);
 				this.unit = pattern.exec(this.good.retailPrice)[1];
 			}
 			this.units = catalog.units;
 			this.grades = catalog.grades;
-			let pattern = new RegExp("^([\u4e00-\u9fa5]{1,}[省|市|自治区]?)\.([\u4e00-\u9fa5]{1,}[市|区|县|州|盟|地区]?)$", "i");
-			let result = pattern.exec("内蒙古.呼和浩特")
-			console.log(result);
-
+			//let pattern = new RegExp("^([\u4e00-\u9fa5]{1,}[省|市|自治区]?)\.([\u4e00-\u9fa5]{1,}[市|区|县|州|盟|地区]?)$", "i");
+			//let pattern = new RegExp(/(^\d+)天$/i);
+			//let result = pattern.exec("35") //"内蒙古.呼和浩特"
+			//console.log(this.computedGrossProfitRate(null, 65));
 		},
 		watch: {
 			unit() {
@@ -209,11 +223,38 @@
 					this.retailPrice = this.retailPrice.replace(pattern, '') + "/" + this.unit;
 					return;
 				}
-				if (this.good) {
-					if (this.good.retailPrice)
-						this.good.retailPrice = this.good.retailPrice.replace(pattern, '') + "/" + this.unit;
+				if (this.good && this.good.retailPrice) {
+					this.good.retailPrice = this.good.retailPrice.replace(pattern, '') + "/" + this.unit;
 				}
 			}
+		},
+		computed: {
+			retailGrossProfitRate: {
+				get() {
+					let pattern = new RegExp(/\/?([\u4e00-\u9fa5]{1,2}|500g|kg|pcs)?$/);
+					let cost = this.purchasePrice ? this.purchasePrice.replace(pattern, '') : this.good ? this.good
+						.storage.lastPurchasePrice.replace(pattern, '') : 0;
+					if (this.retailPrice) {
+						return this.computedGrossProfitRate(cost, this.retailPrice.replace(pattern, '')) +
+							'%';
+					}
+					if (this.purchasePrice) {
+						if (this.retailPrice) {
+							return this.computedGrossProfitRate(cost, this.retailPrice.replace(pattern, '')) +
+								'%';
+						}
+						if (this.good) {
+							return this.computedGrossProfitRate(cost, this.good.retailPrice.replace(pattern, '')) +
+								'%';
+						}
+					}
+					if (this.good) {
+						return this.computedGrossProfitRate(cost, this.good.retailPrice.replace(pattern, '')) +
+							'%';
+					}
+				},
+				set(Value) {}
+			},
 		},
 		methods: {
 			scan() {
@@ -257,7 +298,8 @@
 				this.originDialog = false;
 			},
 			showOriginDialog() {
-				let pattern = new RegExp("^([\u4e00-\u9fa5]{1,}[省|市|自治区]?)\.([\u4e00-\u9fa5]{1,}[市|区|县|州|盟|地区]?)$", "i");
+				let pattern = new RegExp("^([\u4e00-\u9fa5]{1,}[省|市|自治区]?)\.([\u4e00-\u9fa5]{1,}[市|区|县|州|盟|地区]?)$",
+					"i");
 				let result = pattern.exec(this.good.placeOfOrigin);
 				if (this.placeOfOrigin)
 					result = pattern.exec(this.placeOfOrigin);
@@ -278,7 +320,8 @@
 						if (area.includes(result[2])) //直辖县
 							this.initPlaceOfOrigin = [result[1], '直辖县', result[2]];
 					} else if (result[1] === '海南省') {
-						let area = ["五指山市", "琼海市", "文昌市", "万宁市", "东方市", "定安县", "屯昌县", "澄迈县", "临高县", "白沙黎族自治县", "昌江黎族自治县",
+						let area = ["五指山市", "琼海市", "文昌市", "万宁市", "东方市", "定安县", "屯昌县", "澄迈县", "临高县", "白沙黎族自治县",
+							"昌江黎族自治县",
 							"乐东黎族自治县", "陵水黎族自治县", "保亭黎族苗族自治县", "琼中黎族苗族自治县"
 						];
 						if (area.includes(result[2])) //直辖县
@@ -306,7 +349,6 @@
 			originDialogConfirm() {
 				this.hideOriginDialog()
 				let obj = this.regionResult.obj;
-				console.log(obj.city);
 				let province = ['110000', '120000', '310000', '500000'];
 				let city = ['429000', '469000']
 				if (province.includes(obj.province.value) || city.includes(obj.city.value)) {
@@ -326,6 +368,39 @@
 				this.unitDrawerModal = false;
 				if (this.good)
 					this.unit = v;
+			},
+			purchasePriceBlur(event) {
+				this.purchasePrice = event.target.value;
+				if (this.purchasePrice) {
+					let pattern = new RegExp(/\/?([\u4e00-\u9fa5]{1,2}|500g|kg|pcs)?$/);
+					let temp = this.purchasePrice.replace(pattern, '');
+					this.purchasePrice = formatMoney(temp) + "/" + (this.unit || 'pcs');
+				}
+			},
+			retailPriceBlur(event) {
+				this.retailPrice = event.target.value;
+				if (this.retailPrice) {
+					let pattern = new RegExp(/\/?([\u4e00-\u9fa5]{1,2}|500g|kg|pcs)?$/);
+					let temp = this.retailPrice.replace(pattern, '');
+					this.retailPrice = formatMoney(temp) + "/" + (this.unit || 'pcs');
+				}
+			},
+			computedGrossProfitRate(cost, price) {
+				if (cost === null || cost === 0 || cost === '0')
+					return '100';
+				if (price === 0 || price === '0' || price === '0.00' || price === '0.0')
+					return '0';
+				let difference = price - cost;
+				return (difference / price * 100).toFixed(2);
+			},
+
+			shelfLifeBlur(event) {
+				this.shelfLife = event.target.value;
+				if (this.shelfLife) {
+					let pattern = new RegExp(/天$/);
+					let temp = this.shelfLife.replace(pattern, '');
+					this.shelfLife = temp + '天';
+				}
 			},
 
 			chooseImage() {
@@ -366,9 +441,23 @@
 </script>
 
 <style scoped lang='scss'>
-	.smallBtn {
-		border-width: 0px;
-		outline: none;
+	.badge1 {
+		position: absolute;
+		transform: translateX(95%);
+		top: -8rpx;
+		right: 0rpx;
+		min-width: 32rpx;
+		min-height: 28rpx;
+		line-height: 28rpx;
+		border-radius: 200rpx;
+		
+		text-align: center;
+		padding: 0 10rpx;
+		font-size: 18rpx;
+		color: #ffffff;
+		
+		white-space: nowrap;
+		z-index: 10;
 	}
 
 	.bottom {
