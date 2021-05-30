@@ -2,8 +2,7 @@
 	<view class="bg-white">
 		<navBar :title="good?'商品编辑':'商品新增'" :backgroundColor="[1, ['#6B73FF', '#000DFF', 135]]" :titleFont="['#FFF']">
 		</navBar>
-		<view :style="[scrollContentStyle]" @touchstart="touchStart" @touchmove="touchMove" @touchend="touchEnd"
-			:lower-threshold="240">
+		<view :style="[scrollContentStyle]" @touchstart="touchStart" @touchmove="touchMove" @touchend="touchEnd">
 			<view class="flex flex-direction justify-center align-center padding-tb-sm" v-if="pullingDown">
 				<view class="loading-animation"></view>
 				<text class="pull-down-text">释放刷新~</text>
