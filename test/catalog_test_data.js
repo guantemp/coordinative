@@ -218,6 +218,12 @@ export default {
 				id: "234",
 				name: "纸品"
 			},
+			storage: {
+				lastPurchasePrice: '7.98/提',
+				amount: 420,
+				number: 70,
+				stockTurn: 10.25
+			},
 			placeOfOrigin: '四川省.成都市',
 			grade: '合格品',
 			retailPrice: '11.98/提',

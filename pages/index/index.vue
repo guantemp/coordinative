@@ -1,5 +1,6 @@
 <template>
 	<view>
+		<redflower-showTips></redflower-showTips>
 		<view class="padding text-center bg-white">
 			<text class="text-lg text-red">HOPRXI协助工具 - Release Notes</text>
 		</view>

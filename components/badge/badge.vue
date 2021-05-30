@@ -3,11 +3,17 @@
 		<slot></slot>
 		<view class="badge-dot" v-if="dot&&count!==0"></view>
 		<view class="badge-count" v-else-if="count" @click="onClick()">{{count}}</view>
+		<view class="badge-count" v-else @click="onClick()">{{finalCount}}</view>
 	</view>
 </template>
 
 <script>
 	export default {
+		data() {
+			return {
+				maxCount: 99,
+			}
+		},
 		props: {
 			count: {
 				type: String,
@@ -17,7 +23,7 @@
 				type: Boolean,
 				default: false
 			},
-			bgColor:{
+			bgColor: {
 				type: String,
 				default: ''
 			}
@@ -77,6 +83,7 @@
 		z-index: 10;
 		box-shadow: 0 0 0 1rpx #fff;
 	}
+
 	.badge-dot:not([class*="bg-"]) {
 		background-color: #dd514c;
 	}

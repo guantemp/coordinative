@@ -52,7 +52,7 @@
 				</view>
 			</view>
 		</scroll-view>
-		<uni-fab :pattern="pattern" :content="content" horizontal="right" vertical="bottom" direction="horizontal"
+		<uni-fab :pattern="fabPattern" :content="content" horizontal="right" vertical="bottom" direction="horizontal"
 			@trigger="trigger"></uni-fab>
 	</view>
 </template>
@@ -62,11 +62,12 @@
 	export default {
 		data() {
 			return {
+				scanResult: '',
 				catalog: [],
 				category: [],
 				tabCur: 0,
 				scrollLeft: 0,
-				pattern: {
+				fabPattern: {
 					color: '#7A7E83',
 					backgroundColor: '#fff',
 					selectedColor: '#007AFF',
@@ -80,13 +81,13 @@
 					{
 						iconPath: '/static/workflow/new_kg.png',
 						selectedIconPath: '/static/workflow/new_kg.png',
-						text: '新增计重',
+						text: '新增散秤',
 						active: false
 					},
 					{
 						iconPath: '/static/workflow/count.png',
 						selectedIconPath: '/static/workflow/count.png',
-						text: '新增计数',
+						text: '商品类目',
 						active: false
 					}
 				]
@@ -104,6 +105,18 @@
 			uni.hideLoading()
 		},
 		methods: {
+			scan() {
+				var that = this;
+				uni.scanCode({
+					scanType: ['barCode'],
+					success: function(res) {
+						that.scanResult = res.result;
+					},
+					fail: function(res) {
+						console.log(JSON.stringify(res));
+					},
+				});
+			},
 			tabSelect(id, event) {
 				this.tabCur = event.currentTarget.dataset.id;
 				this.scrollLeft = (event.currentTarget.dataset.id - 1) * 60;
@@ -117,6 +130,9 @@
 				//this.content[e.index].active = !e.item.active
 				if (e.index === 0) {
 					this.$util.navTo('/pages/workflow/catalog/good');
+				}
+				if (e.index === 2) {
+					this.$util.navTo('/pages/workflow/catalog/category');
 				}
 			},
 			navTo(id) {

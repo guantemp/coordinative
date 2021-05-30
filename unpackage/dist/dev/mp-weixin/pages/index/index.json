@@ -1,4 +1,6 @@
 {
   "navigationBarTitleText": "首页",
-  "usingComponents": {}
+  "usingComponents": {
+    "redflower-show-tips": "/components/redflower-showTips/redflower-showTips"
+  }
 }

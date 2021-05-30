@@ -28,7 +28,8 @@
         "price/price_adjustment_add",
         "label/label",
         "catalog/catalog",
-        "catalog/good"
+        "catalog/good",
+        "catalog/category"
       ]
     }
   ],
@@ -81,6 +82,5 @@
       "desc": "你的位置信息将用于定位你所处的门店"
     }
   },
-  "usingComponents": {},
-  "sitemapLocation": "sitemap.json"
+  "usingComponents": {}
 }

@@ -1,98 +1,133 @@
 <template>
-	<view>
-		<navBar :title="(plu||id)?'商品编辑':'商品新增'" :backgroundColor="[1, ['#6B73FF', '#000DFF', 135]]"
-			:titleFont="['#FFF']" id="navBar">
+	<view class="bg-white">
+		<navBar :title="good?'商品编辑':'商品新增'" :backgroundColor="[1, ['#6B73FF', '#000DFF', 135]]" :titleFont="['#FFF']">
 		</navBar>
-		<view class="cu-form-group">
-			<view class="title">
-				<text v-if='good.plu'>PLU码</text>
-				<text v-else>商品条码</text>
-				<text class="text-red margin-left-xs">*</text>
+		<view :style="[scrollContentStyle]" @touchstart="touchStart" @touchmove="touchMove" @touchend="touchEnd"
+			:lower-threshold="240">
+			<view class="flex flex-direction justify-center align-center padding-tb-sm" v-if="pullingDown">
+				<view class="loading-animation"></view>
+				<text class="pull-down-text">释放刷新~</text>
 			</view>
-			<input v-model="scanResult" :placeholder="good.plu||good.barcode||''" @blur="scanResultBlur"></input>
-			<view class="cu-capsule radius ">
-				<view class='cu-tag bg-blue text-lg' @tap.stop="scan">
-					<text class='cuIcon-scan text-white'></text>
+			<view class="cu-form-group">
+				<view class="title">
+					<text v-if='good.plu'>PLU码</text>
+					<text v-else>商品条码</text>
+					<text class="text-red margin-left-xs">*</text>
 				</view>
-				<view class="cu-tag line-blue text-df" @tap.stop="plu?generate('plu'):generate('barcode')">
-					<text>生成</text>
-				</view>
-			</view>
-		</view>
-		<view class="cu-form-group">
-			<view class="title">商品名称<text class="text-red margin-left-xs">*</text></view>
-			<input v-model="name" :placeholder="good.name||''"></input>
-			<text class="cuIcon-more" @tap.stop="showAliasModalDialog" :class="alias?'text-red':''"></text>
-		</view>
-		<view class="cu-form-group">
-			<view class="title">商品规格<text class="text-red margin-left-xs">*</text></view>
-			<input v-model="specs" :placeholder="good.specs||'未定义'"></input>
-		</view>
-		<view class="cu-form-group">
-			<view class="title">商品等级<text class="text-red margin-left-xs">*</text></view>
-			<input v-model="grade" :placeholder="grade||good.grade||'合格品'" disabled></input>
-			<text class="cuIcon-more" @tap.stop="showGradeRadioDialog"></text>
-		</view>
-		<view class="cu-form-group">
-			<view class="title">商品产地<text class="text-red margin-left-xs">*</text></view>
-			<input v-model="placeOfOrigin" :placeholder="good.placeOfOrigin||''"></input>
-			<text class="cuIcon-right" @tap.stop="showOriginDialog"></text>
-		</view>
-		<view class="cu-form-group">
-			<view class="title">商品类别<text class="text-red margin-left-xs">*</text></view>
-			<input :placeholder="good.category.name||'未定义'" v-model="category"></input>
-			<text class="cuIcon-more"></text>
-		</view>
-		<view class="cu-form-group">
-			<view class="title">参考进价</view>
-			<text class="text-price"></text>
-			<view class="flex flex-sub justify-start">
-				<input :placeholder="good.storage.lastPurchasePrice||'0.00/PCS'" :value="purchasePrice" type="digit"
-					@blur="purchasePriceBlur"></input>
-					<text class="badge1">毛利率：{{retailGrossProfitRate}}</text>
-			</view>
-			<text class="icon-unit text-blue" @tap.stop="showUnitDrawerModal"></text>
-		</view>
-		<view class="cu-form-group">
-			<view class="title">零&nbsp;&nbsp;售&nbsp;&nbsp;价</view>
-			<text class="text-price"></text>
-			<view class="flex flex-sub">
-				<badge :count="'毛利率：'+ retailGrossProfitRate" class="basis-df">
-					<input :placeholder="good.retailPrice||'0.00/PCS'" :value="retailPrice" type="digit"
-						@blur="retailPriceBlur"></input>
-				</badge>
-			</view>
-			<text class="icon-unit text-blue" @tap.stop="showUnitDrawerModal"></text>
-		</view>
-		<view class="cu-form-group solid-bottom">
-			<view class="title">保&nbsp;&nbsp;质&nbsp;&nbsp;期</view>
-			<input :placeholder="good.shelfLife||'0天'" :value="shelfLife" type="number" @blur="shelfLifeBlur"></input>
-		</view>
-		<view class="cu-bar bg-white">
-			<view class="action title">商品图片</view>
-			<view class="action">{{imgList.length}}/4</view>
-		</view>
-		<view class="cu-form-group">
-			<view class="grid col-4 grid-square flex-sub">
-				<view class="bg-img" v-for="(item,index) in imgList" :key="index" @tap="viewImage"
-					:data-url="imgList[index]">
-					<image :src="imgList[index]" mode="aspectFill"></image>
-					<view class="cu-tag bg-red" @tap.stop="delImg" :data-index="index">
-						<text class='cuIcon-close'></text>
+				<input v-model="scanResult" :placeholder="good.plu||good.barcode||''" @blur="scanResultBlur"></input>
+				<view class="cu-capsule radius align-center">
+					<view class='cu-tag bg-blue text-lg' @tap.stop="scan">
+						<text class='cuIcon-scan text-white'></text>
+					</view>
+					<view class="cu-tag line-blue text-df" @tap.stop="plu?generate('plu'):generate('barcode')">
+						生成
 					</view>
 				</view>
-				<view class="solids" @tap="chooseImage" v-if="imgList.length<4">
-					<text class='cuIcon-cameraadd'></text>
+			</view>
+			<view class="cu-form-group">
+				<view class="title">商品名称<text class="text-red margin-left-xs">*</text></view>
+				<input v-model="name" :placeholder="good.name||''"></input>
+				<text class="cuIcon-more" @tap.stop="showAliasModalDialog" :class="alias?'text-red':''"></text>
+			</view>
+			<view class="cu-form-group">
+				<view class="title">商品规格<text class="text-red margin-left-xs">*</text></view>
+				<input v-model="specs" :placeholder="good.specs||'未定义'"></input>
+			</view>
+			<view class="cu-form-group">
+				<view class="title">商品等级<text class="text-red margin-left-xs">*</text></view>
+				<input v-model="grade" :placeholder="grade||good.grade||'合格品'" disabled></input>
+				<text class="cuIcon-more" @tap.stop="showGradeRadioDialog"></text>
+			</view>
+			<view class="cu-form-group">
+				<view class="title" @tap.stop="this.$util.toast('直辖定位到区级，其余定位到市！')">
+					商品产地<text class="text-red margin-left-xs">*</text></view>
+				<input v-model="placeOfOrigin" :placeholder="good.placeOfOrigin||''"></input>
+				<text class="cuIcon-right" @tap.stop="showOriginDialog"></text>
+			</view>
+			<view class="cu-form-group">
+				<view class="title">商品类别<text class="text-red margin-left-xs">*</text></view>
+				<input :placeholder="good.category.name||'未定义'" v-model="category"></input>
+				<text class="cuIcon-more" @tap.stop="this.$util.navTo('/pages/workflow/catalog/category');"></text>
+			</view>
+			<view class="cu-form-group">
+				<view class="title" @tap.stop="this.$util.toast('最近一次入库价，不参与计算库存成本和实际毛利率，仅作为商品录入时计算毛利率！')">
+					参考进价<text class="cuIcon-info"></text>
+				</view>
+				<text class="text-price"></text>
+				<input :placeholder="good.storage.lastPurchasePrice||'0.00/PCS'" :value="purchasePrice" type="digit"
+					@blur="purchasePriceBlur"></input>
+			</view>
+			<view class="cu-form-group">
+				<view class="title" @tap.stop="this.$util.toast('0.00元为灵活定价商品，POS系统每次销售时会询问售价！')">
+					零&nbsp;&nbsp;售&nbsp;&nbsp;价<text class="cuIcon-info text-sm test"></text></view>
+				<text class="text-price"></text>
+				<view class="flex flex-sub">
+					<badge v-if="retailGrossProfitRate" :count="'毛利率：'+ retailGrossProfitRate" class="basis-df">
+						<input :placeholder="good.retailPrice||'0.00/PCS'" :value="retailPrice" type="digit"
+							@blur="retailPriceBlur"></input>
+					</badge>
+					<input v-else placeholder="0.00/PCS" :value="retailPrice" type="digit"
+						@blur="retailPriceBlur"></input>
+				</view>
+				<text class="icon-unit text-blue" @tap.stop="showUnitDrawerModal"></text>
+			</view>
+			<view class="cu-form-group">
+				<view class="title margin-right-sm">会&nbsp;&nbsp;员&nbsp;&nbsp;价</view>
+				<text class="text-price"></text>
+				<view class="flex flex-sub">
+					<badge v-if="retailGrossProfitRate" :count="'毛利率：'+ retailGrossProfitRate" class="basis-df">
+						<input :placeholder="good.memberPrice||'0.00/PCS'" :value="memberPrice" type="digit"
+							@blur="memberPriceBlur"></input>
+					</badge>
+					<input v-else placeholder="0.00/PCS" :value="memberPrice" type="digit"
+						@blur="memberPriceBlur"></input>
+				</view>
+				<text class="icon-unit text-blue" @tap.stop="showUnitDrawerModal"></text>
+			</view>
+			<view class="cu-form-group solid-bottom">
+				<view class="title">保&nbsp;&nbsp;质&nbsp;&nbsp;期</view>
+				<input :placeholder="good.shelfLife||'0天'" :value="shelfLife" type="number"
+					@blur="shelfLifeBlur"></input>
+			</view>
+			<view class="cu-bar bg-white">
+				<view class="action title">商品图片</view>
+				<view class="action">{{imgList.length}}/4</view>
+			</view>
+			<view class="cu-form-group">
+				<view class="grid col-4 grid-square flex-sub">
+					<view class="bg-img" v-for="(item,index) in imgList" :key="index" @tap="viewImage"
+						:data-url="imgList[index]">
+						<image :src="imgList[index]" mode="aspectFill"></image>
+						<view class="cu-tag bg-red" @tap.stop="delImg" :data-index="index">
+							<text class='cuIcon-close'></text>
+						</view>
+					</view>
+					<view class="solids" @tap="chooseImage" v-if="imgList.length<4">
+						<text class='cuIcon-cameraadd'></text>
+					</view>
 				</view>
 			</view>
 		</view>
 		<view class="bottom">
-			<button class="cu-btn radius shadow bg-gradual-green basis-sm"
-				@tap.stop="this.$util.navTo('/pages/workflow/price/price_adjustment_add?sign=add')">
-				保存并新增</button>
-			<button class="cu-btn radius shadow bg-gradual-green basis-sm margin-left-sm"
-				@tap.stop="this.$util.navTo('/pages/workflow/price/price_adjustment_add?sign=add')">
-				保存</button>
+			<block v-if="good">
+				<button class="cu-btn radius shadow bg-gradual-blue basis-xs margin-right-sm"
+					@tap.stop="this.$util.navTo('/pages/workflow/price/price_adjustment_add?sign=add')">
+					<text class="cuIcon-pullleft"></text></button>
+				<button class="cu-btn radius shadow bg-gradual-blue basis-xs margin-right-sm"
+					@tap.stop="this.$util.navTo('/pages/workflow/price/price_adjustment_add?sign=add')">
+					<text class="cuIcon-pullright text-xxl"></text></button>
+				<button class="cu-btn radius shadow bg-gradual-blue basis-sm"
+					@tap.stop="this.$util.navTo('/pages/workflow/price/price_adjustment_add?sign=add')">
+					<text class="icon-save margin-right-sm"></text>保存</button>
+			</block>
+			<block v-else>
+				<button class="cu-btn radius shadow bg-gradual-green basis-sm"
+					@tap.stop="this.$util.navTo('/pages/workflow/price/price_adjustment_add?sign=add')">
+					<text class="cuIcon-add margin-right-xs"></text>保存并新增</button>
+				<button class="cu-btn radius shadow bg-gradual-green basis-sm margin-left-sm"
+					@tap.stop="this.$util.navTo('/pages/workflow/price/price_adjustment_add?sign=add')">
+					<text class="icon-save margin-right-sm"></text>保存</button>
+			</block>
 		</view>
 		<!-- 别名对话框 -->
 		<view class="cu-modal" :class="aliasModalDialog?'show':''">
@@ -159,6 +194,7 @@
 		formatMoney
 	} from '@/js_sdk/util.js';
 	import catalog from '@/test/catalog_test_data.js'; //用例数据库
+	let unitPattern = new RegExp(/\/?([\u4e00-\u9fa5]{1,2}|500g|kg|pcs)?$/);
 	export default {
 		data() {
 			return {
@@ -192,6 +228,11 @@
 				units: [],
 
 				shelfLife: '',
+
+				pullingDown: false, // 是否正在下拉
+				currentTouchStartY: 0,
+				pullDownHeight: 0, // 下拉高度
+				refresherThreshold: 60 //下拉刷新阈值80px
 			}
 		},
 		onLoad(options) {
@@ -206,9 +247,9 @@
 				}
 			}
 			if (this.good) {
-				let pattern = new RegExp(/\/?([\u4e00-\u9fa5]{1,2}|500g|kg|pcs)?$/);
-				this.unit = pattern.exec(this.good.retailPrice)[1];
+				this.unit = unitPattern.exec(this.good.retailPrice)[1];
 			}
+			console.log(this.good);
 			this.units = catalog.units;
 			this.grades = catalog.grades;
 			//let pattern = new RegExp("^([\u4e00-\u9fa5]{1,}[省|市|自治区]?)\.([\u4e00-\u9fa5]{1,}[市|区|县|州|盟|地区]?)$", "i");
@@ -218,43 +259,49 @@
 		},
 		watch: {
 			unit() {
-				let pattern = new RegExp(/\/?([\u4e00-\u9fa5]{1,2}|500g|kg|pcs)?$/);
 				if (this.retailPrice) {
-					this.retailPrice = this.retailPrice.replace(pattern, '') + "/" + this.unit;
+					this.retailPrice = this.retailPrice.replace(unitPattern, '') + "/" + this.unit;
 					return;
 				}
 				if (this.good && this.good.retailPrice) {
-					this.good.retailPrice = this.good.retailPrice.replace(pattern, '') + "/" + this.unit;
+					this.good.retailPrice = this.good.retailPrice.replace(unitPattern, '') + "/" + this.unit;
 				}
 			}
 		},
 		computed: {
 			retailGrossProfitRate: {
 				get() {
-					let pattern = new RegExp(/\/?([\u4e00-\u9fa5]{1,2}|500g|kg|pcs)?$/);
-					let cost = this.purchasePrice ? this.purchasePrice.replace(pattern, '') : this.good ? this.good
-						.storage.lastPurchasePrice.replace(pattern, '') : 0;
-					if (this.retailPrice) {
-						return this.computedGrossProfitRate(cost, this.retailPrice.replace(pattern, '')) +
+					let cost = this.purchasePrice ? this.purchasePrice.replace(unitPattern, '') : this.good ? this.good
+						.storage.lastPurchasePrice.replace(unitPattern, '') : 0;
+					if (this.retailPrice)
+						return this.computedGrossProfitRate(cost, this.retailPrice.replace(unitPattern, '')) +
 							'%';
-					}
 					if (this.purchasePrice) {
-						if (this.retailPrice) {
-							return this.computedGrossProfitRate(cost, this.retailPrice.replace(pattern, '')) +
+						if (this.good && !this.retailPrice)
+							return this.computedGrossProfitRate(cost, this.good.retailPrice.replace(unitPattern, '')) +
 								'%';
-						}
-						if (this.good) {
-							return this.computedGrossProfitRate(cost, this.good.retailPrice.replace(pattern, '')) +
+						if (this.retailPrice)
+							return this.computedGrossProfitRate(cost, this.retailPrice.replace(unitPattern, '')) +
 								'%';
-						}
+						return '0%';
 					}
-					if (this.good) {
-						return this.computedGrossProfitRate(cost, this.good.retailPrice.replace(pattern, '')) +
+					if (this.good)
+						return this.computedGrossProfitRate(cost, this.good.retailPrice.replace(unitPattern, '')) +
 							'%';
-					}
 				},
 				set(Value) {}
 			},
+			scrollContentStyle() {
+				const style = {};
+				const {
+					pullDownHeight,
+					pullingDown
+				} = this;
+				style.transform = pullingDown ? `translateY(${pullDownHeight}px)` : `translateY(0px)`;
+				style.transition = pullingDown ? `transform .1s linear` :
+					`transform 0.3s cubic-bezier(0.19,1.64,0.42,0.72)`;
+				return style;
+			}
 		},
 		methods: {
 			scan() {
@@ -298,8 +345,7 @@
 				this.originDialog = false;
 			},
 			showOriginDialog() {
-				let pattern = new RegExp("^([\u4e00-\u9fa5]{1,}[省|市|自治区]?)\.([\u4e00-\u9fa5]{1,}[市|区|县|州|盟|地区]?)$",
-					"i");
+				let pattern = new RegExp(/^([\u4e00-\u9fa5]{1,}[省|市|自治区]?)\.([\u4e00-\u9fa5]{1,}[市|区|县|州|盟|地区]?)$/i);
 				let result = pattern.exec(this.good.placeOfOrigin);
 				if (this.placeOfOrigin)
 					result = pattern.exec(this.placeOfOrigin);
@@ -372,23 +418,21 @@
 			purchasePriceBlur(event) {
 				this.purchasePrice = event.target.value;
 				if (this.purchasePrice) {
-					let pattern = new RegExp(/\/?([\u4e00-\u9fa5]{1,2}|500g|kg|pcs)?$/);
-					let temp = this.purchasePrice.replace(pattern, '');
+					let temp = this.purchasePrice.replace(unitPattern, '');
 					this.purchasePrice = formatMoney(temp) + "/" + (this.unit || 'pcs');
 				}
 			},
 			retailPriceBlur(event) {
 				this.retailPrice = event.target.value;
 				if (this.retailPrice) {
-					let pattern = new RegExp(/\/?([\u4e00-\u9fa5]{1,2}|500g|kg|pcs)?$/);
-					let temp = this.retailPrice.replace(pattern, '');
+					let temp = this.retailPrice.replace(unitPattern, '');
 					this.retailPrice = formatMoney(temp) + "/" + (this.unit || 'pcs');
 				}
 			},
 			computedGrossProfitRate(cost, price) {
 				if (cost === null || cost === 0 || cost === '0')
 					return '100';
-				if (price === 0 || price === '0' || price === '0.00' || price === '0.0')
+				if (price === null || price === 0 || price === '0' || price === '0.00' || price === '0.0')
 					return '0';
 				let difference = price - cost;
 				return (difference / price * 100).toFixed(2);
@@ -406,8 +450,8 @@
 			chooseImage() {
 				uni.chooseImage({
 					count: 4, //默认9
-					sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
-					sourceType: ['camera'], //开相机
+					//sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
+					//sourceType: ['camera'], //开相机  album 图册
 					success: (res) => {
 						if (this.imgList.length != 0) {
 							this.imgList = this.imgList.concat(res.tempFilePaths)
@@ -436,30 +480,61 @@
 					}
 				})
 			},
+
+			// 触摸按下处理
+			touchStart(e) {
+				this.pullingDown = true;
+				this.currentTouchStartY = e.touches[0].clientY;
+			},
+			touchMove(e) {
+				if (e.touches[0].clientY < this.currentTouchStartY) return;
+				const currentTouchMoveY = e.touches[0].clientY;
+				const movingDistance = (currentTouchMoveY - this.currentTouchStartY) * 0.65;
+				const moreDistance = movingDistance > this.refresherThreshold ? (movingDistance - this
+					.refresherThreshold) * 0.3 : 0;
+				const computeDistance =
+					movingDistance > this.refresherThreshold ? this.refresherThreshold + moreDistance : movingDistance +
+					moreDistance;
+				this.pullDownHeight = computeDistance;
+			},
+			// 触摸松开处理
+			touchEnd(e) {
+				if (this.pullDownHeight >= this.refresherThreshold) {
+					this.pullingDown = false;
+					this.pullDownHeight = 0;
+					this.refreshData();
+				} else {
+					this.pullingDown = false;
+					this.pullDownHeight = 0;
+				}
+			},
+			refreshData() {
+				uni.showLoading({
+					title: '',
+				});
+				for (const item of catalog.catalog) {
+					if (item.id === this.good.id || item.plu === this.good.plu) {
+						this.good = item;
+						this.unit = unitPattern.exec(this.good.retailPrice)[1];
+						break;
+					}
+				}
+				setTimeout(() => {
+					// 服务端响应的 message 提示
+					uni.showToast({
+						title: "刷新成功",
+						icon: "success",
+						position: 'bottom'
+					})
+					//延时关闭  加载中的 loading框
+					uni.hideLoading()
+				}, 200)
+			}
 		}
 	}
 </script>
 
 <style scoped lang='scss'>
-	.badge1 {
-		position: absolute;
-		transform: translateX(95%);
-		top: -8rpx;
-		right: 0rpx;
-		min-width: 32rpx;
-		min-height: 28rpx;
-		line-height: 28rpx;
-		border-radius: 200rpx;
-		
-		text-align: center;
-		padding: 0 10rpx;
-		font-size: 18rpx;
-		color: #ffffff;
-		
-		white-space: nowrap;
-		z-index: 10;
-	}
-
 	.bottom {
 		display: flex;
 		justify-content: center;
@@ -484,6 +559,71 @@
 			border-radius: 3px;
 			border: 1rpx solid #fbbd08;
 			margin-right: 14rpx;
+		}
+	}
+
+
+	.loading-animation {
+		width: 60rpx;
+		height: 60rpx;
+		margin-bottom: 20rpx;
+		position: relative;
+
+		&::after,
+		&::before {
+			left: 0;
+			width: 100%;
+			position: absolute;
+			border: 0 solid currentColor;
+			background-color: #b7b7b7;
+		}
+
+		&::after {
+			content: '';
+			top: -25%;
+			z-index: 1;
+			height: 100%;
+			border-radius: 10%;
+			animation: spin 0.6s -0.1s linear infinite;
+		}
+
+		&::before {
+			content: '';
+			bottom: -9%;
+			height: 10%;
+			background: #000;
+			border-radius: 50%;
+			opacity: 0.2;
+			animation: shadow 0.6s -0.1s linear infinite;
+		}
+
+		@keyframes spin {
+			17% {
+				border-bottom-right-radius: 10%;
+			}
+
+			25% {
+				transform: translateY(25%) rotate(22.5deg);
+			}
+
+			50% {
+				border-bottom-right-radius: 100%;
+				transform: translateY(50%) scale(1, 0.9) rotate(45deg);
+			}
+
+			75% {
+				transform: translateY(25%) rotate(67.5deg);
+			}
+
+			100% {
+				transform: translateY(0) rotate(90deg);
+			}
+		}
+
+		@keyframes shadow {
+			50% {
+				transform: scale(1.25, 1);
+			}
 		}
 	}
 </style>

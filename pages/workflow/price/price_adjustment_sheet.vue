@@ -22,7 +22,7 @@
 			<text @click.stop="selectDate(false)">{{formattedEndDate}}</text>
 		</view>
 		<scroll-view scroll-y :scroll-with-animation="true" :enable-back-to-top="true"
-			:style="{height:dateShow?'calc(98.5vh - '+(fixedHeight+dateShowHeight)+'px - 14rpx)':'calc(98.5vh - '+ fixedHeight +'px - 14rpx)'}">
+			:style="{height:dateShow?'calc(98.5vh - '+(fixedHeight+dateShowHeight)+'px - 12rpx)':'calc(98.5vh - '+ fixedHeight +'px - 12rpx)'}">
 			<view class="bg-white nav margin-top-xs">
 				<view class="flex text-center">
 					<view class="cu-item flex-sub" :class="index===tabCur?'text-orange cur':''"
@@ -294,10 +294,6 @@
 				font-size: 24rpx;
 			}
 		}
-	}
-
-	scroll-view {
-		height: calc(98.5vh - var(fixedHeight));
 	}
 
 	.add {

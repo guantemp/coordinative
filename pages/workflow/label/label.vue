@@ -469,7 +469,7 @@
 		display: flex;
 		flex-direction: column;
 		height: 100%;
-		transform: scale(0.88);
+		transform: scale(0.88);//放大
 		transition: all 0.2s ease-in 0s;
 		overflow: hidden;
 	}

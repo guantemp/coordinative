@@ -141,6 +141,13 @@
 					"navigationBarTitleText": "商品",
 					"navigationStyle": "custom"
 				}
+			},
+			{
+				"path": "catalog/category",
+				"style": {
+					"navigationBarTitleText": "商品类目",
+					"navigationStyle": "custom"
+				}
 			}
 		]
 	}],

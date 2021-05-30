@@ -96,13 +96,13 @@ var components
 try {
   components = {
     navBar: function() {
-      return __webpack_require__.e(/*! import() | components/navBar/navBar */ "components/navBar/navBar").then(__webpack_require__.bind(null, /*! @/components/navBar/navBar.vue */ 186))
+      return __webpack_require__.e(/*! import() | components/navBar/navBar */ "components/navBar/navBar").then(__webpack_require__.bind(null, /*! @/components/navBar/navBar.vue */ 192))
     },
     datePicker: function() {
-      return __webpack_require__.e(/*! import() | components/date-picker/date-picker */ "components/date-picker/date-picker").then(__webpack_require__.bind(null, /*! @/components/date-picker/date-picker.vue */ 200))
+      return __webpack_require__.e(/*! import() | components/date-picker/date-picker */ "components/date-picker/date-picker").then(__webpack_require__.bind(null, /*! @/components/date-picker/date-picker.vue */ 206))
     },
     badge: function() {
-      return __webpack_require__.e(/*! import() | components/badge/badge */ "components/badge/badge").then(__webpack_require__.bind(null, /*! @/components/badge/badge.vue */ 207))
+      return __webpack_require__.e(/*! import() | components/badge/badge */ "components/badge/badge").then(__webpack_require__.bind(null, /*! @/components/badge/badge.vue */ 213))
     }
   }
 } catch (e) {
@@ -514,7 +514,8 @@ var _util = __webpack_require__(/*! @/js_sdk/util.js */ 30);
 
 
 var _catalog_test_data = _interopRequireDefault(__webpack_require__(/*! @/test/catalog_test_data.js */ 53));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function _createForOfIteratorHelper(o, allowArrayLike) {var it;if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) {if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {if (it) o = it;var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion = true,didErr = false,err;return { s: function s() {it = o[Symbol.iterator]();}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function _unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return _arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);}function _arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function ownKeys(object, enumerableOnly) {var keys = Object.keys(object);if (Object.getOwnPropertySymbols) {var symbols = Object.getOwnPropertySymbols(object);if (enumerableOnly) symbols = symbols.filter(function (sym) {return Object.getOwnPropertyDescriptor(object, sym).enumerable;});keys.push.apply(keys, symbols);}return keys;}function _objectSpread(target) {for (var i = 1; i < arguments.length; i++) {var source = arguments[i] != null ? arguments[i] : {};if (i % 2) {ownKeys(Object(source), true).forEach(function (key) {_defineProperty(target, key, source[key]);});} else if (Object.getOwnPropertyDescriptors) {Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));} else {ownKeys(Object(source)).forEach(function (key) {Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));});}}return target;}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;} //用例数据库
-var _default = {
+var pattern = new RegExp(/\/?([\u4e00-\u9fa5]{1,2}|500g|kg|pcs)?$/);var _default =
+{
   data: function data() {
     return {
       fold: true,
@@ -522,8 +523,9 @@ var _default = {
       remarks: null,
 
       dateModal: false,
-      effectiveDate: null,
-      initDate: null,
+      effectiveDateTime: null,
+      startYear: null,
+      initDateTime: null,
       confirmFlag: true,
       resultDate: {},
 
@@ -533,7 +535,7 @@ var _default = {
 
       clearModalDialog: false,
 
-      modalName: null,
+      addOrEditItemModalDialog: false,
       scanResult: null,
 
       items: [],
@@ -548,19 +550,18 @@ var _default = {
       vipGrossProfitRate: '' };
 
   },
-  onLoad: function onLoad(options) {var _this2 = this;
-    setTimeout(function () {
-      _this2.effectiveDate = (0, _util.formatDate)(new Date(), "yyyy-MM-dd 00:00:00");
-    }, 300);
-    this.units = _catalog_test_data.default.units;
+  onLoad: function onLoad(options) {
     var sign = options.sign || 'edit';
-    console.log(sign);
+    var currentDate = new Date();
+    this.effectiveDateTime = (0, _util.formatDate)(currentDate, "yyyy-MM-dd hh:mm:ss");
+    currentDate.setDate(currentDate.getDate() - 31);
+    this.startYear = currentDate.getFullYear();
+    this.units = _catalog_test_data.default.units;
     //new RegExp("^([1-9][0-9]+(.[0-9]{1,4})?)/([\u4e00-\u9fa5]{1,2}|500g|kg|pcs)$", "i");
     //console.log("00564".replace(new RegExp(/^(0+)([0-9]+(\.[0-9]{0,})?$)/).$1, ""));
   },
   watch: {
     unit: function unit() {
-      var pattern = new RegExp(/\/?([\u4e00-\u9fa5]{1,2}|500g|kg|pcs)?$/);
       if (this.newRetailPrice)
       this.newRetailPrice = this.newRetailPrice.replace(pattern, '') + "/" + this.unit;
       if (this.newMemberPrice)
@@ -581,7 +582,6 @@ var _default = {
     oldRetailGrossProfitRate: {
       get: function get() {
         if (this.item) {
-          var pattern = new RegExp(/\/?([\u4e00-\u9fa5]{1,2}|500g|kg|pcs)?$/);
           var cost = this.item.storage.lastPurchasePrice.replace(pattern, '');
           return this.computedGrossProfitRate(cost, this.item.retailPrice.replace(pattern, '')) + '%';
         }
@@ -591,7 +591,6 @@ var _default = {
     oldMemberGrossProfitRate: {
       get: function get() {
         if (this.item) {
-          var pattern = new RegExp(/\/?([\u4e00-\u9fa5]{1,2}|500g|kg|pcs)?$/);
           var cost = this.item.storage.lastPurchasePrice.replace(pattern, '');
           return this.computedGrossProfitRate(cost, this.item.memberPrice.replace(pattern, '')) + '%';
         }
@@ -601,7 +600,6 @@ var _default = {
     oldVipGrossProfitRate: {
       get: function get() {
         if (this.item) {
-          var pattern = new RegExp(/\/?([\u4e00-\u9fa5]{1,2}|500g|kg|pcs)?$/);
           var cost = this.item.storage.lastPurchasePrice.replace(pattern, '');
           return this.computedGrossProfitRate(cost, this.item.vipPrice.replace(pattern, '')) + '%';
         }
@@ -609,12 +607,13 @@ var _default = {
       set: function set(Value) {} } },
 
 
-
   methods: {
     foldClick: function foldClick() {
       this.fold = !this.fold;
     },
     showDateModal: function showDateModal() {
+      this.initDateTime = this.effectiveDateTime ? this.effectiveDateTime : (0, _util.formatDate)(
+      new Date(), "yyyy-MM-dd hh:mm:ss");
       this.dateModal = true;
     },
     hideDateModal: function hideDateModal() {
@@ -625,10 +624,10 @@ var _default = {
         this.confirmFlag = false;
       }
     },
-    touchEnd: function touchEnd() {var _this3 = this;
+    touchEnd: function touchEnd() {var _this2 = this;
       if (this.timeout) {
         setTimeout(function () {
-          _this3.confirmFlag = true;
+          _this2.confirmFlag = true;
         }, 500);
       }
     },
@@ -643,7 +642,7 @@ var _default = {
         return;
       };
       this.dateModal = false;
-      this.effectiveDate = (0, _util.formatDate)(new Date(this.resultDate.value), "yyyy-MM-dd hh:mm:ss");
+      this.effectiveDateTime = (0, _util.formatDate)(new Date(this.resultDate.value), "yyyy-MM-dd hh:mm:ss");
     },
 
     hideUnitDrawerModal: function hideUnitDrawerModal() {
@@ -658,19 +657,18 @@ var _default = {
       this.unit = v;
     },
     showModal: function showModal(event) {
-      this.addSign = true;
-      this.modalName = event.currentTarget.dataset.target;
+      this.addOrEditItemModalDialog = this.addSign = true;
+      //this.modalName = event.currentTarget.dataset.target;
     },
     hideModal: function hideModal(v) {
       if (!this.addSign)
       this.clearItem();
-      this.modalName = null;
+      this.addOrEditItemModalDialog = false;
     },
     editItem: function editItem(key) {
       var that = this;
       that.addSign = false;
-      that.modalName = 'DialogModalAdd';
-      var pattern = new RegExp(/\/?([\u4e00-\u9fa5]{1,2}|500g|kg|pcs)?$/);var _iterator = _createForOfIteratorHelper(
+      this.addOrEditItemModalDialog = true;var _iterator = _createForOfIteratorHelper(
       that.items),_step;try {for (_iterator.s(); !(_step = _iterator.n()).done;) {var i = _step.value;
           if (i.id === key || i.plu === key) {
             that.item = i;
@@ -704,12 +702,11 @@ var _default = {
         }} catch (err) {_iterator2.e(err);} finally {_iterator2.f();}
     },
     blur: function blur(sign, event) {
-      var pattern = new RegExp(/\/?([\u4e00-\u9fa5]{1,}|500g|kg|pcs)?$/);
       var cost = this.item ? this.item.storage.lastPurchasePrice.replace(pattern, '') : 0;
       switch (sign) {
         case 'sale':
           this.newRetailPrice = event.target.value;
-          console.log(event.target.value);
+          //console.log(event.target.value);
           if (this.newRetailPrice) {
             var temp = this.newRetailPrice.replace(pattern, '');
             this.retailGrossProfitRate = this.computedGrossProfitRate(cost, temp) + '%';
@@ -748,11 +745,10 @@ var _default = {
     },
     searchConfirm: function searchConfirm() {
       var that = this;
-      var patt = new RegExp(/\/?([\u4e00-\u9fa5]{1,2}|500g|kg|pcs)?$/);
       that.clearItem();var _iterator3 = _createForOfIteratorHelper(
       _catalog_test_data.default.catalog),_step3;try {for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {var i = _step3.value;
           if (i.barcode == that.scanResult || i.plu == that.scanResult) {
-            that.unit = patt.exec(i.retailPrice)[1];
+            that.unit = pattern.exec(i.retailPrice)[1];
             that.item = {
               name: i.name,
               specs: i.specs,
@@ -838,7 +834,7 @@ var _default = {
       that.scanResult = null;
     },
     saveItem: function saveItem() {
-      this.modalName = null;
+      this.addOrEditItemModalDialog = false;
       this.addItem();
     },
 
@@ -860,16 +856,16 @@ var _default = {
       this.hideClearModalDialog();
     },
 
-    computedHeight: function computedHeight() {var _this4 = this;
+    computedHeight: function computedHeight() {var _this3 = this;
       var query = uni.createSelectorQuery().in(this);
       query.select('#navBar').boundingClientRect().exec(function (rect) {
-        console.log(rect);
-        _this4.occupiedHeight = rect[0].height;
+        //console.log(rect);
+        _this3.occupiedHeight = rect[0].height;
       });
       query = uni.createSelectorQuery().in(this);
       query.select('.bottom').boundingClientRect().exec(function (rect) {
-        _this4.occupiedHeight = _this4.occupiedHeight + rect[0].height;
-        _this4.$util.toast("height:" + _this4.occupiedHeight);
+        _this3.occupiedHeight = _this3.occupiedHeight + rect[0].height;
+        _this3.$util.toast("height:" + _this3.occupiedHeight);
       });
     } } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))

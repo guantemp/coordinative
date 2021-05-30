@@ -11,7 +11,7 @@
 						</view>
 						<view class="grid-item-container">
 							<text class="shop1">生效日期：</text>
-							<text class="shop2">{{effectiveDate}}</text>
+							<text class="shop2">{{effectiveDateTime}}</text>
 							<text class="cuIcon-calendar" @click="showDateModal"></text>
 						</view>
 						<view class="grid-item-container">
@@ -135,10 +135,10 @@
 			<view class="cu-dialog" @tap.stop="">
 				<view
 					class="flex align-center justify-between padding-lr-lg padding-tb-sm bg-white solid-bottom text-lg">
-					<text @tap.stop.prevent="hideDateModal">取消</text>
+					<text @tap.stop.prevent="hideDateModal" class="text-green">取消</text>
 					<text class="text-orange" @tap.stop.prevent="pickerConfirm">确定</text>
 				</view>
-				<date-picker :startYear="2021" fields="second" :current="current" :value="initDate"
+				<date-picker :startYear="startYear" fields="second" :current="current" :value="initDateTime"
 					@change="handlerChange" @touchstart="touchStart" @touchend="touchEnd">
 				</date-picker>
 			</view>
@@ -159,7 +159,7 @@
 			</view>
 		</view>
 		<!-- 添加商品明细模态对话框 -->
-		<view class="cu-modal bottom-modal" :class="modalName=='DialogModalAdd'?'show':''">
+		<view class="cu-modal bottom-modal" :class="addOrEditItemModalDialog?'show':''">
 			<view class="cu-dialog">
 				<view @tap="hideModal" class="bg-white text-right padding-tb-sm padding-lr-lg">
 					<text class="cuIcon-close text-red text-bold text-xl"></text>
@@ -337,6 +337,7 @@
 		formatMoney
 	} from '@/js_sdk/util.js';
 	import catalog from '@/test/catalog_test_data.js'; //用例数据库
+	let pattern = new RegExp(/\/?([\u4e00-\u9fa5]{1,2}|500g|kg|pcs)?$/);
 	export default {
 		data() {
 			return {
@@ -345,8 +346,9 @@
 				remarks: null,
 
 				dateModal: false,
-				effectiveDate: null,
-				initDate: null,
+				effectiveDateTime: null,
+				startYear: null,
+				initDateTime: null,
 				confirmFlag: true,
 				resultDate: {},
 
@@ -356,7 +358,7 @@
 
 				clearModalDialog: false,
 
-				modalName: null,
+				addOrEditItemModalDialog: false,
 				scanResult: null,
 
 				items: [],
@@ -372,18 +374,17 @@
 			}
 		},
 		onLoad(options) {
-			setTimeout(() => {
-				this.effectiveDate = formatDate(new Date(), "yyyy-MM-dd 00:00:00");
-			}, 300);
-			this.units = catalog.units;
 			let sign = options.sign || 'edit';
-			console.log(sign);
+			let currentDate = new Date();
+			this.effectiveDateTime = formatDate(currentDate, "yyyy-MM-dd hh:mm:ss");
+			currentDate.setDate(currentDate.getDate() - 31);
+			this.startYear = currentDate.getFullYear();
+			this.units = catalog.units;
 			//new RegExp("^([1-9][0-9]+(.[0-9]{1,4})?)/([\u4e00-\u9fa5]{1,2}|500g|kg|pcs)$", "i");
 			//console.log("00564".replace(new RegExp(/^(0+)([0-9]+(\.[0-9]{0,})?$)/).$1, ""));
 		},
 		watch: {
 			unit() {
-				let pattern = new RegExp(/\/?([\u4e00-\u9fa5]{1,2}|500g|kg|pcs)?$/);
 				if (this.newRetailPrice)
 					this.newRetailPrice = this.newRetailPrice.replace(pattern, '') + "/" + this.unit;
 				if (this.newMemberPrice)
@@ -404,7 +405,6 @@
 			oldRetailGrossProfitRate: {
 				get() {
 					if (this.item) {
-						let pattern = new RegExp(/\/?([\u4e00-\u9fa5]{1,2}|500g|kg|pcs)?$/);
 						let cost = this.item.storage.lastPurchasePrice.replace(pattern, '');
 						return this.computedGrossProfitRate(cost, this.item.retailPrice.replace(pattern, '')) + '%';
 					}
@@ -414,7 +414,6 @@
 			oldMemberGrossProfitRate: {
 				get() {
 					if (this.item) {
-						let pattern = new RegExp(/\/?([\u4e00-\u9fa5]{1,2}|500g|kg|pcs)?$/);
 						let cost = this.item.storage.lastPurchasePrice.replace(pattern, '');
 						return this.computedGrossProfitRate(cost, this.item.memberPrice.replace(pattern, '')) + '%';
 					}
@@ -424,20 +423,20 @@
 			oldVipGrossProfitRate: {
 				get() {
 					if (this.item) {
-						let pattern = new RegExp(/\/?([\u4e00-\u9fa5]{1,2}|500g|kg|pcs)?$/);
 						let cost = this.item.storage.lastPurchasePrice.replace(pattern, '');
 						return this.computedGrossProfitRate(cost, this.item.vipPrice.replace(pattern, '')) + '%';
 					}
 				},
 				set(Value) {}
 			},
-
 		},
 		methods: {
 			foldClick() {
 				this.fold = !this.fold;
 			},
 			showDateModal() {
+				this.initDateTime = this.effectiveDateTime ? this.effectiveDateTime : formatDate(
+					new Date(), "yyyy-MM-dd hh:mm:ss");
 				this.dateModal = true;
 			},
 			hideDateModal() {
@@ -466,7 +465,7 @@
 					return;
 				};
 				this.dateModal = false;
-				this.effectiveDate = formatDate(new Date(this.resultDate.value), "yyyy-MM-dd hh:mm:ss")
+				this.effectiveDateTime = formatDate(new Date(this.resultDate.value), "yyyy-MM-dd hh:mm:ss")
 			},
 
 			hideUnitDrawerModal() {
@@ -481,19 +480,18 @@
 					this.unit = v;
 			},
 			showModal(event) {
-				this.addSign = true;
-				this.modalName = event.currentTarget.dataset.target;
+				this.addOrEditItemModalDialog = this.addSign = true;
+				//this.modalName = event.currentTarget.dataset.target;
 			},
 			hideModal(v) {
 				if (!this.addSign)
 					this.clearItem();
-				this.modalName = null;
+				this.addOrEditItemModalDialog = false;
 			},
 			editItem(key) {
 				let that = this;
 				that.addSign = false;
-				that.modalName = 'DialogModalAdd';
-				let pattern = new RegExp(/\/?([\u4e00-\u9fa5]{1,2}|500g|kg|pcs)?$/);
+				this.addOrEditItemModalDialog = true;
 				for (const i of that.items) {
 					if (i.id === key || i.plu === key) {
 						that.item = i;
@@ -527,16 +525,15 @@
 				}
 			},
 			blur(sign, event) {
-				let pattern = new RegExp(/\/?([\u4e00-\u9fa5]{1,}|500g|kg|pcs)?$/);
 				let cost = this.item ? this.item.storage.lastPurchasePrice.replace(pattern, '') : 0;
 				switch (sign) {
 					case 'sale':
 						this.newRetailPrice = event.target.value;
-						console.log(event.target.value);
+						//console.log(event.target.value);
 						if (this.newRetailPrice) {
 							let temp = this.newRetailPrice.replace(pattern, '');
 							this.retailGrossProfitRate = this.computedGrossProfitRate(cost, temp) + '%';
-							this.newRetailPrice = formatMoney(temp) + "/" + (this.unit||'pcs');
+							this.newRetailPrice = formatMoney(temp) + "/" + (this.unit || 'pcs');
 						} else {
 							this.retailGrossProfitRate = '';
 						}
@@ -545,7 +542,7 @@
 						if (this.newMemberPrice) {
 							let temp = this.newMemberPrice.replace(pattern, '');
 							this.memberGrossProfitRate = this.computedGrossProfitRate(cost, temp) + '%';
-							this.newMemberPrice = formatMoney(temp) + "/" + (this.unit||'pcs');
+							this.newMemberPrice = formatMoney(temp) + "/" + (this.unit || 'pcs');
 						} else {
 							this.memberGrossProfitRate = '';
 						}
@@ -554,7 +551,7 @@
 						if (this.newVipPrice) {
 							let temp = this.newVipPrice.replace(pattern, '');
 							this.vipGrossProfitRate = this.computedGrossProfitRate(cost, temp) + '%';
-							this.newVipPrice = formatMoney(temp) + "/" + (this.unit||'pcs');
+							this.newVipPrice = formatMoney(temp) + "/" + (this.unit || 'pcs');
 						} else {
 							this.vipGrossProfitRate = '';
 						}
@@ -571,11 +568,10 @@
 			},
 			searchConfirm() {
 				var that = this;
-				let patt = new RegExp(/\/?([\u4e00-\u9fa5]{1,2}|500g|kg|pcs)?$/);
 				that.clearItem();
 				for (const i of catalog.catalog) {
 					if (i.barcode == that.scanResult || i.plu == that.scanResult) {
-						that.unit = patt.exec(i.retailPrice)[1];
+						that.unit = pattern.exec(i.retailPrice)[1];
 						that.item = {
 							name: i.name,
 							specs: i.specs,
@@ -661,7 +657,7 @@
 				that.scanResult = null;
 			},
 			saveItem() {
-				this.modalName = null;
+				this.addOrEditItemModalDialog = false;
 				this.addItem();
 			},
 
@@ -686,7 +682,7 @@
 			computedHeight() {
 				let query = uni.createSelectorQuery().in(this);
 				query.select('#navBar').boundingClientRect().exec(rect => {
-					console.log(rect);
+					//console.log(rect);
 					this.occupiedHeight = rect[0].height;
 				});
 				query = uni.createSelectorQuery().in(this);
