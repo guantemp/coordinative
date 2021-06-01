@@ -273,13 +273,13 @@ export default {
 		{
 			id: '201452966564158972',
 			name: '菊品郁金银屑片',
-			barcode: '6926094418474',
+			barcode: 6926094418474,
 			specs: '100片',
 			category: {
 				id: "A1323",
 				name: "药品"
 			},
-			placeOfOrigin: '陕西.商洛市',
+			placeOfOrigin: '陕西省.商洛市',
 			grade: '合格品',
 			vip: {
 				referenceSalePrice: '45.25/瓶',
@@ -321,7 +321,7 @@ export default {
 		}, {
 			id: '201452966564158974',
 			name: '阿莫西林胶囊',
-			barcode: '6931435340314',
+			barcode: 6931435340314,
 			specs: '0.25g*50粒',
 			placeOfOrigin: '黑龙江.哈尔滨市',
 			grade: '合格品',
@@ -346,7 +346,7 @@ export default {
 		{
 			id: '201452564158974',
 			name: '伊利金典有机纯牛奶',
-			barcode: '6907992508191',
+			barcode: 6907992508191,
 			specs: '250ml',
 			placeOfOrigin: '内蒙古.呼和浩特市',
 			grade: '合格品',

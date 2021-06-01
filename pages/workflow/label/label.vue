@@ -11,6 +11,39 @@
 		</view>
 		<scroll-view v-else scroll-y :scroll-with-animation="true" :enable-back-to-top="true"
 			:style="{height: 'calc(100vh - 125px)'}">
+			<view class="flex flex-direction margin-lr-xs">
+				<block v-for="(item,index) in items" :key="index">
+					<view class="grid-item-container margin-top-xs align-center bg-white shadow">
+						<checkbox class='round red check' :class="true?'checked':''" :checked="true?true:false"
+							value="C">
+						</checkbox>
+						<view class="content text-left flex flex-direction padding-lr-xs">
+							<text class="text-cut">{{item.name}}</text>
+							<view class="flex justify-between">
+								<text>{{item.barcode||item.plu}}</text><text>{{item.specs}}</text>
+							</view>
+							<view class="flex justify-between">
+								<text class="text-cut">{{item.placeOfOrigin}}</text><text>{{item.grade}}</text>
+							</view>
+							<view class="flex justify-between text-cut">
+							<text>零售价：{{item.retailPrice}}</text>
+							<text>会员价：{{item.memberPrice}}</text>
+							</view>
+						</view>
+						<view class="flex flex-direction labelShow padding-xs" :class="index/2 !== 0?'bg-blue':'bg-red'">
+							<text>适用标签格式</text>
+							<text>{{item.label.name}}</text>
+							<text>打印标签数量</text>
+							<view class="flex align-center">
+								<text class="icon-minus"></text>
+								<input :placeholder="item.label.printQuantity" type="number" v-model="printQuantity"
+									class="basis-sm text-center solid-bottom"></input>
+								<text class="cuIcon-roundadd"></text>
+							</view>
+						</view>
+					</view>
+				</block>
+			</view>
 		</scroll-view>
 		<!--bootom-->
 		<view class="bottom cu-bar bg-white tabbar border shop">
@@ -96,8 +129,8 @@
 						<text class="cuIcon-titles text-yellow"></text>
 						<text>请选择适用标签</text>
 					</view>
-					<swiper class="labelSwiper margin-tb-xs square-dot" :current="swiperIndex" previous-margin="70rpx"
-						next-margin="70rpx" indicator-dots="true" indicator-color="#8799a3"
+					<swiper class="labelSwiper margin-tb-xs square-dot padding-lr-sm" :current="swiperIndex"
+						previous-margin="70rpx" next-margin="70rpx" indicator-dots="true" indicator-color="#8799a3"
 						indicator-active-color="#0081ff" circular="true" @change="labelSwiperChange">
 						<swiper-item v-for="(item,index) in labelList" :key="index"
 							:class="swiperIndex === index?'cur':''" @tap.stop="showLabelTipsModalDialog">
@@ -251,48 +284,7 @@
 				case 'price_adjustment':
 					let sheetNumber = options.sheetNumber || '';
 			}
-			this.items = [{
-				barcode: 6907861191394,
-				grade: "合格品",
-				id: "201451060435585024",
-				memberPrice: "18.00/盒",
-				name: "彩虹柠檬香电热灭蚊香液",
-				placeOfOrigin: "四川.成都",
-				retailPrice: "19.59/盒",
-				specs: "150ml",
-				vipPrice: "0.00/盒",
-				label: {
-					id: 45,
-					name: "条码标签",
-					printQuantity: 1,
-					specs: "32mm(宽)*19mm(高)*3列",
-					url: "/static/workflow/c.png"
-				},
-				promotion: {
-					endDate: "2021-05-07 23:59:59",
-					explain: "厂家回馈用户，只限于本店PLUS会员用户",
-					price: "1450.00/公斤",
-					startDate: "2021-05-06 00:00:00",
-					title: "5.1节会员促销"
-				}
-			}, {
-				memberPrice: "38.88/支",
-				name: "菊品郁金银屑片",
-				placeOfOrigin: "陕西.商洛市",
-				retailPrice: "49.98/支",
-				specs: "100片",
-				vipPrice: "35.00/瓶",
-				barcode: "6926094418474",
-				grade: "合格品",
-				id: "201452966564158972",
-				label: {
-					id: 334,
-					name: "正价标签",
-					printQuantity: 1,
-					specs: "90mm(宽)*38mm(高)*1列",
-					url: "/static/workflow/b.png",
-				}
-			}];
+			this.items = label.labels;
 		},
 		methods: {
 			//add item opertion
@@ -449,6 +441,27 @@
 </script>
 
 <style lang='scss'>
+	.grid-item-container {
+		display: flex;
+		justify-content: space-between;
+		border-radius: 20rpx;
+
+		.check {
+			width: 7%;
+			transform: scale(0.65);
+		}
+
+		.content {
+			width: 65%;
+		}
+
+		.labelShow {
+			width: 28%;
+			border-top-right-radius: 20rpx;
+			border-bottom-right-radius: 20rpx;
+		}
+	}
+
 	.labelSwiper {
 		width: 100%;
 		height: 220rpx;
@@ -469,7 +482,7 @@
 		display: flex;
 		flex-direction: column;
 		height: 100%;
-		transform: scale(0.88);//放大
+		transform: scale(0.88); //放大
 		transition: all 0.2s ease-in 0s;
 		overflow: hidden;
 	}

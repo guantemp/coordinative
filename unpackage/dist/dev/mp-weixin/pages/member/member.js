@@ -96,13 +96,13 @@ var components
 try {
   components = {
     navBar: function() {
-      return __webpack_require__.e(/*! import() | components/navBar/navBar */ "components/navBar/navBar").then(__webpack_require__.bind(null, /*! @/components/navBar/navBar.vue */ 192))
+      return __webpack_require__.e(/*! import() | components/navBar/navBar */ "components/navBar/navBar").then(__webpack_require__.bind(null, /*! @/components/navBar/navBar.vue */ 199))
     },
     datePicker: function() {
-      return __webpack_require__.e(/*! import() | components/date-picker/date-picker */ "components/date-picker/date-picker").then(__webpack_require__.bind(null, /*! @/components/date-picker/date-picker.vue */ 206))
+      return __webpack_require__.e(/*! import() | components/date-picker/date-picker */ "components/date-picker/date-picker").then(__webpack_require__.bind(null, /*! @/components/date-picker/date-picker.vue */ 213))
     },
     badge: function() {
-      return __webpack_require__.e(/*! import() | components/badge/badge */ "components/badge/badge").then(__webpack_require__.bind(null, /*! @/components/badge/badge.vue */ 213))
+      return __webpack_require__.e(/*! import() | components/badge/badge */ "components/badge/badge").then(__webpack_require__.bind(null, /*! @/components/badge/badge.vue */ 220))
     }
   }
 } catch (e) {

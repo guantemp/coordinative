@@ -822,7 +822,7 @@ function initData(vueOptions, context) {
     try {
       data = data.call(context); // 支持 Vue.prototype 上挂的数据
     } catch (e) {
-      if (Object({"NODE_ENV":"development","VUE_APP_NAME":"HOPRXI协着工具","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG) {
+      if (Object({"VUE_APP_NAME":"HOPRXI协着工具","VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG) {
         console.warn('根据 Vue 的 data 函数初始化小程序 data 失败，请尽量确保 data 函数中不访问 vm 对象，否则可能影响首次数据渲染速度。', data);
       }
     }
@@ -4386,7 +4386,49 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
   {
     id: 'HRRT-001581B6AE86',
-    name: '汉印HM-A300S蓝牙便携' }] };exports.default = _default;
+    name: '汉印HM-A300S蓝牙便携' }],
+
+
+  labels: [{
+    id: '201452393217567744',
+    name: '哇哈哈营养快线水果牛奶饮品（菠萝味）',
+    barcode: 6902083898625,
+    specs: '550ml',
+    placeOfOrigin: '浙江省.杭州市',
+    grade: '合格品',
+    retailPrice: '11.98/瓶',
+    memberPrice: '10.98/瓶',
+    vipPrice: '4.98/瓶',
+    label: {
+      id: 334,
+      name: "特价标签",
+      printQuantity: 1,
+      specs: "90mm(宽)*38mm(高)*1列",
+      url: "/static/workflow/c.png" },
+
+    promotion: {
+      endDate: "2021-05-07 23:59:59",
+      explain: "厂家回馈用户，只限于本店PLUS会员用户",
+      price: "1450.00/公斤",
+      startDate: "2021-05-06 00:00:00",
+      title: "5.1节会员促销" } },
+
+  {
+    id: '201452853459475457',
+    name: '川骄无芯卷纸（白四层）',
+    barcode: 6970981171003,
+    specs: '1800g',
+    placeOfOrigin: '四川省.成都市',
+    grade: '合格品',
+    retailPrice: '11.98/提',
+    memberPrice: '0.00/提',
+    vipPrice: '0.00/提',
+    label: {
+      id: 334,
+      name: "正价标签",
+      printQuantity: 1,
+      specs: "90mm(宽)*38mm(高)*1列",
+      url: "/static/workflow/b.png" } }] };exports.default = _default;
 
 /***/ }),
 
@@ -4438,9 +4480,9 @@ Request = /*#__PURE__*/function () {
                                      * @param {Object} arg.header - 全局header
                                      * @param {String} arg.method = [GET|POST|PUT|DELETE|CONNECT|HEAD|OPTIONS|TRACE] - 全局默认请求方式
                                      * @param {String} arg.dataType = [json] - 全局默认的dataType
-                                     * @param {String} arg.responseType = [text|arraybuffer] - 全局默认的responseType。App和支付宝小程序不支持
+                                     * @param {String} arg.responseType = [text|arraybuffer] - 全局默认的responseType。支付宝小程序不支持
                                      * @param {Object} arg.custom - 全局默认的自定义参数
-                                     * @param {Number} arg.timeout - 全局默认的超时时间，单位 ms。默认30000。仅微信小程序（2.10.0）、支付宝小程序支持
+                                     * @param {Number} arg.timeout - 全局默认的超时时间，单位 ms。默认60000。H5(HBuilderX 2.9.9+)、APP(HBuilderX 2.9.9+)、微信小程序（2.10.0）、支付宝小程序
                                      * @param {Boolean} arg.sslVerify - 全局默认的是否验证 ssl 证书。默认true.仅App安卓端支持（HBuilderX 2.3.3+）
                                      * @param {Boolean} arg.withCredentials - 全局默认的跨域请求时是否携带凭证（cookies）。默认false。仅H5支持（HBuilderX 2.6.15+）
                                      * @param {Boolean} arg.firstIpv4 - 全DNS解析时优先使用ipv4。默认false。仅 App-Android 支持 (HBuilderX 2.8.0+)
@@ -10156,7 +10198,7 @@ function type(obj) {
 
 function flushCallbacks$1(vm) {
     if (vm.__next_tick_callbacks && vm.__next_tick_callbacks.length) {
-        if (Object({"NODE_ENV":"development","VUE_APP_NAME":"HOPRXI协着工具","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG) {
+        if (Object({"VUE_APP_NAME":"HOPRXI协着工具","VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG) {
             var mpInstance = vm.$scope;
             console.log('[' + (+new Date) + '][' + (mpInstance.is || mpInstance.route) + '][' + vm._uid +
                 ']:flushCallbacks[' + vm.__next_tick_callbacks.length + ']');
@@ -10177,14 +10219,14 @@ function nextTick$1(vm, cb) {
     //1.nextTick 之前 已 setData 且 setData 还未回调完成
     //2.nextTick 之前存在 render watcher
     if (!vm.__next_tick_pending && !hasRenderWatcher(vm)) {
-        if(Object({"NODE_ENV":"development","VUE_APP_NAME":"HOPRXI协着工具","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG){
+        if(Object({"VUE_APP_NAME":"HOPRXI协着工具","VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG){
             var mpInstance = vm.$scope;
             console.log('[' + (+new Date) + '][' + (mpInstance.is || mpInstance.route) + '][' + vm._uid +
                 ']:nextVueTick');
         }
         return nextTick(cb, vm)
     }else{
-        if(Object({"NODE_ENV":"development","VUE_APP_NAME":"HOPRXI协着工具","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG){
+        if(Object({"VUE_APP_NAME":"HOPRXI协着工具","VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG){
             var mpInstance$1 = vm.$scope;
             console.log('[' + (+new Date) + '][' + (mpInstance$1.is || mpInstance$1.route) + '][' + vm._uid +
                 ']:nextMPTick');
@@ -10270,7 +10312,7 @@ var patch = function(oldVnode, vnode) {
     });
     var diffData = this.$shouldDiffData === false ? data : diff(data, mpData);
     if (Object.keys(diffData).length) {
-      if (Object({"NODE_ENV":"development","VUE_APP_NAME":"HOPRXI协着工具","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG) {
+      if (Object({"VUE_APP_NAME":"HOPRXI协着工具","VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG) {
         console.log('[' + (+new Date) + '][' + (mpInstance.is || mpInstance.route) + '][' + this._uid +
           ']差量更新',
           JSON.stringify(diffData));
@@ -10688,18 +10730,19 @@ internalMixin(Vue);
 "use strict";
 /* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _buildURL = _interopRequireDefault(__webpack_require__(/*! ../helpers/buildURL */ 21));
 var _buildFullPath = _interopRequireDefault(__webpack_require__(/*! ../core/buildFullPath */ 23));
-var _settle = _interopRequireDefault(__webpack_require__(/*! ../core/settle */ 26));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function ownKeys(object, enumerableOnly) {var keys = Object.keys(object);if (Object.getOwnPropertySymbols) {var symbols = Object.getOwnPropertySymbols(object);if (enumerableOnly) symbols = symbols.filter(function (sym) {return Object.getOwnPropertyDescriptor(object, sym).enumerable;});keys.push.apply(keys, symbols);}return keys;}function _objectSpread(target) {for (var i = 1; i < arguments.length; i++) {var source = arguments[i] != null ? arguments[i] : {};if (i % 2) {ownKeys(Object(source), true).forEach(function (key) {_defineProperty(target, key, source[key]);});} else if (Object.getOwnPropertyDescriptors) {Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));} else {ownKeys(Object(source)).forEach(function (key) {Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));});}}return target;}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+var _settle = _interopRequireDefault(__webpack_require__(/*! ../core/settle */ 26));
+var _utils = __webpack_require__(/*! ../utils */ 22);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function ownKeys(object, enumerableOnly) {var keys = Object.keys(object);if (Object.getOwnPropertySymbols) {var symbols = Object.getOwnPropertySymbols(object);if (enumerableOnly) symbols = symbols.filter(function (sym) {return Object.getOwnPropertyDescriptor(object, sym).enumerable;});keys.push.apply(keys, symbols);}return keys;}function _objectSpread(target) {for (var i = 1; i < arguments.length; i++) {var source = arguments[i] != null ? arguments[i] : {};if (i % 2) {ownKeys(Object(source), true).forEach(function (key) {_defineProperty(target, key, source[key]);});} else if (Object.getOwnPropertyDescriptors) {Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));} else {ownKeys(Object(source)).forEach(function (key) {Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));});}}return target;}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
 /**
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          * 返回可选值存在的配置
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          * @param {Array} keys - 可选值数组
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          * @param {Object} config2 - 配置
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          * @return {{}} - 存在的配置项
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          */
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           * 返回可选值存在的配置
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           * @param {Array} keys - 可选值数组
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           * @param {Object} config2 - 配置
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           * @return {{}} - 存在的配置项
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           */
 var mergeKeys = function mergeKeys(keys, config2) {
   var config = {};
   keys.forEach(function (prop) {
-    if (typeof config2[prop] !== 'undefined') {
+    if (!(0, _utils.isUndefined)(config2[prop])) {
       config[prop] = config2[prop];
     }
   });
@@ -10707,10 +10750,12 @@ var mergeKeys = function mergeKeys(keys, config2) {
 };var _default =
 function _default(config) {
   return new Promise(function (resolve, reject) {
+    var fullPath = (0, _buildURL.default)((0, _buildFullPath.default)(config.baseURL, config.url), config.params);
     var _config = {
-      url: (0, _buildURL.default)((0, _buildFullPath.default)(config.baseURL, config.url), config.params),
+      url: fullPath,
       header: config.header,
       complete: function complete(response) {
+        config.fullPath = fullPath;
         response.config = config;
         try {
           // 对可能字符串不是json 的情况容错
@@ -10741,10 +10786,18 @@ function _default(config) {
 
 
 
+
+
+
       'formData'];
 
       requestTask = uni.uploadFile(_objectSpread(_objectSpread(_objectSpread({}, _config), otherConfig), mergeKeys(optionalKeys, config)));
     } else if (config.method === 'DOWNLOAD') {
+
+
+
+
+
       requestTask = uni.downloadFile(_config);
     } else {
       var _optionalKeys = [
@@ -10869,7 +10922,7 @@ function buildURL(url, params) {
 
 
 // utils is a library of generic helper functions non-specific to axios
-Object.defineProperty(exports, "__esModule", { value: true });exports.isArray = isArray;exports.isObject = isObject;exports.isDate = isDate;exports.isURLSearchParams = isURLSearchParams;exports.forEach = forEach;exports.isBoolean = isBoolean;exports.isPlainObject = isPlainObject;exports.deepMerge = deepMerge;
+Object.defineProperty(exports, "__esModule", { value: true });exports.isArray = isArray;exports.isObject = isObject;exports.isDate = isDate;exports.isURLSearchParams = isURLSearchParams;exports.forEach = forEach;exports.isBoolean = isBoolean;exports.isPlainObject = isPlainObject;exports.deepMerge = deepMerge;exports.isUndefined = isUndefined;
 var toString = Object.prototype.toString;
 
 /**
@@ -10998,6 +11051,10 @@ function deepMerge() /* obj1, obj2, obj3, ... */{
   return result;
 }
 
+function isUndefined(val) {
+  return typeof val === 'undefined';
+}
+
 /***/ }),
 
 /***/ 23:
@@ -11031,7 +11088,32 @@ function buildFullPath(baseURL, requestedURL) {
 
 /***/ }),
 
-/***/ 239:
+/***/ 24:
+/*!**************************************************************************************!*\
+  !*** E:/mini/coordinative/js_sdk/luch-request/luch-request/helpers/isAbsoluteURL.js ***!
+  \**************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+               * Determines whether the specified URL is absolute
+               *
+               * @param {string} url The URL to test
+               * @returns {boolean} True if the specified URL is absolute, otherwise false
+               */Object.defineProperty(exports, "__esModule", { value: true });exports.default = isAbsoluteURL;
+function isAbsoluteURL(url) {
+  // A URL is considered absolute if it begins with "<scheme>://" or "//" (protocol-relative URL).
+  // RFC 3986 defines scheme name as a sequence of characters beginning with a letter and followed
+  // by any combination of letters, digits, plus, period, or hyphen.
+  return /^([a-z][a-z\d+\-.]*:)?\/\//i.test(url);
+}
+
+/***/ }),
+
+/***/ 246:
 /*!********************************************************!*\
   !*** E:/mini/coordinative/js_sdk/areadata/areadata.js ***!
   \********************************************************/
@@ -22344,31 +22426,6 @@ cityData;exports.default = _default;
 
 /***/ }),
 
-/***/ 24:
-/*!**************************************************************************************!*\
-  !*** E:/mini/coordinative/js_sdk/luch-request/luch-request/helpers/isAbsoluteURL.js ***!
-  \**************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-/**
-               * Determines whether the specified URL is absolute
-               *
-               * @param {string} url The URL to test
-               * @returns {boolean} True if the specified URL is absolute, otherwise false
-               */Object.defineProperty(exports, "__esModule", { value: true });exports.default = isAbsoluteURL;
-function isAbsoluteURL(url) {
-  // A URL is considered absolute if it begins with "<scheme>://" or "//" (protocol-relative URL).
-  // RFC 3986 defines scheme name as a sequence of characters beginning with a letter and followed
-  // by any combination of letters, digits, plus, period, or hyphen.
-  return /^([a-z][a-z\d+\-.]*:)?\/\//i.test(url);
-}
-
-/***/ }),
-
 /***/ 25:
 /*!************************************************************************************!*\
   !*** E:/mini/coordinative/js_sdk/luch-request/luch-request/helpers/combineURLs.js ***!
@@ -22503,9 +22560,9 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 var mergeKeys = function mergeKeys(keys, globalsConfig, config2) {
   var config = {};
   keys.forEach(function (prop) {
-    if (typeof config2[prop] !== 'undefined') {
+    if (!(0, _utils.isUndefined)(config2[prop])) {
       config[prop] = config2[prop];
-    } else if (typeof globalsConfig[prop] !== 'undefined') {
+    } else if (!(0, _utils.isUndefined)(globalsConfig[prop])) {
       config[prop] = globalsConfig[prop];
     }
   });
@@ -22533,6 +22590,12 @@ function _default(globalsConfig) {var config2 = arguments.length > 1 && argument
   // eslint-disable-next-line no-empty
   if (method === 'DOWNLOAD') {
 
+
+
+
+
+
+
   } else if (method === 'UPLOAD') {
     delete config.header['content-type'];
     delete config.header['Content-Type'];
@@ -22548,13 +22611,21 @@ function _default(globalsConfig) {var config2 = arguments.length > 1 && argument
 
     'filePath',
     'name',
+
+
+
     'formData'];
 
     uploadKeys.forEach(function (prop) {
-      if (typeof config2[prop] !== 'undefined') {
+      if (!(0, _utils.isUndefined)(config2[prop])) {
         config[prop] = config2[prop];
       }
     });
+
+
+
+
+
   } else {
     var defaultsKeys = [
     'data',
@@ -22606,7 +22677,7 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
   custom: {},
 
-  timeout: 30000,
+  timeout: 60000,
 
 
 
@@ -23090,13 +23161,13 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
   {
     id: '201452966564158972',
     name: '菊品郁金银屑片',
-    barcode: '6926094418474',
+    barcode: 6926094418474,
     specs: '100片',
     category: {
       id: "A1323",
       name: "药品" },
 
-    placeOfOrigin: '陕西.商洛市',
+    placeOfOrigin: '陕西省.商洛市',
     grade: '合格品',
     vip: {
       referenceSalePrice: '45.25/瓶',
@@ -23138,7 +23209,7 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
   {
     id: '201452966564158974',
     name: '阿莫西林胶囊',
-    barcode: '6931435340314',
+    barcode: 6931435340314,
     specs: '0.25g*50粒',
     placeOfOrigin: '黑龙江.哈尔滨市',
     grade: '合格品',
@@ -23163,7 +23234,7 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
   {
     id: '201452564158974',
     name: '伊利金典有机纯牛奶',
-    barcode: '6907992508191',
+    barcode: 6907992508191,
     specs: '250ml',
     placeOfOrigin: '内蒙古.呼和浩特市',
     grade: '合格品',

@@ -174,7 +174,7 @@
 				:style="[{top:58+'px',height:'calc(100vh - ' + 58 + 'px)'}]">
 				<view class="padding-sm solid-bottom text-left">
 					<text class="cuIcon-titles text-orange"></text>
-					<text>重置价格单位</text>
+					<text>选择价格单位</text>
 				</view>
 				<view class="units text-df">
 					<block v-for="(unitItem, index) in units" :key="index">

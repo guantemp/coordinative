@@ -46,7 +46,8 @@
 							产地：<text>{{good.placeOfOrigin}}</text>
 						</view>
 						<view>
-							零售价：<text class="text-price text-red">{{good.retailPrice}}</text>
+							零售价：<text class="text-price text-red margin-right-sm">{{good.retailPrice}}</text>
+							会员价：<text class="text-price text-red">{{good.memberPrice}}</text>
 						</view>
 					</view>
 				</view>

@@ -8,12 +8,12 @@ export default {
   header: {},
   method: 'GET',
   dataType: 'json',
-  // #ifndef MP-ALIPAY || APP-PLUS
+  // #ifndef MP-ALIPAY
   responseType: 'text',
   // #endif
   custom: {},
-  // #ifdef MP-ALIPAY || MP-WEIXIN
-  timeout: 30000,
+  // #ifdef H5 || APP-PLUS || MP-ALIPAY || MP-WEIXIN
+  timeout: 60000,
   // #endif
   // #ifdef APP-PLUS
   sslVerify: true,

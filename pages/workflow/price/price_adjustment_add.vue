@@ -695,7 +695,7 @@
 	}
 </script>
 
-<style scoped lang='scss'>
+<style lang='scss'>
 	.price_adjustment_add {
 		width: 100vw;
 		height: 100vh;

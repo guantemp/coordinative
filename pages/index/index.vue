@@ -5,8 +5,8 @@
 			<text class="text-lg text-red">HOPRXI协助工具 - Release Notes</text>
 		</view>
 		<view class="cu-timeline">
-			<view class="cu-item text-blue">
-				<view class="bg-blue light content">
+			<view class="cu-item text-gray">
+				<view class="bg-gray light content">
 					<view class="cu-capsule radius">
 						<view class="cu-tag bg-green">version 0.0.5</view>
 						<view class="cu-tag line-green">2021-05-21</view>
@@ -18,8 +18,8 @@
 					</view>
 				</view>
 			</view>
-			<view class="cu-item text-cyan">
-				<view class="bg-cyan light content">
+			<view class="cu-item text-gray">
+				<view class="bg-gray light content">
 					<view class="cu-capsule radius">
 						<view class="cu-tag bg-green">version 0.0.4</view>
 						<view class="cu-tag line-green">2021-05-10</view>
