@@ -11,6 +11,12 @@
 		</view>
 		<scroll-view v-else scroll-y :scroll-with-animation="true" :enable-back-to-top="true"
 			:style="{height: 'calc(100vh - 125px)'}">
+			<view class="flex bg-white shadow radius padding-xs justify-between">
+				<checkbox class='round red check' :class="true?'checked':''" :checked="true?true:false" value="C">
+					<text>全选</text>
+				</checkbox>
+				<text class="text-blue">删除所选</text>
+			</view>
 			<view class="flex flex-direction margin-lr-xs">
 				<block v-for="(item,index) in items" :key="index">
 					<view class="grid-item-container margin-top-xs align-center bg-white shadow">
@@ -18,27 +24,29 @@
 							value="C">
 						</checkbox>
 						<view class="content text-left flex flex-direction padding-lr-xs">
-							<text class="text-cut">{{item.name}}</text>
+							<text class="text-cut text-bold">{{item.name}}</text>
 							<view class="flex justify-between">
 								<text>{{item.barcode||item.plu}}</text><text>{{item.specs}}</text>
 							</view>
 							<view class="flex justify-between">
-								<text class="text-cut">{{item.placeOfOrigin}}</text><text>{{item.grade}}</text>
+								<text>{{item.placeOfOrigin}}</text><text>{{item.grade}}</text>
 							</view>
 							<view class="flex justify-between text-cut">
-							<text>零售价：{{item.retailPrice}}</text>
-							<text>会员价：{{item.memberPrice}}</text>
+								<text>零售价：{{item.retailPrice}}</text>
+								<text>会员价：{{item.memberPrice}}</text>
 							</view>
 						</view>
-						<view class="flex flex-direction labelShow padding-xs" :class="index/2 !== 0?'bg-blue':'bg-red'">
+						<view class="flex flex-direction labelShow padding-xs"
+							:class="index/2 !== 0?'bg-blue':'bg-red'">
 							<text>适用标签格式</text>
 							<text>{{item.label.name}}</text>
-							<text>打印标签数量</text>
-							<view class="flex align-center">
-								<text class="icon-minus"></text>
-								<input :placeholder="item.label.printQuantity" type="number" v-model="printQuantity"
-									class="basis-sm text-center solid-bottom"></input>
-								<text class="cuIcon-roundadd"></text>
+							<text>打印数量</text>
+							<view class="flex align-center text-center">
+								<view class="numberBtn minus" :class="[inputValue <= 0?'numbox_disabled':'']"
+									@click="minus">-</view>
+								<input type="number" :value="item.label.printQuantity"></input>
+								<view class="numberBtn plus" :class="[inputValue >= 99?'numbox_disabled':'']"
+									@click="plus">+</view>
 							</view>
 						</view>
 					</view>
@@ -396,9 +404,16 @@
 					...that.item
 				}
 				that.items.push(that.item);
+				//要去除数量
+				//that.seclectedLabel = {};
 				that.item = null;
 				that.scanResult = '';
 				that.printQuantity = 1;
+				const {
+					printQuantity,
+					...temp
+				} = that.seclectedLabel;
+				that.seclectedLabel=temp;
 				console.log(that.items);
 			},
 
@@ -444,7 +459,7 @@
 	.grid-item-container {
 		display: flex;
 		justify-content: space-between;
-		border-radius: 20rpx;
+		border-radius: 16rpx;
 
 		.check {
 			width: 7%;
@@ -456,9 +471,43 @@
 		}
 
 		.labelShow {
-			width: 28%;
-			border-top-right-radius: 20rpx;
-			border-bottom-right-radius: 20rpx;
+			width: 29%;
+			border-top-right-radius: 16rpx;
+			border-bottom-right-radius: 16rpx;
+
+			.numberBtn {
+				width: 48rpx;
+				height: 46rpx;
+				font-size: 38rpx;
+				line-height: 46rpx;
+				font-weight: bold;
+				color: #FFF;
+				border: 1rpx solid #f1f1f1;
+
+				&:active {
+					background-color: #f1f1f1;
+				}
+			}
+
+			.minus {
+				border-top-left-radius: 6rpx;
+				border-bottom-left-radius: 6rpx;
+			}
+
+			input {
+				width: 54rpx;
+				height: 39rpx;
+				font-size: 32rpx;
+				line-height: 39rpx;
+				color: #FFF;
+				border-top: 1rpx solid #f1f1f1;
+				border-bottom: 1rpx solid #f1f1f1;
+			}
+
+			.plus {
+				border-top-right-radius: 6rpx;
+				border-bottom-right-radius: 6rpx;
+			}
 		}
 	}
 
