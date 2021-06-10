@@ -1,21 +1,25 @@
 export default {
 	labelList: [{
 		id: 45,
+		type: 'barcode',
 		url: '/static/workflow/c.png',
 		name: '条码标签',
 		specs: '32mm(宽)*19mm(高)*3列',
 	}, {
 		id: 34,
+		type: 'special',
 		url: '/static/workflow/a.png',
 		name: '特价标签',
 		specs: '78mm(宽)*38mm(高)*1列'
 	}, {
 		id: 78,
+		type: 'normal',
 		url: '/static/workflow/a.png',
 		name: '正价标签',
 		specs: '78mm(宽)*38mm(高)*1列'
 	}, {
 		id: 334,
+		type: 'normal',
 		url: '/static/workflow/b.png',
 		name: '正价标签',
 		specs: '90mm(宽)*38mm(高)*1列'
@@ -51,6 +55,7 @@ export default {
 		vipPrice: '4.98/瓶',
 		label: {
 			id: 334,
+			type: 'special',
 			name: "特价标签",
 			printQuantity: 1,
 			specs: "90mm(宽)*38mm(高)*1列",
@@ -76,6 +81,7 @@ export default {
 		label: {
 			id: 334,
 			name: "正价标签",
+			type: 'normal',
 			printQuantity: 1,
 			specs: "90mm(宽)*38mm(高)*1列",
 			url: "/static/workflow/b.png",

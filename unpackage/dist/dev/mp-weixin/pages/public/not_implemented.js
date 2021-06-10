@@ -137,11 +137,108 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 var _default =
 {
+  data: function data() {
+    return {
+      /* 窗口尺寸 */
+      winSize: {},
+      /* 显示遮罩 */
+      showShade: false,
+      /* 显示操作弹窗 */
+      showPop: false,
+      /* 弹窗按钮列表 */
+      popButton: ["删除该商品", "测试用列"],
+      /* 弹窗定位样式 */
+      popStyle: "",
+      /* 选择的用户下标 */
+      pickerUserIndex: -1 };
+
+  },
   methods: {
     navBack: function navBack() {
       uni.navigateBack();
+    },
+    onLongPress: function onLongPress(e) {var _this = this;var _ref =
+      [e.touches[0], "", e.currentTarget.dataset.index],touches = _ref[0],style = _ref[1],index = _ref[2];
+
+      /* 因 非H5端不兼容 style 属性绑定 Object ，所以拼接字符 */
+      if (touches.clientY > this.winSize.height / 2) {
+        style = "bottom:".concat(this.winSize.height - touches.clientY, "px;");
+      } else {
+        style = "top:".concat(touches.clientY, "px;");
+      }
+      if (touches.clientX > this.winSize.witdh / 2) {
+        style += "right:".concat(this.winSize.witdh - touches.clientX, "px");
+      } else {
+        style += "left:".concat(touches.clientX, "px");
+      }
+
+      this.popStyle = style;
+      this.pickerUserIndex = Number(index);
+      this.showShade = true;
+      this.$nextTick(function () {
+        setTimeout(function () {
+          _this.showPop = true;
+        }, 10);
+      });
+    },
+    /* 列表触摸事件 */
+    listTap: function listTap() {
+      /* 因弹出遮罩问题，所以需要在遮罩弹出的情况下阻止列表事件的触发 */
+      if (this.showShade) {
+        return;
+      }
+      console.log("列表触摸事件触发");
+    },
+    /* 获取窗口尺寸 */
+    getWindowSize: function getWindowSize() {var _this2 = this;
+      uni.getSystemInfo({
+        success: function success(res) {
+          _this2.winSize = {
+            "witdh": res.windowWidth,
+            "height": res.windowHeight };
+
+        } });
+
+    },
+    /* 隐藏弹窗 */
+    hidePop: function hidePop() {var _this3 = this;
+      this.showPop = false;
+      this.pickerUserIndex = -1;
+      setTimeout(function () {
+        _this3.showShade = false;
+      }, 250);
+    },
+    /* 选择菜单 */
+    pickerMenu: function pickerMenu(e) {
+      var index = Number(e.currentTarget.dataset.index);
+      console.log("\u7B2C".concat(this.pickerUserIndex + 1, "\u4E2A\u7528\u6237,\u7B2C").concat(index + 1, "\u4E2A\u6309\u94AE"));
+      // 在这里开启你的代码秀
+
+      uni.showToast({
+        title: "\u7B2C".concat(this.pickerUserIndex + 1, "\u4E2A\u7528\u6237,\u7B2C").concat(index + 1, "\u4E2A\u6309\u94AE"),
+        icon: "none",
+        mask: true,
+        duration: 600 });
+
+
+      /* 
+                           因为隐藏弹窗方法中会将当前选择的用户下标还原为-1,
+                           如果行的菜单方法存在异步情况，请在隐藏之前将该值保存，或通过参数传入异步函数中
+                           */
+      this.hidePop();
     } } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 

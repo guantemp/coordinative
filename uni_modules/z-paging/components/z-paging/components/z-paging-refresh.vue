@@ -7,10 +7,11 @@
 <template>
 	<view style="height: 100%;">
 		<view
-			:class="showRefresherUpdateTime?'zp-custom-refresher-container zp-custom-refresher-container-padding':'zp-custom-refresher-container'"
+			:class="['zp-custom-refresher-container',{'zp-custom-refresher-container-padding':showRefresherUpdateTime}]"
 			style="height: 100%;">
 			<view class="zp-custom-refresher-left">
 				<image v-if="refresherStatus!==2" :class="refresherLeftImageClass"
+					:style="[{width: showRefresherUpdateTime?'36rpx':'30rpx',height: showRefresherUpdateTime?'36rpx':'30rpx','margin-right': showRefresherUpdateTime?'20rpx':'8rpx'}]"
 					:src="defaultThemeStyle==='white'?base64ArrowWhite:base64Arrow">
 				</image>
 				<!-- #ifndef APP-NVUE -->
@@ -20,7 +21,7 @@
 				<!-- #endif -->
 				<!-- #ifdef APP-NVUE -->
 				<view v-else :style="[{'margin-right':showRefresherUpdateTime?'18rpx':'12rpx'}]">
-					<loading-indicator class="zp-loading-image"
+					<loading-indicator :class="systemInfo.platform==='ios'?'zp-loading-image-ios':'zp-loading-image-android'"
 						:style="[{color:defaultThemeStyle==='white'?'white':'#777777'}]" :animating="true">
 					</loading-indicator>
 				</view>
@@ -39,6 +40,7 @@
 	</view>
 </template>
 <script>
+	const systemInfo = uni.getSystemInfoSync();
 	import zStatic from '../js/z-paging-static'
 	import {
 		getRefesrherFormatTimeByKey
@@ -47,16 +49,29 @@
 		name: 'z-paging-refresh',
 		data() {
 			return {
+				systemInfo: systemInfo,
 				base64Arrow: zStatic.base64Arrow,
 				base64ArrowWhite: zStatic.base64ArrowWhite,
 				base64Flower: zStatic.base64Flower,
 				base64FlowerWhite: zStatic.base64FlowerWhite,
-				refresherTimeText: ''
+				refresherTimeText: '',
+				isRefresherLeftImageClassLoaded: false
 			};
 		},
-		props: ['refresherStatus', 'defaultThemeStyle', 'refresherDefaultText', 'refresherPullingText',
-			'refresherPullingText', 'refresherRefreshingText', 'showRefresherUpdateTime', 'refresherUpdateTimeKey'
-		],
+		props: {
+			'refresherStatus': {
+				default: -1
+			},
+			'defaultThemeStyle': {},
+			'refresherDefaultText': {},
+			'refresherPullingText': {},
+			'refresherPullingText': {},
+			'refresherRefreshingText': {},
+			'showRefresherUpdateTime': {
+				default: false
+			},
+			'refresherUpdateTimeKey': {}
+		},
 		computed: {
 			refresherStatusTextMap() {
 				this.updateTime(this.refresherUpdateTimeKey);
@@ -67,16 +82,16 @@
 				};
 			},
 			refresherLeftImageClass() {
-				let refresherLeftImageClass = ''
+				let refresherLeftImageClass = '';
 				if (this.refresherStatus === 0) {
-					refresherLeftImageClass = 'zp-custom-refresher-left-image zp-custom-refresher-arrow-down';
+					if(this.isRefresherLeftImageClassLoaded){
+						refresherLeftImageClass = 'zp-custom-refresher-left-image zp-custom-refresher-arrow-down';
+					}else{
+						this.isRefresherLeftImageClassLoaded = true;
+						refresherLeftImageClass = 'zp-custom-refresher-left-image zp-custom-refresher-arrow-down-no-duration';
+					}
 				} else {
 					refresherLeftImageClass = 'zp-custom-refresher-left-image zp-custom-refresher-arrow-top';
-				}
-				if (this.showRefresherUpdateTime) {
-					refresherLeftImageClass += ' zp-custom-refresher-left-image-big';
-				} else {
-					refresherLeftImageClass += ' zp-custom-refresher-left-image-small';
 				}
 				return refresherLeftImageClass;
 			},
@@ -149,6 +164,7 @@
 		/* #endif */
 		flex-direction: row;
 		align-items: center;
+		overflow: hidden;
 	}
 
 	.zp-custom-refresher-left-image {
@@ -185,8 +201,8 @@
 
 	.zp-custom-refresher-arrow-top {
 		/* #ifndef APP-NVUE */
-		animation: refresher-arrow-top 0.25s linear;
-		-webkitanimation: refresher-arrow-top 0.25s linear;
+		animation: refresher-arrow-top .2s linear;
+		-webkit-animation: refresher-arrow-top .2s linear;
 		animation-fill-mode: forwards;
 		-webkit-animation-fill-mode: forwards;
 		/* #endif */
@@ -197,8 +213,20 @@
 
 	.zp-custom-refresher-arrow-down {
 		/* #ifndef APP-NVUE */
-		animation: refresher-arrow-down 0.25s linear;
-		-webkit-animation: refresher-arrow-down 0.25s linear;
+		animation: refresher-arrow-down .2s linear;
+		-webkit-animation: refresher-arrow-down .2s linear;
+		animation-fill-mode: forwards;
+		-webkit-animation-fill-mode: forwards;
+		/* #endif */
+		/* #ifdef APP-NVUE */
+		transform: rotate(180deg);
+		/* #endif */
+	}
+	
+	.zp-custom-refresher-arrow-down-no-duration {
+		/* #ifndef APP-NVUE */
+		animation: refresher-arrow-down 0s linear;
+		-webkit-animation: refresher-arrow-down 0s linear;
 		animation-fill-mode: forwards;
 		-webkit-animation-fill-mode: forwards;
 		/* #endif */

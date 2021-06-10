@@ -8,6 +8,18 @@
 			<view class="cu-item text-gray">
 				<view class="bg-gray light content">
 					<view class="cu-capsule radius">
+						<view class="cu-tag bg-green">version 0.0.6</view>
+						<view class="cu-tag line-green">2021-06-04</view>
+					</view>
+					<view class="margin-top flex flex-direction">
+						<text>1、商品编辑、增加</text>
+						<text>2、标签打印的列表显示</text>
+					</view>
+				</view>
+			</view>
+			<view class="cu-item text-gray">
+				<view class="bg-gray light content">
+					<view class="cu-capsule radius">
 						<view class="cu-tag bg-green">version 0.0.5</view>
 						<view class="cu-tag line-green">2021-05-21</view>
 					</view>

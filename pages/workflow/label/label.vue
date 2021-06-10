@@ -11,19 +11,10 @@
 		</view>
 		<scroll-view v-else scroll-y :scroll-with-animation="true" :enable-back-to-top="true"
 			:style="{height: 'calc(100vh - 125px)'}">
-			<view class="flex bg-white shadow radius padding-xs justify-between">
-				<checkbox class='round red check' :class="true?'checked':''" :checked="true?true:false" value="C">
-					<text>全选</text>
-				</checkbox>
-				<text class="text-blue">删除所选</text>
-			</view>
 			<view class="flex flex-direction margin-lr-xs">
 				<block v-for="(item,index) in items" :key="index">
-					<view class="grid-item-container margin-top-xs align-center bg-white shadow">
-						<checkbox class='round red check' :class="true?'checked':''" :checked="true?true:false"
-							value="C">
-						</checkbox>
-						<view class="content text-left flex flex-direction padding-lr-xs">
+					<view class="grid-item-container">
+						<view class="content">
 							<text class="text-cut text-bold">{{item.name}}</text>
 							<view class="flex justify-between">
 								<text>{{item.barcode||item.plu}}</text><text>{{item.specs}}</text>
@@ -36,26 +27,26 @@
 								<text>会员价：{{item.memberPrice}}</text>
 							</view>
 						</view>
-						<view class="flex flex-direction labelShow padding-xs"
-							:class="index/2 !== 0?'bg-blue':'bg-red'">
+						<view class="labelShow"
+							:class="item.label.type === 'special'?'bg-red':item.label.type === 'normal'?'bg-blue':'bg-yellow'">
 							<text>适用标签格式</text>
 							<text>{{item.label.name}}</text>
 							<text>打印数量</text>
 							<view class="flex align-center text-center">
-								<view class="numberBtn minus" :class="[inputValue <= 0?'numbox_disabled':'']"
-									@click="minus">-</view>
+								<view class="numberBtn minus" @click="minus"><text>-</text></view>
 								<input type="number" :value="item.label.printQuantity"></input>
 								<view class="numberBtn plus" :class="[inputValue >= 99?'numbox_disabled':'']"
-									@click="plus">+</view>
+									@click="plus"><text>+</text></view>
 							</view>
 						</view>
 					</view>
 				</block>
+
 			</view>
 		</scroll-view>
 		<!--bootom-->
 		<view class="bottom cu-bar bg-white tabbar border shop">
-			<view class="action" @tap.stop="items=[]">
+			<view class="action" @tap.stop="showClearModalDialog">
 				<view class="cuIcon-delete">
 					<view v-if="items.length > 0" class="cu-tag badge">{{items.length}}</view>
 				</view>
@@ -201,6 +192,21 @@
 				</view>
 			</view>
 		</view>
+		<!-- 清空商品对话框 -->
+		<view class="cu-modal" :class="clearModalDialog?'show':''">
+			<view class="cu-dialog">
+				<view class="cu-bar bg-white">
+					<view class="content">删除提示</view>
+				</view>
+				<view class="padding-xl bg-white text-bold">
+					<text>此操作将清除已添加的所有商品！</text>
+				</view>
+				<view class="cu-bar bg-white">
+					<view class="action margin-0 flex-sub text-green" @tap="hideClearModalDialog">取消</view>
+					<view class="action margin-0 flex-sub solid-left" @tap="clearItems">确定</view>
+				</view>
+			</view>
+		</view>
 		<!--单据引入对话框-->
 		<view class="cu-modal" :class="importDocumentModalDialog?'show':''" @tap="hideImportDocumentModalDialog">
 			<view class="cu-dialog" @tap.stop="">
@@ -271,6 +277,8 @@
 				prints: [],
 				printRadioModalDialog: false,
 				printRadio: 'system',
+
+				clearModalDialog: false,
 
 				importDocumentModalDialog: false,
 				importDocumentRadio: 'priceAdjustment',
@@ -404,8 +412,6 @@
 					...that.item
 				}
 				that.items.push(that.item);
-				//要去除数量
-				//that.seclectedLabel = {};
 				that.item = null;
 				that.scanResult = '';
 				that.printQuantity = 1;
@@ -413,8 +419,7 @@
 					printQuantity,
 					...temp
 				} = that.seclectedLabel;
-				that.seclectedLabel=temp;
-				console.log(that.items);
+				that.seclectedLabel = temp;
 			},
 
 			showPrintRadioModalDialog() {
@@ -438,6 +443,13 @@
 			importDocumentRadioChange(event) {
 				this.importDocumentRadio = event.detail.value;
 			},
+			showClearModalDialog() {
+				if (this.items.length > 0)
+					this.clearModalDialog = true;
+			},
+			hideClearModalDialog() {
+				this.clearModalDialog = false;
+			},
 
 			computedHeight() {
 				let query = uni.createSelectorQuery().in(this);
@@ -460,28 +472,30 @@
 		display: flex;
 		justify-content: space-between;
 		border-radius: 16rpx;
-
-		.check {
-			width: 7%;
-			transform: scale(0.65);
-		}
+		background-color: #fff;
+		margin-top: 10rpx;
+		align-items: center;
 
 		.content {
-			width: 65%;
+			width: 68%;
+			display: flex;
+			flex-direction: column;
+			padding: 0rpx 8rpx;
 		}
 
 		.labelShow {
-			width: 29%;
+			width: 32%;
+			display: flex;
+			flex-direction: column;
+			padding: 8rpx;
 			border-top-right-radius: 16rpx;
 			border-bottom-right-radius: 16rpx;
 
 			.numberBtn {
-				width: 48rpx;
+				width: 46rpx;
 				height: 46rpx;
-				font-size: 38rpx;
-				line-height: 46rpx;
-				font-weight: bold;
-				color: #FFF;
+				font-size: 40rpx;
+				line-height: 40rpx;
 				border: 1rpx solid #f1f1f1;
 
 				&:active {
@@ -495,11 +509,11 @@
 			}
 
 			input {
-				width: 54rpx;
-				height: 39rpx;
-				font-size: 32rpx;
-				line-height: 39rpx;
-				color: #FFF;
+				width: 76rpx;
+				height: 46rpx;
+				font-size: 30rpx;
+				font-weight: 400;
+				line-height: 30rpx;
 				border-top: 1rpx solid #f1f1f1;
 				border-bottom: 1rpx solid #f1f1f1;
 			}
@@ -551,4 +565,6 @@
 		bottom: 0;
 		width: 100vw;
 	}
+
+	
 </style>
