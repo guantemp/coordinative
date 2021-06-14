@@ -1,12 +1,10 @@
 <template>
-	<view class="t-touch-item" :class=" item.isTouchMove?'touch-move-active':''" @touchstart="touchstart($event,item)"
-		@touchmove="touchmove" :data-index="index">
-		<view class="t-slide-content" :style="{transform:item.isTouchMove?'translateX(0)':`translateX(${btnWidth*(btnArr.length)}rpx)`,
-			                                marginLeft:`-${btnWidth*(btnArr.length)}rpx`}" @click="itemClick(item)">
+	<view class="item" @touchstart="touchstart" @touchmove="touchmove">
+		<view :style="[slideStyle]" @tap="itemClick">
 			<slot> </slot>
 		</view>
-		<view class="btn" v-for="(btn,num) in btnArr" :key="num" @touchstart="btnClick(btn.events,item)" :style="{width:btnWidth+'rpx',transform:item.isTouchMove?'translateX(0)':`translateX(${btnWidth*(btnArr.length)}rpx)`,
-				         backgroundColor:btn.background,}">
+		<view class="btn btnRadius" v-for="(btn,index) in btnArr" :key="index" @touchstart="btnClick(btn.events)"
+			:style="[btnStyle(index)]">
 			<text class="text-df" :style="{color:btn.color}">{{btn.name}}</text>
 		</view>
 	</view>
@@ -15,114 +13,127 @@
 <script>
 	export default {
 		props: {
-			btnWidth: {
+			radius: {
 				type: Number,
-				default: 200
+				default: 0
 			},
 			//按钮数组
 			btnArr: {
 				type: Array,
 				default: [{
 						name: '编辑',
+						width: 200,
 						background: '#00aaff',
 						color: '#fff',
 						events: 'edit'
 					},
 					{
 						name: '删除',
+						width: 200,
 						background: '#ff5500',
 						color: '#fff',
 						events: 'del'
-					}
+					},
 				]
 			},
 		},
 		data() {
 			return {
-				items: [],
 				startX: 0, //开始坐标
 				startY: 0, //开始Y坐标
-				flag: false,
+				isTouchMove: false,
+				buttons: [],
 			}
 		},
+		created() {
+			if (Array.isArray(this.btnArr)) {
+				this.buttons = this.btnArr;
+			}
+		},
+		computed: {
+			slideStyle: function() {
+				let style = {};
+				let offset = 0;
+				for (const btn of this.buttons) {
+					offset += btn.width;
+				}
+				style.flex = 1;
+				if (this.isTouchMove) {
+					style.transform = `translateX(0)`;
+				} else {
+					style.transform = `translateX(${offset}rpx)`;
+					style.marginLeft = `-${offset}rpx`
+				}
+				return style;
+			},
+		},
 		methods: {
+			btnStyle(index) {
+				let offset = 0;
+				for (const b of this.buttons) {
+					offset += b.width;
+				}
+				console.log(offset)
+				let style = {};
+				style.backgroundColor = this.buttons[index].background;
+				style.width = this.buttons[index].width + 'rpx';
+				if (this.isTouchMove) {
+					style.transform = `translateX(0)`;
+				} else {
+					style.transform = `translateX(${offset}rpx)`;
+				}
+				return style;
+			},
 			//点击单行
-			itemClick(item) {
+			itemClick() {
 				setTimeout(() => {
-					if (this.flag) {
-						this.$emit('itemClick', item)
+					if (this.isTouchMove) {
+						this.$emit('itemClick')
 					}
 				}, 100)
 			},
 			//点击按钮
-			btnClick(name, item, event) {
-				this.$emit(name, item)
+			btnClick(name, event) {
+				this.$emit(name)
 			},
-			//赋值
-			assignment(data) {
-				data.forEach(val => {
-					this.$set(val, 'isTouchMove', false)
-				})
-				this.items = data
-			},
-			touchstart: function(e, item) {
-				this.flag = true
-				//如果点击的行为滑开行   不执行点击事件
-				if (item.isTouchMove) {
-					this.flag = false
-				}
-				//开始触摸时 重置所有删除
-				this.items.forEach((v, i) => {
-					//只操作为true的
-					if (v.isTouchMove) {
-						v.isTouchMove = false
-					}
-				})
+			touchstart(event) {
 				/*  #ifdef APP-PLUS||H5||MP  */
-				this.startX = e.changedTouches[0].clientX
-				this.startY = e.changedTouches[0].clientY,
-					/*  #endif  */
-					/*  #ifdef APP-NVUE */
-					this.startX = e.changedTouches[0].screenX
-				this.startY = e.changedTouches[0].screenY,
-					/*  #endif  */
-					this.items = this.items
-
-			},
-			//滑动事件处理
-			touchmove: function(e) {
-				this.flag = false
-				let that = this
-				let index = e.currentTarget.dataset.index //当前索引
-				let startX = this.startX //开始X坐标
-				let startY = this.startY //开始Y坐标
-				/*  #ifdef APP-PLUS||H5||MP  */
-				var touchMoveX = e.changedTouches[0].clientX //滑动变化坐标
-				var touchMoveY = e.changedTouches[0].clientY //滑动变化坐标
+				this.startX = event.changedTouches[0].clientX;
+				this.startY = event.changedTouches[0].clientY;
 				/*  #endif  */
 				/*  #ifdef APP-NVUE */
-				var touchMoveX = e.changedTouches[0].screenX //滑动变化坐标
-				var touchMoveY = e.changedTouches[0].screenY //滑动变化坐标
+				this.startX = event.changedTouches[0].screenX;
+				this.startY = event.changedTouches[0].screenY;
+				/*  #endif  */
+			},
+			//滑动事件处理
+			touchmove(event) {
+				let that = this;
+				let startX = that.startX; //开始X坐标
+				let startY = that.startY; //开始Y坐标
+				/*  #ifdef APP-PLUS||H5||MP  */
+				var touchMoveX = event.changedTouches[0].clientX //滑动变化坐标
+				var touchMoveY = event.changedTouches[0].clientY //滑动变化坐标
+				/*  #endif  */
+				/*  #ifdef APP-NVUE */
+				var touchMoveX = event.changedTouches[0].screenX //滑动变化坐标
+				var touchMoveY = event.changedTouches[0].screenY //滑动变化坐标
 				/*  #endif  */
 				//获取滑动角度
-				let angle = this.angle({
+				let angle = that.angle({
 					X: startX,
 					Y: startY
 				}, {
 					X: touchMoveX,
 					Y: touchMoveY
 				});
-				this.items.forEach(function(v, i) {
-					v.isTouchMove = false
-					//滑动超过60度角 return
-					if (Math.abs(angle) > 60) return;
-					if (i == index) {
-						if (touchMoveX > startX) //右滑
-							that.$set(that.items[i], 'isTouchMove', false)
-						else //左滑
-							that.$set(that.items[i], 'isTouchMove', true)
-					}
-				})
+				if (Math.abs(angle) > 60) return;
+				if (touchMoveX > startX) //右滑
+					that.isTouchMove = false
+				else //左滑
+					that.isTouchMove = true
+				//声明或者已经赋值过的对象或者数组（数组里边的值是对象）时，向对象中添加新的属性，如果更新此属性的值，是不会更新视图的,要使用set
+				//that.$set(that.items[i], 'isTouchMove', false) set
 			},
 			angle: function(start, end) {
 				var X = end.X - start.X,
@@ -135,17 +146,28 @@
 </script>
 
 <style lang="scss">
-	.t-slide-btn {
+	.item {
+		/*  #ifdef APP-PLUS||H5||MP  */
+		display: flex;
+		/*  #endif  */
+		flex: 1;
+		overflow: hidden;
+	}
+
+	.btn {
 		font-weight: bold;
 		/*  #ifdef APP-PLUS||H5||MP  */
 		display: flex;
 		/*  #endif  */
-		flex-direction: row;
 		align-items: center;
 		justify-content: center;
-		text-align: center;
 		color: #fff;
 		transition-property: transform;
 		transition-duration: 0.3s;
+	}
+
+	.btnRadius {
+		border-top-right-radius: var(--radius);
+		border-bottom-right-radius: var(--radius)
 	}
 </style>

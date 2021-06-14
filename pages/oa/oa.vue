@@ -30,36 +30,14 @@
 				</view>
 			</view>
 		</view>
-
-		<view class="grid col-3 bg-purple padding-tb-sm margin-lr-sm radius">
-			<view class='cu-item padding-left-sm flex flex-direction'>
-				<text class="cuIcon-vip" @click="showVip">区域fd参考售价</text>
-				<text
-					class="text-bold text-cyan text-price padding-tb-xs">{{item.vip.referencePurchasePrice||'--'}}</text>
-			</view>
-			<view class='cu-item padding-left-sm flex flex-direction'>
-				<text class="cuIcon-vip" @click="showVip">区域参考进价</text>
-				<text
-					class="text-lg text-bold text-cyan text-price padding-tb-xs">{{item.vip.referencePurchasePrice||'--'}}</text>
-			</view>
-			<view class='cu-item padding-left-sm flex flex-direction'>
-				<text>最近入库价</text>
-				<text
-					class="text-lg text-bold text-price padding-tb-xs text-yellow">{{item.storage.lastPurchasePrice||'--'}}</text>
-			</view>
-			<view class='cu-item padding-left-sm flex flex-direction'>
-				<text class="padding-tb-xs">库存数量</text>
-				<text class="text-lg text-bold text-pink">{{item.storage.number||'--'}}</text>
-			</view>
-			<view class='cu-item padding-left-sm flex flex-direction'>
-				<text class="padding-tb-xs">库存金额</text>
-				<text class="text-lg text-bold text-pink text-price">{{item.storage.amount||'--'}}</text>
-			</view>
-			<view class='cu-item padding-left-sm flex flex-direction'>
-				<text class="padding-tb-xs cuIcon-question">存货周转率</text>
-				<text class="text-lg text-bold text-green">{{item.storage.stockTurn||'--'}}</text>
-			</view>
+		<view class="margin-xs radius">
+			<slide @edit="edit" @del="del">
+				<view style="height:120rpx" class="flex bg-white align-center justify-center" @tap.stop="itemClick">我是测试1</view>
+			</slide>
 		</view>
+		<slide :btnArr="btnArr" radius="40" @del="del">
+			<view style="height:180rpx" class="padding bg-white text-center">我是测试2</view>
+		</slide>
 	</view>
 </template>
 
@@ -67,6 +45,13 @@
 	export default {
 		data() {
 			return {
+				btnArr: [{
+					name: '删除',
+					width: 200,
+					background: '#ff5500',
+					color: '#fff',
+					events: 'del'
+				}],
 				attendanceList: [{
 						icon: '/static/user/clock_in.png',
 						url: '/pages/user/clock_in',
@@ -122,7 +107,29 @@
 					},
 				],
 			}
-		}
+		},
+		methods: {
+			//点击单行
+			itemClick() {
+				console.log('点击外面')
+			},
+			//删除
+			del() {
+				console.log('删除');
+				uni.showToast({
+					title: '删除ID--',
+					icon: 'none'
+				})
+			},
+			//编辑
+			edit() {
+				console.log('编辑')
+				uni.showToast({
+					title: '编辑ID--',
+					icon: 'none'
+				})
+			},
+		},
 	}
 </script>
 

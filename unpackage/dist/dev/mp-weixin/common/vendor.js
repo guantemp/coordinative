@@ -11170,7 +11170,32 @@ function isAbsoluteURL(url) {
 
 /***/ }),
 
-/***/ 246:
+/***/ 25:
+/*!************************************************************************************!*\
+  !*** E:/mini/coordinative/js_sdk/luch-request/luch-request/helpers/combineURLs.js ***!
+  \************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+               * Creates a new URL by combining the specified URLs
+               *
+               * @param {string} baseURL The base URL
+               * @param {string} relativeURL The relative URL
+               * @returns {string} The combined URL
+               */Object.defineProperty(exports, "__esModule", { value: true });exports.default = combineURLs;
+function combineURLs(baseURL, relativeURL) {
+  return relativeURL ?
+  baseURL.replace(/\/+$/, '') + '/' + relativeURL.replace(/^\/+/, '') :
+  baseURL;
+}
+
+/***/ }),
+
+/***/ 253:
 /*!********************************************************!*\
   !*** E:/mini/coordinative/js_sdk/areadata/areadata.js ***!
   \********************************************************/
@@ -22480,31 +22505,6 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
 
 cityData;exports.default = _default;
-
-/***/ }),
-
-/***/ 25:
-/*!************************************************************************************!*\
-  !*** E:/mini/coordinative/js_sdk/luch-request/luch-request/helpers/combineURLs.js ***!
-  \************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-/**
-               * Creates a new URL by combining the specified URLs
-               *
-               * @param {string} baseURL The base URL
-               * @param {string} relativeURL The relative URL
-               * @returns {string} The combined URL
-               */Object.defineProperty(exports, "__esModule", { value: true });exports.default = combineURLs;
-function combineURLs(baseURL, relativeURL) {
-  return relativeURL ?
-  baseURL.replace(/\/+$/, '') + '/' + relativeURL.replace(/^\/+/, '') :
-  baseURL;
-}
 
 /***/ }),
 
