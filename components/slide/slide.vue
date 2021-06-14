@@ -43,7 +43,7 @@
 				startY: 0, //开始Y坐标
 				isTouchMove: false,
 				buttons: [],
-				offset:0,
+				offset: 0,
 			}
 		},
 		created() {
@@ -77,8 +77,11 @@
 				} else {
 					style.transform = `translateX(${this.offset}rpx)`;
 				}
-				if(index === this.buttons.length-1)
-				style.borderTopRightRadius=this
+				if (index === this.buttons.length - 1) {
+					console.log(index);
+					style.borderTopRightRadius = this.radius + 'rpx';
+					style.borderBottomRightRadius = this.radius + 'rpx';
+				}
 				return style;
 			},
 			//点击单行

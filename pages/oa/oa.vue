@@ -31,7 +31,7 @@
 			</view>
 		</view>
 		<view class="margin-xs radius">
-			<slide @edit="edit" @del="del">
+			<slide @edit="edit" @del="del" radius="40">
 				<view style="height:120rpx" class="flex bg-white align-center justify-center" @tap.stop="itemClick">我是测试1</view>
 			</slide>
 		</view>
