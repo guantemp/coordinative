@@ -43,45 +43,42 @@
 				startY: 0, //开始Y坐标
 				isTouchMove: false,
 				buttons: [],
+				offset:0,
 			}
 		},
 		created() {
 			if (Array.isArray(this.btnArr)) {
 				this.buttons = this.btnArr;
+				for (const btn of this.buttons) {
+					this.offset += btn.width;
+				}
 			}
 		},
 		computed: {
 			slideStyle: function() {
 				let style = {};
-				let offset = 0;
-				for (const btn of this.buttons) {
-					offset += btn.width;
-				}
 				style.flex = 1;
 				if (this.isTouchMove) {
 					style.transform = `translateX(0)`;
 				} else {
-					style.transform = `translateX(${offset}rpx)`;
-					style.marginLeft = `-${offset}rpx`
+					style.transform = `translateX(${this.offset}rpx)`;
+					style.marginLeft = `-${this.offset}rpx`
 				}
 				return style;
 			},
 		},
 		methods: {
 			btnStyle(index) {
-				let offset = 0;
-				for (const b of this.buttons) {
-					offset += b.width;
-				}
-				console.log(offset)
 				let style = {};
 				style.backgroundColor = this.buttons[index].background;
 				style.width = this.buttons[index].width + 'rpx';
 				if (this.isTouchMove) {
 					style.transform = `translateX(0)`;
 				} else {
-					style.transform = `translateX(${offset}rpx)`;
+					style.transform = `translateX(${this.offset}rpx)`;
 				}
+				if(index === this.buttons.length-1)
+				style.borderTopRightRadius=this
 				return style;
 			},
 			//点击单行
