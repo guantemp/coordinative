@@ -1,11 +1,14 @@
 <template>
-	<view class="item" @touchstart="touchstart" @touchmove="touchmove">
-		<view :style="[slideStyle]" @tap="itemClick">
-			<slot> </slot>
-		</view>
-		<view class="btn btnRadius" v-for="(btn,index) in btnArr" :key="index" @touchstart="btnClick(btn.events)"
-			:style="[btnStyle(index)]">
-			<text class="text-df" :style="{color:btn.color}">{{btn.name}}</text>
+	<view class="slide">
+		<view class="item" :style="[itemStyle]" :class="isTouchMove?'touch-move-active':''" @touchstart="touchstart"
+			@touchmove="touchmove">
+			<view class="flex-sub" @tap="itemClick">
+				<slot :item="item"></slot>
+			</view>
+			<view v-for="(btn,index) in btnArr" :key="index" @touchstart="btnClick(btn.events)" class="btn"
+				:style="{width:btn.width+'rpx',backgroundColor:btn.background}">
+				<text class="text-df" :style="{color:btn.color}">{{btn.name}}</text>
+			</view>
 		</view>
 	</view>
 </template>
@@ -55,14 +58,11 @@
 			}
 		},
 		computed: {
-			slideStyle: function() {
+			itemStyle: function() {
 				let style = {};
-				style.flex = 1;
-				if (this.isTouchMove) {
-					style.transform = `translateX(0)`;
-				} else {
+				style.marginLeft = `-${this.offset}rpx`;
+				if (!this.isTouchMove) {
 					style.transform = `translateX(${this.offset}rpx)`;
-					style.marginLeft = `-${this.offset}rpx`
 				}
 				return style;
 			},
@@ -72,13 +72,7 @@
 				let style = {};
 				style.backgroundColor = this.buttons[index].background;
 				style.width = this.buttons[index].width + 'rpx';
-				if (this.isTouchMove) {
-					style.transform = `translateX(0)`;
-				} else {
-					style.transform = `translateX(${this.offset}rpx)`;
-				}
 				if (index === this.buttons.length - 1) {
-					console.log(index);
 					style.borderTopRightRadius = this.radius + 'rpx';
 					style.borderBottomRightRadius = this.radius + 'rpx';
 				}
@@ -146,28 +140,29 @@
 </script>
 
 <style lang="scss">
+	.slide {
+		overflow: hidden;
+	}
+
 	.item {
 		/*  #ifdef APP-PLUS||H5||MP  */
 		display: flex;
 		/*  #endif  */
-		flex: 1;
-		overflow: hidden;
+		justify-content: space-between;
+		transition-property: transform;
+		transition: 0.3s ease;
 	}
 
 	.btn {
-		font-weight: bold;
 		/*  #ifdef APP-PLUS||H5||MP  */
 		display: flex;
 		/*  #endif  */
+		font-weight: bold;
 		align-items: center;
 		justify-content: center;
-		color: #fff;
-		transition-property: transform;
-		transition-duration: 0.3s;
 	}
 
-	.btnRadius {
-		border-top-right-radius: var(--radius);
-		border-bottom-right-radius: var(--radius)
+	.touch-move-active .content {
+		transform: translateX(0);
 	}
 </style>

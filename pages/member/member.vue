@@ -33,7 +33,7 @@
 		</view>
 		<scroll-view v-else scroll-y :scroll-with-animation="true" :enable-back-to-top="true"
 			:style="{height: fold?'calc(100vh - 190px)':'calc(100vh - 125px)'}">
-			<block v-for="(item,index) in items" :key="index">
+			<template v-for="(item,index) in items">
 				<view class="flex flex-direction radius margin-xs bg-white light ">
 					<view class='flex justify-between padding-lr-sm padding-top-sm align-center'>
 						<text class="text-bold">品名：{{item.name}}</text>
@@ -76,7 +76,7 @@
 							<text class="text-lg text-red text-price padding-tb-xs">{{item.newVipPrice||'--'}}</text>
 						</view>
 					</view>
-					<block v-else>
+					<template v-else>
 						<view v-if="item.newRetailPrice" class="grid col-2" @click='editItem(item.id||item.plu)'>
 							<view class='cu-item padding-left-lg flex flex-direction'>
 								<text>原零售价</text>
@@ -112,9 +112,9 @@
 								<text class="text-lg text-orange text-price padding-tb-xs">{{item.newVipPrice}}</text>
 							</view>
 						</view>
-					</block>
+					</template>
 				</view>
-			</block>
+			</template>
 		</scroll-view>
 		<!--bootom-->
 		<view class="bottom cu-bar bg-white tabbar border">
@@ -402,32 +402,23 @@
 			}
 		},
 		computed: {
-			oldRetailGrossProfitRate: {
-				get() {
-					if (this.item) {
-						let cost = this.item.storage.lastPurchasePrice.replace(pattern, '');
-						return this.computedGrossProfitRate(cost, this.item.retailPrice.replace(pattern, '')) + '%';
-					}
-				},
-				set(Value) {}
+			oldRetailGrossProfitRate: function() {
+				if (this.item) {
+					let cost = this.item.storage.lastPurchasePrice.replace(pattern, '');
+					return this.computedGrossProfitRate(cost, this.item.retailPrice.replace(pattern, '')) + '%';
+				}
 			},
-			oldMemberGrossProfitRate: {
-				get() {
-					if (this.item) {
-						let cost = this.item.storage.lastPurchasePrice.replace(pattern, '');
-						return this.computedGrossProfitRate(cost, this.item.memberPrice.replace(pattern, '')) + '%';
-					}
-				},
-				set(Value) {}
+			oldMemberGrossProfitRate: function() {
+				if (this.item) {
+					let cost = this.item.storage.lastPurchasePrice.replace(pattern, '');
+					return this.computedGrossProfitRate(cost, this.item.memberPrice.replace(pattern, '')) + '%';
+				}
 			},
-			oldVipGrossProfitRate: {
-				get() {
-					if (this.item) {
-						let cost = this.item.storage.lastPurchasePrice.replace(pattern, '');
-						return this.computedGrossProfitRate(cost, this.item.vipPrice.replace(pattern, '')) + '%';
-					}
-				},
-				set(Value) {}
+			oldVipGrossProfitRate: function() {
+				if (this.item) {
+					let cost = this.item.storage.lastPurchasePrice.replace(pattern, '');
+					return this.computedGrossProfitRate(cost, this.item.vipPrice.replace(pattern, '')) + '%';
+				}
 			},
 		},
 		methods: {
@@ -625,7 +616,7 @@
 			addItem() {
 				var that = this;
 				if (!that.item || (!that.newRetailPrice && !that.newMemberPrice && !that.newVipPrice)) {
-					that.$util.toast("数据未被改变，没有商品被加入调价单！");
+					that.$util.toast("单价未改变，没有商品被加入调价单！");
 					return;
 				}
 				for (const i of that.items) {

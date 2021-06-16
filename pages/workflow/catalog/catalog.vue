@@ -1,5 +1,5 @@
 <template>
-	<view>
+	<view class="bg-white">
 		<navBar title="商品目录" :backgroundColor="[1, ['#6B73FF', '#000DFF', 135]]" :titleFont="['#FFF']" id="navBar"
 			surplusHeight=43>
 			<view slot="extendSlot" class="cu-bar search">
@@ -15,7 +15,7 @@
 				</view>
 			</view>
 		</navBar>
-		<scroll-view scroll-x class="bg-white nav" scroll-with-animation :scroll-left="scrollLeft">
+		<scroll-view scroll-x class="nav solid-bottom" scroll-with-animation :scroll-left="scrollLeft">
 			<view class="flex text-center">
 				<view class="cu-item flex-sub" :class="index===tabCur?'text-orange cur':''"
 					v-for="(item,index) in category" :key="index" :data-id="index" @tap="tabSelect(item.id,$event)">
@@ -25,11 +25,11 @@
 				</view>
 			</view>
 		</scroll-view>
-		<scroll-view scroll-y :scroll-with-animation="true" :enable-back-to-top="true" class="solid-top"
+		<scroll-view scroll-y :scroll-with-animation="true" :enable-back-to-top="true"
 			:style="{height: 'calc(100vh - 150px)'}">
-			<view class="bg-white">
-				<view :id="'good'+good.id" class="flex padding-lr-sm padding-tb-xs solid-top align-center"
-					v-for="good in catalog" :key="good.id" @tap="good.id?navTo(good.id):navToScale(good.plu)">
+			<slide :btnArr="btnArr" v-for="(good,index) in catalog" :key="good.id" @del="del(good.id||good.plu)">
+				<view class="flex padding-lr-sm padding-tb-xs align-center" :class="index===0?'':'solid-top'"
+					@tap="good.id?navTo(good.id):navToScale(good.plu)">
 					<view class="imageWrapper">
 						<image class="good-img"
 							:src="good.goodImg||(good.barcode?'/static/workflow/archives.png':'/static/workflow/plu.png')"
@@ -51,7 +51,7 @@
 						</view>
 					</view>
 				</view>
-			</view>
+			</slide>
 		</scroll-view>
 		<uni-fab :pattern="fabPattern" :content="content" horizontal="right" vertical="bottom" direction="horizontal"
 			@trigger="trigger"></uni-fab>
@@ -68,6 +68,13 @@
 				category: [],
 				tabCur: 0,
 				scrollLeft: 0,
+				btnArr: [{
+					name: '删除',
+					width: 200,
+					background: '#ff5500',
+					color: '#fff',
+					events: 'del'
+				}],
 				fabPattern: {
 					color: '#7A7E83',
 					backgroundColor: '#fff',
@@ -141,6 +148,9 @@
 			},
 			navToScale(plu) {
 				this.$util.navTo('/pages/workflow/catalog/good?plu=' + plu);
+			},
+			del(id) {
+				this.$util.toast('删除：'+id);
 			}
 		}
 	}

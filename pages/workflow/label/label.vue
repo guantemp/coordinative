@@ -11,38 +11,37 @@
 		</view>
 		<scroll-view v-else scroll-y :scroll-with-animation="true" :enable-back-to-top="true"
 			:style="{height: 'calc(100vh - 125px)'}">
-			<view class="flex flex-direction margin-lr-xs">
-				<block v-for="(item,index) in items" :key="index">
-					<view class="grid-item-container">
-						<view class="content">
-							<text class="text-cut text-bold">{{item.name}}</text>
-							<view class="flex justify-between">
-								<text>{{item.barcode||item.plu}}</text><text>{{item.specs}}</text>
-							</view>
-							<view class="flex justify-between">
-								<text>{{item.placeOfOrigin}}</text><text>{{item.grade}}</text>
-							</view>
-							<view class="flex justify-between text-cut">
-								<text>零售价：{{item.retailPrice}}</text>
-								<text>会员价：{{item.memberPrice}}</text>
-							</view>
+			<slide :btnArr="btnArr" radius="8" @del="del(item.id||item.plu)" v-for="(item,index) in items" :key="index"
+				class="flex flex-direction margin-lr-xs margin-top-xs radius">
+				<view class="grid-item-container radius">
+					<view class="content">
+						<text class="text-cut text-bold">{{item.name}}</text>
+						<view class="flex justify-between">
+							<text>{{item.barcode||item.plu}}</text><text>{{item.specs}}</text>
 						</view>
-						<view class="labelShow"
-							:class="item.label.type === 'special'?'bg-red':item.label.type === 'normal'?'bg-blue':'bg-yellow'">
-							<text>适用标签格式</text>
-							<text>{{item.label.name}}</text>
-							<text>打印数量</text>
-							<view class="flex align-center text-center">
-								<view class="numberBtn minus" @click="minus"><text>-</text></view>
-								<input type="number" :value="item.label.printQuantity"></input>
-								<view class="numberBtn plus" :class="[inputValue >= 99?'numbox_disabled':'']"
-									@click="plus"><text>+</text></view>
+						<view class="flex justify-between">
+							<text>{{item.placeOfOrigin}}</text><text>{{item.grade}}</text>
+						</view>
+						<view class="flex justify-between text-cut">
+							<text>零售价：{{item.retailPrice}}</text>
+							<text>会员价：{{item.memberPrice}}</text>
+						</view>
+					</view>
+					<view class="labelShow"
+						:class="item.label.type === 'special'?'bg-red':item.label.type === 'normal'?'bg-blue':'bg-yellow'">
+						<text>适用标签格式</text>
+						<text>{{item.label.name}}</text>
+						<text>打印数量</text>
+						<view class="flex align-center text-center">
+							<view class="numberBtn minus" @click="minus"><text>-</text></view>
+							<input type="number" :value="item.label.printQuantity"></input>
+							<view class="numberBtn plus" :class="[inputValue >= 99?'numbox_disabled':'']" @click="plus">
+								<text>+</text>
 							</view>
 						</view>
 					</view>
-				</block>
-
-			</view>
+				</view>
+			</slide>
 		</scroll-view>
 		<!--bootom-->
 		<view class="bottom cu-bar bg-white tabbar border shop">
@@ -273,6 +272,13 @@
 				printQuantity: 1,
 				labelTipsModalDialog: false,
 				seclectedLabel: {},
+				btnArr: [{
+					name: '删除',
+					width: 200,
+					background: '#ff5500',
+					color: '#fff',
+					events: 'del'
+				}],
 
 				prints: [],
 				printRadioModalDialog: false,
@@ -471,57 +477,53 @@
 	.grid-item-container {
 		display: flex;
 		justify-content: space-between;
-		border-radius: 16rpx;
 		background-color: #fff;
-		margin-top: 10rpx;
 		align-items: center;
+	}
 
-		.content {
-			width: 68%;
-			display: flex;
-			flex-direction: column;
-			padding: 0rpx 8rpx;
+	.content {
+		width: 68%;
+		display: flex;
+		flex-direction: column;
+		padding: 0rpx 8rpx;
+	}
+
+	.labelShow {
+		width: 32%;
+		display: flex;
+		flex-direction: column;
+		padding: 8rpx;
+
+		.numberBtn {
+			width: 46rpx;
+			height: 46rpx;
+			font-size: 40rpx;
+			line-height: 40rpx;
+			border: 1rpx solid #f1f1f1;
+
+			&:active {
+				background-color: #f1f1f1;
+			}
 		}
 
-		.labelShow {
-			width: 32%;
-			display: flex;
-			flex-direction: column;
-			padding: 8rpx;
-			border-top-right-radius: 16rpx;
-			border-bottom-right-radius: 16rpx;
+		.minus {
+			border-top-left-radius: 6rpx;
+			border-bottom-left-radius: 6rpx;
+		}
 
-			.numberBtn {
-				width: 46rpx;
-				height: 46rpx;
-				font-size: 40rpx;
-				line-height: 40rpx;
-				border: 1rpx solid #f1f1f1;
+		input {
+			width: 76rpx;
+			height: 46rpx;
+			font-size: 30rpx;
+			font-weight: 400;
+			line-height: 30rpx;
+			border-top: 1rpx solid #f1f1f1;
+			border-bottom: 1rpx solid #f1f1f1;
+		}
 
-				&:active {
-					background-color: #f1f1f1;
-				}
-			}
-
-			.minus {
-				border-top-left-radius: 6rpx;
-				border-bottom-left-radius: 6rpx;
-			}
-
-			input {
-				width: 76rpx;
-				height: 46rpx;
-				font-size: 30rpx;
-				font-weight: 400;
-				line-height: 30rpx;
-				border-top: 1rpx solid #f1f1f1;
-				border-bottom: 1rpx solid #f1f1f1;
-			}
-
-			.plus {
-				border-top-right-radius: 6rpx;
-				border-bottom-right-radius: 6rpx;
-			}
+		.plus {
+			border-top-right-radius: 6rpx;
+			border-bottom-right-radius: 6rpx;
 		}
 	}
 
@@ -565,6 +567,4 @@
 		bottom: 0;
 		width: 100vw;
 	}
-
-	
 </style>

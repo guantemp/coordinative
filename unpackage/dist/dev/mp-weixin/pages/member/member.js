@@ -579,33 +579,24 @@ var pattern = new RegExp(/\/?([\u4e00-\u9fa5]{1,2}|500g|kg|pcs)?$/);var _default
     } },
 
   computed: {
-    oldRetailGrossProfitRate: {
-      get: function get() {
-        if (this.item) {
-          var cost = this.item.storage.lastPurchasePrice.replace(pattern, '');
-          return this.computedGrossProfitRate(cost, this.item.retailPrice.replace(pattern, '')) + '%';
-        }
-      },
-      set: function set(Value) {} },
-
-    oldMemberGrossProfitRate: {
-      get: function get() {
-        if (this.item) {
-          var cost = this.item.storage.lastPurchasePrice.replace(pattern, '');
-          return this.computedGrossProfitRate(cost, this.item.memberPrice.replace(pattern, '')) + '%';
-        }
-      },
-      set: function set(Value) {} },
-
-    oldVipGrossProfitRate: {
-      get: function get() {
-        if (this.item) {
-          var cost = this.item.storage.lastPurchasePrice.replace(pattern, '');
-          return this.computedGrossProfitRate(cost, this.item.vipPrice.replace(pattern, '')) + '%';
-        }
-      },
-      set: function set(Value) {} } },
-
+    oldRetailGrossProfitRate: function oldRetailGrossProfitRate() {
+      if (this.item) {
+        var cost = this.item.storage.lastPurchasePrice.replace(pattern, '');
+        return this.computedGrossProfitRate(cost, this.item.retailPrice.replace(pattern, '')) + '%';
+      }
+    },
+    oldMemberGrossProfitRate: function oldMemberGrossProfitRate() {
+      if (this.item) {
+        var cost = this.item.storage.lastPurchasePrice.replace(pattern, '');
+        return this.computedGrossProfitRate(cost, this.item.memberPrice.replace(pattern, '')) + '%';
+      }
+    },
+    oldVipGrossProfitRate: function oldVipGrossProfitRate() {
+      if (this.item) {
+        var cost = this.item.storage.lastPurchasePrice.replace(pattern, '');
+        return this.computedGrossProfitRate(cost, this.item.vipPrice.replace(pattern, '')) + '%';
+      }
+    } },
 
   methods: {
     foldClick: function foldClick() {
@@ -802,7 +793,7 @@ var pattern = new RegExp(/\/?([\u4e00-\u9fa5]{1,2}|500g|kg|pcs)?$/);var _default
     addItem: function addItem() {
       var that = this;
       if (!that.item || !that.newRetailPrice && !that.newMemberPrice && !that.newVipPrice) {
-        that.$util.toast("数据未被改变，没有商品被加入调价单！");
+        that.$util.toast("单价未改变，没有商品被加入调价单！");
         return;
       }var _iterator4 = _createForOfIteratorHelper(
       that.items),_step4;try {for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {var i = _step4.value;

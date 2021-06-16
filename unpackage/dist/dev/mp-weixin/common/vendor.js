@@ -4445,6 +4445,25 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
 
   labels: [{
+    id: '201452853459475457',
+    name: '川骄无芯卷纸（白四层）',
+    barcode: 6970981171003,
+    specs: '1800g',
+    placeOfOrigin: '四川省.成都市',
+    grade: '合格品',
+    retailPrice: '11.98/提',
+    memberPrice: '0.00/提',
+    vipPrice: '0.00/提',
+    label: {
+      id: 334,
+      name: "正价标签",
+      type: 'normal',
+      printQuantity: 1,
+      specs: "90mm(宽)*38mm(高)*1列",
+      url: "/static/workflow/b.png" } },
+
+
+  {
     id: '201452393217567744',
     name: '哇哈哈营养快线水果牛奶饮品（菠萝味）',
     barcode: 6902083898625,
@@ -4467,25 +4486,7 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
       explain: "厂家回馈用户，只限于本店PLUS会员用户",
       price: "1450.00/公斤",
       startDate: "2021-05-06 00:00:00",
-      title: "5.1节会员促销" } },
-
-  {
-    id: '201452853459475457',
-    name: '川骄无芯卷纸（白四层）',
-    barcode: 6970981171003,
-    specs: '1800g',
-    placeOfOrigin: '四川省.成都市',
-    grade: '合格品',
-    retailPrice: '11.98/提',
-    memberPrice: '0.00/提',
-    vipPrice: '0.00/提',
-    label: {
-      id: 334,
-      name: "正价标签",
-      type: 'normal',
-      printQuantity: 1,
-      specs: "90mm(宽)*38mm(高)*1列",
-      url: "/static/workflow/b.png" } }] };exports.default = _default;
+      title: "5.1节会员促销" } }] };exports.default = _default;
 
 /***/ }),
 

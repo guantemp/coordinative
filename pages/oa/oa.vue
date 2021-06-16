@@ -31,13 +31,29 @@
 			</view>
 		</view>
 		<view class="margin-xs radius">
-			<slide @edit="edit" @del="del" radius="40">
-				<view style="height:120rpx" class="flex bg-white align-center justify-center" @tap.stop="itemClick">我是测试1</view>
+			<slide @edit="edit" @del="del" radius="5">
+				<view class="flex bg-white align-center justify-center flex" @tap.stop="itemClick">
+					<view class="basis-df">我是撒发射点撒飞洒测试1</view>
+					<view>我是测撒发生胜多负少试11</view>
+				</view>
 			</slide>
 		</view>
 		<slide :btnArr="btnArr" radius="40" @del="del">
 			<view style="height:180rpx" class="padding bg-white text-center">我是测试2</view>
 		</slide>
+
+		<view class="bg-white margin-xs wai">
+			<view class="text1">
+				<view class="flex flex-sub">
+					<view class="margin-right-xl">我是撒发射点撒飞洒测试1</view>
+					<view>我是测胜多负少试11</view>
+				</view>
+				<view class="btn" v-for="(btn,num) in btnArr"
+					:style="{width:btn.width+'rpx',backgroundColor:btn.background,}">
+					<text :style="{color:btn.color}">{{btn.name}}</text>
+				</view>
+			</view>
+		</view>
 	</view>
 </template>
 
@@ -46,12 +62,20 @@
 		data() {
 			return {
 				btnArr: [{
-					name: '删除',
-					width: 200,
-					background: '#ff5500',
-					color: '#fff',
-					events: 'del'
-				}],
+						name: '编辑',
+						background: '#00aaff',
+						width: 200,
+						color: '#fff',
+						events: 'edit'
+					},
+					{
+						name: '删除',
+						width: 100,
+						background: '#ff5500',
+						color: '#fff',
+						events: 'del'
+					}
+				],
 				attendanceList: [{
 						icon: '/static/user/clock_in.png',
 						url: '/pages/user/clock_in',
@@ -134,6 +158,26 @@
 </script>
 
 <style lang="scss" scoped>
+	.wai{
+		overflow: hidden;
+	}
+	.text1 {
+		height: 120rpx;
+		display: flex;
+		justify-content: space-between;
+		//transform: translateX(400rpx);
+		margin-left: -400rpx;
+	}
+
+	.btn {
+		/*  #ifdef APP-PLUS||H5||MP  */
+		display: flex;
+		/*  #endif  */
+		font-weight: bold;
+		align-items: center;
+		justify-content: center;
+	}
+
 	.item {
 		padding-top: 3vh;
 		position: relative;
