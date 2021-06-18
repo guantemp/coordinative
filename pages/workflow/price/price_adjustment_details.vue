@@ -25,7 +25,7 @@
 		</navBar>
 		<scroll-view scroll-y :scroll-with-animation="true" :enable-back-to-top="true"
 			:style="{height: fold?'calc(100vh - 140px)':'calc(100vh - 125px)'}">
-			<block v-for="(item,index) in price_adjustment.items" :key="index">
+			<template v-for="(item,index) in price_adjustment.items">
 				<view class="flex flex-direction radius margin-xs bg-white">
 					<view class='flex justify-between padding-lr-sm padding-top-sm align-center'>
 						<text class="text-bold text-cut">品名：{{item.name}}</text>
@@ -74,7 +74,7 @@
 							</badge>
 						</view>
 					</view>
-					<block v-else>
+					<template v-else>
 						<view v-if="item.newRetailPrice" class="grid col-2" @click='editItem(item.id||item.plu)'>
 							<view class='cu-item padding-left-lg flex flex-direction'>
 								<text>原零售价</text>
@@ -113,9 +113,9 @@
 								<text class="text-lg text-orange text-price padding-tb-xs">{{item.newVipPrice}}</text>
 							</view>
 						</view>
-					</block>
+					</template>
 				</view>
-			</block>
+			</template>
 		</scroll-view>
 		<!--bootom-->
 		<view class="bottom cu-bar bg-white tabbar border" v-if="price_adjustment.approval!=='pass'">
@@ -133,9 +133,9 @@
 			<view class="bg-orange submit" @click.stop="showAddItemModalDialog" data-target="DialogModalAdd">添加商品</view>
 			<view class="bg-red submit">保存</view>
 		</view>
-		<hoprxi-drag v-else @btnClick="this.$util.toast('测试')" class="text-xxl">
+		<hop-drag v-else @btnClick="this.$util.toast('测试')" class="text-xxl">
 			<text class="text-white icon-print"></text>
-		</hoprxi-drag>
+		</hop-drag>
 		<!-- 清空商品对话框 -->
 		<view class="cu-modal" :class="clearModalDialog?'show':''">
 			<view class="cu-dialog">

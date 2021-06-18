@@ -1,9 +1,5 @@
 {
   "navigationBarTitleText": "会员",
   "navigationStyle": "custom",
-  "usingComponents": {
-    "nav-bar": "/components/navBar/navBar",
-    "date-picker": "/components/date-picker/date-picker",
-    "badge": "/components/badge/badge"
-  }
+  "usingComponents": {}
 }

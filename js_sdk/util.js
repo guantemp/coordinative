@@ -128,3 +128,27 @@ export function formatMoney(money) {
 		return money + '00';
 	return money;
 }
+
+export function clone(data) {
+	const type = typeof data
+	let obj;
+	if (type === 'array') {
+		obj = [];
+	} else if (type === 'object') {
+		obj = {};
+	} else {
+		// 不再具有下一层次
+		return data;
+	}
+	if (type === 'array') {
+		for (let i = 0, len = data.length; i < len; i++) {
+			obj.push(this.clone(data[i]));
+		}
+	} else if (type === 'object') {
+		// 对原型上的方法也拷贝了....
+		for (const key in data) {
+			obj[key] = this.clone(data[key]);
+		}
+	}
+	return obj;
+}

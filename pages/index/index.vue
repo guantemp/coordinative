@@ -8,6 +8,17 @@
 			<view class="cu-item text-gray">
 				<view class="bg-gray light content">
 					<view class="cu-capsule radius">
+						<view class="cu-tag bg-green">version 0.0.7</view>
+						<view class="cu-tag line-green">2021-06-17</view>
+					</view>
+					<view class="margin-top flex flex-direction">
+						<text>呕吐：完成左滑删除，太难了</text>
+					</view>
+				</view>
+			</view>
+			<view class="cu-item text-gray">
+				<view class="bg-gray light content">
+					<view class="cu-capsule radius">
 						<view class="cu-tag bg-green">version 0.0.6</view>
 						<view class="cu-tag line-green">2021-06-04</view>
 					</view>

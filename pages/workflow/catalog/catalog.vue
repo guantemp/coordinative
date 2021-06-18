@@ -27,30 +27,32 @@
 		</scroll-view>
 		<scroll-view scroll-y :scroll-with-animation="true" :enable-back-to-top="true"
 			:style="{height: 'calc(100vh - 150px)'}">
-			<slide :btnArr="btnArr" v-for="(good,index) in catalog" :key="good.id" @del="del(good.id||good.plu)">
-				<view class="flex padding-lr-sm padding-tb-xs align-center" :class="index===0?'':'solid-top'"
-					@tap="good.id?navTo(good.id):navToScale(good.plu)">
-					<view class="imageWrapper">
-						<image class="good-img"
-							:src="good.goodImg||(good.barcode?'/static/workflow/archives.png':'/static/workflow/plu.png')"
-							mode="aspectFill" />
+			<slide :btnArr="btnArr" :items="catalog" @del="del">
+				<template v-slot="{item}">
+					<view class="flex padding-lr-sm padding-tb-xs align-center solid-top"
+						@tap="item.id?navTo(item.id):navToScale(item.plu)">
+						<view class="imageWrapper">
+							<image class="good-img"
+								:src="item.goodImg||(item.barcode?'/static/workflow/archives.png':'/static/workflow/plu.png')"
+								mode="aspectFill" />
+						</view>
+						<view class="flex flex-direction flex-sub">
+							<view class="text-cut">{{item.name}}</view>
+							<view class="flex justify-between">
+								<text v-if="item.barcode">条码：{{item.barcode}}</text>
+								<text v-else>PLU号：{{item.plu}}</text>
+								<text>规格：{{item.specs}}</text>
+							</view>
+							<view>
+								产地：<text>{{item.placeOfOrigin}}</text>
+							</view>
+							<view>
+								零售价：<text class="text-price text-red margin-right-sm">{{item.retailPrice}}</text>
+								会员价：<text class="text-price text-red">{{item.memberPrice}}</text>
+							</view>
+						</view>
 					</view>
-					<view class="flex flex-direction flex-sub">
-						<view class="text-cut">{{good.name}}</view>
-						<view class="flex justify-between">
-							<text v-if="good.barcode">条码：{{good.barcode}}</text>
-							<text v-else>PLU号：{{good.plu}}</text>
-							<text>规格：{{good.specs}}</text>
-						</view>
-						<view>
-							产地：<text>{{good.placeOfOrigin}}</text>
-						</view>
-						<view>
-							零售价：<text class="text-price text-red margin-right-sm">{{good.retailPrice}}</text>
-							会员价：<text class="text-price text-red">{{good.memberPrice}}</text>
-						</view>
-					</view>
-				</view>
+				</template>
 			</slide>
 		</scroll-view>
 		<uni-fab :pattern="fabPattern" :content="content" horizontal="right" vertical="bottom" direction="horizontal"
@@ -106,8 +108,12 @@
 				title: '加载中...',
 				mask: true
 			});
-			this.category = catalog.category;
-			this.catalog = catalog.catalog;
+		},
+		mounted: function() {
+			this.$nextTick(() => {
+				this.category = catalog.category;
+				this.catalog = catalog.catalog;
+			})
 		},
 		onReady() {
 			uni.hideLoading()
@@ -149,8 +155,9 @@
 			navToScale(plu) {
 				this.$util.navTo('/pages/workflow/catalog/good?plu=' + plu);
 			},
-			del(id) {
-				this.$util.toast('删除：'+id);
+			del(data) {
+				console.log(data);
+				this.$util.toast('删除：' + (data.id || data.plu));
 			}
 		}
 	}

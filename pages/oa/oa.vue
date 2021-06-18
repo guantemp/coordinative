@@ -30,16 +30,15 @@
 				</view>
 			</view>
 		</view>
-		<view class="margin-xs radius">
-			<slide @edit="edit" @del="del" radius="5">
-				<view class="flex bg-white align-center justify-center flex" @tap.stop="itemClick">
+
+		<slide ref="slide" @edit="edit" @del="del" radius="5" :items="dataList" afferentClass="margin radius">
+			<template v-slot="{item}">
+				<view class="flex bg-white align-center justify-center flex" @tap.stop="itemClick"
+					style="height:80rpx">
 					<view class="basis-df">我是撒发射点撒飞洒测试1</view>
-					<view>我是测撒发生胜多负少试11</view>
+					<view>{{item.content}}</view>
 				</view>
-			</slide>
-		</view>
-		<slide :btnArr="btnArr" radius="40" @del="del">
-			<view style="height:180rpx" class="padding bg-white text-center">我是测试2</view>
+			</template>
 		</slide>
 
 		<view class="bg-white margin-xs wai">
@@ -130,6 +129,15 @@
 						color: '#ff6b81'
 					},
 				],
+				dataList: [],
+			}
+		},
+		mounted: function() {
+			for (var i = 0; i < 3; i++) {
+				this.dataList.push({
+					content: "瓶身描绘的牡丹一如你初妆, 冉冉檀香透过窗心事我了然, 宣纸上走笔至此搁一半",
+					id: i,
+				})
 			}
 		},
 		methods: {
@@ -138,18 +146,18 @@
 				console.log('点击外面')
 			},
 			//删除
-			del() {
-				console.log('删除');
+			del(data) {
+				console.log('删除', data)
 				uni.showToast({
-					title: '删除ID--',
+					title: '删除ID--' + data.id,
 					icon: 'none'
 				})
 			},
 			//编辑
-			edit() {
-				console.log('编辑')
+			edit(data) {
+				console.log('编辑', data)
 				uni.showToast({
-					title: '编辑ID--',
+					title: '编辑ID--' + data.id,
 					icon: 'none'
 				})
 			},
@@ -158,9 +166,10 @@
 </script>
 
 <style lang="scss" scoped>
-	.wai{
+	.wai {
 		overflow: hidden;
 	}
+
 	.text1 {
 		height: 120rpx;
 		display: flex;

@@ -3,51 +3,54 @@
 		<navBar title="标签打印" :backgroundColor="[1, ['#3C8CE7', '#00EAFF', -45]]" tabPage="/pages/index/index"
 			:titleFont="['#FFF']" id="navBar">
 		</navBar>
-		<!--items show-->
-		<view v-if="items.length === 0" class="flex justify-center flex-direction align-center padding-bottom-lg"
+		<!--labels show-->
+		<view v-if="labels.length === 0" class="flex justify-center flex-direction align-center padding-bottom-lg"
 			:style="{height:'calc(100vh - 190px)'}">
 			<text class="icon-happy text-red margin-bottom-lg tips"></text>
 			<text>没有任务、好开心...</text>
 		</view>
-		<scroll-view v-else scroll-y :scroll-with-animation="true" :enable-back-to-top="true"
-			:style="{height: 'calc(100vh - 125px)'}">
-			<slide :btnArr="btnArr" radius="8" @del="del(item.id||item.plu)" v-for="(item,index) in items" :key="index"
-				class="flex flex-direction margin-lr-xs margin-top-xs radius">
-				<view class="grid-item-container radius">
-					<view class="content">
-						<text class="text-cut text-bold">{{item.name}}</text>
-						<view class="flex justify-between">
-							<text>{{item.barcode||item.plu}}</text><text>{{item.specs}}</text>
+		<scroll-view scroll-y :scroll-with-animation="true" :enable-back-to-top="true"
+			:style="{height: 'calc(100vh - 150px)'}">
+			<slide :btnArr="btnArr" :items="labels" @del="del" @itemClick="itemClick"
+				afferentClass="flex flex-direction margin-lr-xs margin-top-xs">
+				<template v-slot="{item}">
+					<view class="grid-item-container">
+						<view class="content">
+							<text class="text-cut text-bold">{{item.name}}</text>
+							<view class="flex justify-between">
+								<text>{{item.barcode||item.plu}}</text><text>{{item.specs}}</text>
+							</view>
+							<view class="flex justify-between">
+								<text>{{item.placeOfOrigin}}</text><text>{{item.grade}}</text>
+							</view>
+							<view class="flex justify-between text-cut">
+								<text>零售价：{{item.retailPrice}}</text>
+								<text>会员价：{{item.memberPrice}}</text>
+							</view>
 						</view>
-						<view class="flex justify-between">
-							<text>{{item.placeOfOrigin}}</text><text>{{item.grade}}</text>
-						</view>
-						<view class="flex justify-between text-cut">
-							<text>零售价：{{item.retailPrice}}</text>
-							<text>会员价：{{item.memberPrice}}</text>
-						</view>
-					</view>
-					<view class="labelShow"
-						:class="item.label.type === 'special'?'bg-red':item.label.type === 'normal'?'bg-blue':'bg-yellow'">
-						<text>适用标签格式</text>
-						<text>{{item.label.name}}</text>
-						<text>打印数量</text>
-						<view class="flex align-center text-center">
-							<view class="numberBtn minus" @click="minus"><text>-</text></view>
-							<input type="number" :value="item.label.printQuantity"></input>
-							<view class="numberBtn plus" :class="[inputValue >= 99?'numbox_disabled':'']" @click="plus">
-								<text>+</text>
+						<view class="labelShow"
+							:class="item.label.type === 'special'?'bg-red':item.label.type === 'normal'?'bg-blue':'bg-yellow'">
+							<text>适用标签格式</text>
+							<text>{{item.label.name}}</text>
+							<text>打印数量</text>
+							<view class="flex align-center text-center">
+								<view class="numberBtn minus" @click="minus"><text>-</text></view>
+								<input type="number" :value="item.label.printQuantity"></input>
+								<view class="numberBtn plus" :class="[inputValue >= 99?'numbox_disabled':'']"
+									@click="plus">
+									<text>+</text>
+								</view>
 							</view>
 						</view>
 					</view>
-				</view>
+				</template>
 			</slide>
 		</scroll-view>
 		<!--bootom-->
 		<view class="bottom cu-bar bg-white tabbar border shop">
 			<view class="action" @tap.stop="showClearModalDialog">
 				<view class="cuIcon-delete">
-					<view v-if="items.length > 0" class="cu-tag badge">{{items.length}}</view>
+					<view v-if="labels.length > 0" class="cu-tag badge">{{labels.length}}</view>
 				</view>
 				清空
 			</view>
@@ -202,7 +205,7 @@
 				</view>
 				<view class="cu-bar bg-white">
 					<view class="action margin-0 flex-sub text-green" @tap="hideClearModalDialog">取消</view>
-					<view class="action margin-0 flex-sub solid-left" @tap="clearItems">确定</view>
+					<view class="action margin-0 flex-sub solid-left" @tap="clearlabels">确定</view>
 				</view>
 			</view>
 		</view>
@@ -264,7 +267,7 @@
 			return {
 				addItemModalDialog: false,
 				scanResult: '',
-				items: [],
+				labels: [],
 				item: null,
 				switchD: true,
 				labelList: [],
@@ -275,7 +278,7 @@
 				btnArr: [{
 					name: '删除',
 					width: 200,
-					background: '#ff5500',
+					background: '#5c6a7c',
 					color: '#fff',
 					events: 'del'
 				}],
@@ -296,19 +299,32 @@
 			}
 		},
 		onLoad(options) {
-			setTimeout(() => {
-				this.labelList = label.labelList;
-				this.prints = label.prints;
-				this.seclectLabel();
-			}, 500);
 			let sign = options.sign || '';
 			switch (sign) {
 				case 'price_adjustment':
 					let sheetNumber = options.sheetNumber || '';
 			}
-			this.items = label.labels;
+		},
+		mounted: function() {
+			this.$nextTick(() => {
+				this.labelList = label.labelList;
+				this.prints = label.prints;
+				this.seclectLabel();
+				this.labels = label.labels;
+			});
 		},
 		methods: {
+			del(data) {
+				var that = this;
+				let index = 0;
+				for (const item of that.labels) {
+					if ((data.id && item.id === data.id) || (data.plu && item.plu === data.plu)) {
+						that.labels.splice(index, 1);
+						break;
+					}
+					index += 1;
+				}
+			},
 			//add item opertion
 			showAddItemModalDialog() {
 				this.addItemModalDialog = true;
@@ -331,23 +347,20 @@
 							vipPrice: i.vipPrice,
 						};
 						if (i.id) {
-							that.item = {
-								id: i.id,
-								barcode: i.barcode,
-								...that.item
-							};
+							that.$set(that.item, 'id', i.id);
+							that.$set(that.item, 'barcode', i.barcode);
 						}
 						if (i.plu) {
-							that.item = {
-								plu: i.plu,
-								...that.item
-							};
+							that.$set(that.item, 'plu', i.plu);
 						}
 						if (i.promotion) {
+							that.$set(that.item, 'promotion', i.promotion);
+							/*
 							that.item = {
 								promotion: i.promotion,
 								...that.item
 							};
+							*/
 						}
 						break;
 					}
@@ -403,24 +416,19 @@
 					that.$util.toast("没有商品被加入！");
 					return;
 				}
-				for (const i of that.items) {
+				for (const i of that.labels) {
 					if ((i.id && i.id === that.item.id) || (i.plu && i.plu === that.item.plu)) {
 						that.$util.toast("编码" + (i.id || i.plu) + "的商品已存在，是否重复录入！");
 						return;
 					}
 				}
-				that.seclectedLabel = {
-					printQuantity: that.printQuantity,
-					...that.seclectedLabel
-				}
-				that.item = {
-					label: that.seclectedLabel,
-					...that.item
-				}
-				that.items.push(that.item);
+				that.$set(that.seclectedLabel, 'printQuantity', that.printQuantity);
+				that.$set(that.item, 'label', that.seclectedLabel);
+				that.labels.push(that.item);
 				that.item = null;
 				that.scanResult = '';
 				that.printQuantity = 1;
+				//that.$delete(that.seclectedLabel, 'printQuantity');
 				const {
 					printQuantity,
 					...temp
@@ -429,7 +437,7 @@
 			},
 
 			showPrintRadioModalDialog() {
-				if (this.items.length > 0)
+				if (this.labels.length > 0)
 					this.printRadioModalDialog = true;
 			},
 			hidePrintRadioModalDialog() {
@@ -437,7 +445,6 @@
 			},
 			printRadioChange(event) {
 				this.printRadio = event.detail.value;
-				//console.log(this.printRadio);
 			},
 
 			showImportDocumentModalDialog() {
@@ -450,7 +457,7 @@
 				this.importDocumentRadio = event.detail.value;
 			},
 			showClearModalDialog() {
-				if (this.items.length > 0)
+				if (this.labels.length > 0)
 					this.clearModalDialog = true;
 			},
 			hideClearModalDialog() {
@@ -479,6 +486,7 @@
 		justify-content: space-between;
 		background-color: #fff;
 		align-items: center;
+		border-radius: 5rpx;
 	}
 
 	.content {
