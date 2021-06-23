@@ -10,7 +10,6 @@
 			@click.stop.prevent="click"
 			:class="{transition: isDock && !isMove }"
 		>
-		
 			<text class=" text-df icon-print"></text>
 		</view>
 	</view>

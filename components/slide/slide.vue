@@ -1,10 +1,10 @@
 <template>
 	<view>
-		<view class="slide" :class="afferentClass" v-for="(item,index) in items" :key="index">
+		<view class="slide" :class="hierarchyClass" v-for="(item,index) in items" :key="index">
 			<view class="item" :style="{transform:item.isTouchMove?'translateX(0)':`translateX(${offset}rpx)`,
 			                              marginLeft:`-${offset}rpx`}" @touchstart="touchstart" @touchmove="touchmove"
 				:data-index="index">
-				<view class="flex-sub" @tap.stop="click(item)">
+				<view class="flex-sub" @tap.stop="itemClick(item)">
 					<slot v-bind:item="item"></slot>
 				</view>
 				<view class="btn" v-for="(btn,num) in btnArr" :key="num" @tap.stop="btnClick(btn.events,item)"
@@ -18,13 +18,13 @@
 
 <script>
 	/*
-	 * items要使用mounted并$nextTickVue.$nextTick(() => {}），可消除第一次移动动画显示
-	 * @property String afferentClass,用于template下一些css3格式设计
-	 * @property {Array} btnArr 按钮，格式为：[{name: 'xxx', background:'xxx',width:'xxx',color:'xxx',events:'xxx'}]
+	 * items要在mounted中适用Vue.$nextTick(() => {}）初始化，可消除第一次移动动画显示
+	 * @property String hierarchyClass,用于slot下之间item显示的css3风格，比如item之间的间隔
+	 * @property {Array} btnArr 按钮格式为：[{name: 'xxx', background:'xxx',width:'xxx',color:'xxx',events:'xxx'}]
 	 */
 	export default {
 		props: {
-			afferentClass: {
+			hierarchyClass: {
 				type: String,
 				default: ''
 			},
@@ -86,10 +86,13 @@
 				return style;
 			},
 			//单击行
-			click(item) {
+			itemClick(item) {
+				this.$emit('click', item);
+				/*
 				setTimeout(() => {
 					this.$emit('click', item);
 				}, 100)
+				*/
 			},
 			//单击按钮
 			btnClick(name, item) {
@@ -111,7 +114,6 @@
 				this.startY = event.changedTouches[0].screenY;
 				/*  #endif  */
 			},
-			//滑动事件处理
 			touchmove(event) {
 				let that = this;
 				let startX = that.startX;
@@ -135,8 +137,10 @@
 				});
 				let i = 0;
 				for (const v of that.items) {
-					if (Math.abs(angle) > 60) return;
+					if (Math.abs(angle) > 45) return; //角度小于45度
 					if (i === index) {
+						//声明或者已经赋值过的对象或者数组（数组里边的值是对象）时，向对象中添加新的属性，
+						//如果更新此属性的值，是不会更新视图的,要使用vue.$set
 						if (touchMoveX > startX) //右滑
 							that.$set(v, 'isTouchMove', false);
 						else //左滑
@@ -144,9 +148,6 @@
 					}
 					i += 1;
 				}
-
-				//声明或者已经赋值过的对象或者数组（数组里边的值是对象）时，向对象中添加新的属性，如果更新此属性的值，是不会更新视图的,要使用set
-				//that.$set(that.items[i], 'isTouchMove', false) set
 			},
 			angle: function(start, end) {
 				var X = end.X - start.X,

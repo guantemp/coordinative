@@ -91,6 +91,32 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "recyclableRender", function() { return recyclableRender; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "components", function() { return components; });
 var components
+try {
+  components = {
+    navBar: function() {
+      return __webpack_require__.e(/*! import() | components/navBar/navBar */ "components/navBar/navBar").then(__webpack_require__.bind(null, /*! @/components/navBar/navBar.vue */ 197))
+    },
+    hopTree: function() {
+      return __webpack_require__.e(/*! import() | components/hop-tree/hop-tree */ "components/hop-tree/hop-tree").then(__webpack_require__.bind(null, /*! @/components/hop-tree/hop-tree.vue */ 211))
+    }
+  }
+} catch (e) {
+  if (
+    e.message.indexOf("Cannot find module") !== -1 &&
+    e.message.indexOf(".vue") !== -1
+  ) {
+    console.error(e.message)
+    console.error("1. 排查组件名称拼写是否正确")
+    console.error(
+      "2. 排查组件是否符合 easycom 规范，文档：https://uniapp.dcloud.net.cn/collocation/pages?id=easycom"
+    )
+    console.error(
+      "3. 若组件不符合 easycom 规范，需手动引入，并在 components 中注册该组件"
+    )
+  } else {
+    throw e
+  }
+}
 var render = function() {
   var _vm = this
   var _h = _vm.$createElement
@@ -128,43 +154,49 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0; //
+Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var _catalog_test_data = _interopRequireDefault(__webpack_require__(/*! @/test/catalog_test_data.js */ 53));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };} //
 //
 //
 //
 //
 //
-var _default =
-{
-  data: function data() {
-    return {
-      serverData: {
-        title: '报道新生',
-        ArrC: [{
-          title: '船舶专业群',
-          child: [{
-            title: '船舶2001班' }] },
-
-
-        {
-          title: '船舶专业群',
-          child: [{
-            title: '船舶2001班' },
-          {
-            title: '船舶2001班' }] }] } };
-
-
-
-
-
-
-  },
-  onLoad: function onLoad() {
-  },
-  methods: {
-    change: function change(res) {
-      console.log(res);
-    } } };exports.default = _default;
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//用例数据库
+var _default = { data: function data() {return { categories: [] };}, onLoad: function onLoad() {this.categories = _catalog_test_data.default.category;}, methods: {} };exports.default = _default;
 
 /***/ })
 

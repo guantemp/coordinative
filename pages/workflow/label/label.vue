@@ -12,7 +12,7 @@
 		<scroll-view scroll-y :scroll-with-animation="true" :enable-back-to-top="true"
 			:style="{height: 'calc(100vh - 150px)'}">
 			<slide :btnArr="btnArr" :items="labels" @del="del" @itemClick="itemClick"
-				afferentClass="flex flex-direction margin-lr-xs margin-top-xs">
+				hierarchyClass="flex flex-direction margin-lr-xs margin-top-xs">
 				<template v-slot="{item}">
 					<view class="grid-item-container">
 						<view class="content">

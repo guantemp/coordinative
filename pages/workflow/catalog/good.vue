@@ -214,11 +214,9 @@
 				imgList: [],
 
 				aliasModalDialog: false,
-
 				gradeRadioDialog: false,
 				gradeRadio: '合格品',
 				grades: [],
-
 				originDialog: false,
 				initPlaceOfOrigin: [],
 
