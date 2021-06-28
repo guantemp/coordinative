@@ -7,10 +7,12 @@ export default {
 	category: [{
 			id: '0',
 			name: "全部",
+			isShow: false,
 		},
 		{
 			id: '-99',
 			name: "未定义",
+			disabled: true,
 		},
 		{
 			id: '1',
@@ -23,10 +25,18 @@ export default {
 					name: "鲜肉",
 					sub: [{
 						id: "754",
-						name: "猪肉及分割品"
+						name: "猪肉及分割品",
+						sub: [{
+							id: "23467",
+							name: "分割品",
+						}]
 					}, {
-						id: "234",
-						name: "禽类"
+						id: "1234",
+						name: "禽类",
+						sub: [{
+							id: 234567,
+							name: "鸡鸭",
+						}]
 					}]
 				}, {
 					id: "98874",
@@ -93,7 +103,7 @@ export default {
 				name: "清洁用品",
 				sub: [{
 					id: "24325",
-					name: "牙膏牙刷"
+					name: "牙膏牙刷",
 				}]
 			}, {
 				id: "224",
@@ -102,7 +112,11 @@ export default {
 		},
 		{
 			id: "8",
-			name: "五金家电"
+			name: "五金家电",
+			sub: [{
+				id: 24323465345,
+				name: "牙膏牙刷",
+			}]
 		},
 		{
 			id: "9",
@@ -136,7 +150,7 @@ export default {
 			specs: '150ml',
 			placeOfOrigin: '四川省.成都市',
 			grade: '合格品',
-			shelfLife:"180天",
+			shelfLife: "180天",
 			category: {
 				id: "224",
 				name: "杀虫芳香"
@@ -171,7 +185,7 @@ export default {
 				id: "98874",
 				name: "水果"
 			},
-			shelfLife:"3天",
+			shelfLife: "3天",
 			retailPrice: '4.59/500g',
 			memberPrice: '4.00/500g',
 			vipPrice: '2.50/500g',
@@ -255,7 +269,7 @@ export default {
 			placeOfOrigin: '江阳区',
 			grade: '合格品',
 			category_id: "98874",
-			shelfLife:"0天",
+			shelfLife: "0天",
 			retailPrice: '0.99/500g',
 			memberPrice: '0.95/500g',
 			vipPrice: '0.85/500g',

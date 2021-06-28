@@ -157,7 +157,12 @@
 		"navigationBarTitleText": "HOPRXI协助工具",
 		"navigationBarBackgroundColor": "#e7ebed",
 		"backgroundColor": "#F8F8F8"
+		/*
 		//"navigationStyle": "custom"
+		"usingComponents": {
+			"ly-tree-node": "/components/ly-tree/ly-tree-node"
+		}
+		*/
 	},
 	"tabBar": {
 		"color": "#909399",

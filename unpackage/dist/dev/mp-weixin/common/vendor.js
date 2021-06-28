@@ -22976,11 +22976,13 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
   grades: ['合格品', '不合格品', '优等品', '一级品', '二级品', '三级品'],
   category: [{
     id: '0',
-    name: "全部" },
+    name: "全部",
+    isShow: false },
 
   {
     id: '-99',
-    name: "未定义" },
+    name: "未定义",
+    disabled: true },
 
   {
     id: '1',
@@ -22993,10 +22995,18 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
       name: "鲜肉",
       sub: [{
         id: "754",
-        name: "猪肉及分割品" },
+        name: "猪肉及分割品",
+        sub: [{
+          id: "23467",
+          name: "分割品" }] },
+
       {
-        id: "234",
-        name: "禽类" }] },
+        id: "1234",
+        name: "禽类",
+        sub: [{
+          id: 234567,
+          name: "鸡鸭" }] }] },
+
 
     {
       id: "98874",
@@ -23072,7 +23082,11 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
   {
     id: "8",
-    name: "五金家电" },
+    name: "五金家电",
+    sub: [{
+      id: 24323465345,
+      name: "牙膏牙刷" }] },
+
 
   {
     id: "9",

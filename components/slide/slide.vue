@@ -19,7 +19,7 @@
 <script>
 	/*
 	 * items要在mounted中适用Vue.$nextTick(() => {}）初始化，可消除第一次移动动画显示
-	 * @property String hierarchyClass,用于slot下之间item显示的css3风格，比如item之间的间隔
+	 * @property String hierarchyClass,用于slot中item之间的css3风格，比如item之间的间隔
 	 * @property {Array} btnArr 按钮格式为：[{name: 'xxx', background:'xxx',width:'xxx',color:'xxx',events:'xxx'}]
 	 */
 	export default {
@@ -60,7 +60,7 @@
 			return {
 				startX: 0, //开始坐标
 				startY: 0, //开始Y坐标
-				offset: 0,
+				offset: 0,//按钮数组偏移量
 			}
 		},
 		mounted() {

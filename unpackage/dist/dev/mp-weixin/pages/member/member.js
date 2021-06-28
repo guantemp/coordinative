@@ -175,6 +175,8 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
 
 
+
+
 var _catalog_test_data = _interopRequireDefault(__webpack_require__(/*! @/test/catalog_test_data.js */ 53));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };} //
 //
 //
@@ -195,8 +197,29 @@ var _catalog_test_data = _interopRequireDefault(__webpack_require__(/*! @/test/c
 //
 //
 //
+//
+//
 //用例数据库
-var _default = { data: function data() {return { categories: [] };}, onLoad: function onLoad() {this.categories = _catalog_test_data.default.category;}, methods: {} };exports.default = _default;
+var _default = { data: function data() {return { categories: [], expandKeys: [234567], checkedKeys: [234567], defaultProps: { children: 'sub', label: 'name' } };}, onLoad: function onLoad() {this.categories = _catalog_test_data.default.category;}, methods: { // 只有在"点击"修改的指定节点会触发(也就是说这个方法只会触发一次)，obj中包含当前选中
+    handleCheck: function handleCheck(obj) {// obj: {
+      // 	checkedKeys: [9, 5], // 当前选中节点的id数组
+      // 	checkedNodes: [{...}, {...}], // 当前选中节点数组
+      // 	data: {...}, // 当前节点的数据
+      // 	halfCheckedKeys: [1, 4, 2], // 半选中节点的id数组
+      // 	halfCheckedNodes: [{...}, {...}, {...}], // 半选中节点的数组
+      // 	node: Node {...} // 当前节点实例
+      // }
+      console.log('handleCheck', obj);}, // 只要节点的选中或半选中状态改变就触发（包括设置默认选中，点击选中/取消选中），其相关的所有父子节点都会触发（也就是说选中一个节点时，触发多次，父子节点的选中状态只要被修改就会触发）
+    handleCheckChange: function handleCheckChange(obj) {// obj: {
+      // 	checked: true, // 节点是否选中
+      // 	checkedall: false, // 当前树的所有节点是否全选中
+      // 	data: {...}, // 节点数据
+      // 	indeterminate: false, // 是否半选中
+      // 	node: Node {...} // 节点实例
+      // }
+
+      console.log('handleCheckChange', obj);
+    } } };exports.default = _default;
 
 /***/ })
 
